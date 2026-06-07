@@ -38,8 +38,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define NO_CAPTURE_READY 0xffffffff /*<No se obtuvo captura válida.*/
-#define CONSTANTE_PRESICION 58      /*<Contante para calcular distancia (d = vel_sonido * T /2).*/
+#define NO_CAPTURE_READY 0xffffffff /**<No se obtuvo captura válida.*/
+#define CONSTANTE_PRESICION 58      /**<Contante para calcular distancia (d = vel_sonido * T /2).*/
 
 /**
  * @brief Estados de la máquina de estados que controla el funcionamiento del sensor.
@@ -47,10 +47,10 @@
  */
 typedef enum 
 {
-    IDLE,      /*<Iniciar.*/
-    WAIT_RISE, /*<Esperar flanco de subida del ECHO.*/
-    WAIT_FALL, /*<Esperar flanco de bajada del ECHO.*/
-    DONE,      /*<Realizar medición de distancia.*/
+    IDLE,      /**<Iniciar.*/
+    WAIT_RISE, /**<Esperar flanco de subida del ECHO.*/
+    WAIT_FALL, /**<Esperar flanco de bajada del ECHO.*/
+    DONE,      /**<Realizar medición de distancia.*/
 } states;
 
 /**
@@ -59,18 +59,18 @@ typedef enum
  */
 typedef struct
 {
-    uint trig_pin;               /*<Pin GPIO trigger.*/
-    uint echo_pin;               /*<Pin GPIO echo.*/
-    uint32_t timer_period_us;    /*<Periodo de duración del TRIGGER.*/
-    uint32_t distance;           /*<Distancia calculada.*/
-    volatile states estado;      /*<Estado de la FSM del sensor.*/
-    volatile bool data_ready;    /*<Bandera que indica si hay medición.*/
-    bool flag_rise;              /*<Bandera de flanco de subida del ECHO.*/
-    bool flag_fall;              /*<Bandera de flanco de bajada del ECHO.*/
-    volatile uint32_t time_rise; /*<Tiempo al momento del flanco de dubida del ECHO (us).*/
-    volatile uint32_t time_fall; /*<Tiempo al momento del flanco de bajada del ECHO (us).*/
-    uint32_t measured_period;    /*<Periodo medido del ECHO (us).*/
-    uint32_t timeout;            /*<Tiempo de espera entre mediciones.*/
+    uint trig_pin;               /**<Pin GPIO trigger.*/
+    uint echo_pin;               /**<Pin GPIO echo.*/
+    uint32_t timer_period_us;    /**<Periodo de duración del TRIGGER.*/
+    uint32_t distance;           /**<Distancia calculada.*/
+    volatile states estado;      /**<Estado de la FSM del sensor.*/
+    volatile bool data_ready;    /**<Bandera que indica si hay medición.*/
+    bool flag_rise;              /**<Bandera de flanco de subida del ECHO.*/
+    bool flag_fall;              /**<Bandera de flanco de bajada del ECHO.*/
+    volatile uint32_t time_rise; /**<Tiempo al momento del flanco de dubida del ECHO (us).*/
+    volatile uint32_t time_fall; /**<Tiempo al momento del flanco de bajada del ECHO (us).*/
+    uint32_t measured_period;    /**<Periodo medido del ECHO (us).*/
+    uint32_t timeout;            /**<Tiempo de espera entre mediciones.*/
 } hcsr04_t;
 
 /**
