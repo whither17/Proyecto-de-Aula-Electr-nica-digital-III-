@@ -176,7 +176,7 @@ void odometry_update(void) {
      *  Derivado de la diferencia de arcos dividida por la separación.
      *  Positivo = giro antihorario (izquierda); negativo = horario (derecha).
      */
-    float dtheta_odo = (d_R - d_L) / g_baseline;
+    float dtheta_odo = (d_L - d_R) / g_baseline;
 
     /* ── PASO 5: Leer IMU y restar bias ── */
 
@@ -188,7 +188,7 @@ void odometry_update(void) {
      *  Sin esta corrección, gyro_z en reposo no es cero y el ángulo
      *  derivaría aunque el robot esté quieto.
      */
-    float gyro_z_corr = imu.gyro_z - g_gyro_bias_z;
+    float gyro_z_corr = -(imu.gyro_z - g_gyro_bias_z);
 
     /* ── PASO 6: Integrar giroscopio para obtener Δθ_imu ── */
 

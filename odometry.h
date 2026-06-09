@@ -46,7 +46,7 @@
  *  Valor inicial recomendado: 0.98
  *  Ajustar empíricamente según cuánto deslizamiento tengan las orugas.
  */
-#define ODO_ALPHA           0.98f
+#define ODO_ALPHA           0.5f
 
 /*
  *  Período de muestreo en segundos — debe coincidir con IMU_SAMPLE_US.

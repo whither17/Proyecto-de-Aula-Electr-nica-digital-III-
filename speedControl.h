@@ -75,7 +75,7 @@
  *  ↑ Subir si el robot aún serpentea despacio entre correcciones.
  *  ↓ Bajar si hay oscilación rápida o ruido mecánico audible.
  */
-#define SC_KP             0.5f
+#define SC_KP             0.3f
 
 /*
  *  SC_KI — Ganancia integral [PWM% / (tick·ciclo)]
@@ -87,7 +87,7 @@
  *  ↑ Subir si queda un offset residual después de ~50 ciclos.
  *  ↓ Bajar si el integrador empieza a oscilar lentamente (período >2 s).
  */
-#define SC_KI             0.1f
+#define SC_KI             0.05f
 
 /*
  *  SC_FF_SLOPE_LEFT / SC_FF_SLOPE_RIGHT
@@ -102,8 +102,8 @@
  *  Si un canal deriva consistentemente más ticks que el otro, ajustar
  *  su slope en pasos de 0.1 hasta equilibrar.
  */
-#define SC_FF_SLOPE_LEFT  7.8f
-#define SC_FF_SLOPE_RIGHT 7.8f
+#define SC_FF_SLOPE_LEFT  7.5f
+#define SC_FF_SLOPE_RIGHT 7.5f
 
 /*
  *  SC_INTEGRAL_DEADBAND — Zona muerta del integrador [ticks]
@@ -128,7 +128,7 @@
  *  SC_MAX_CORRECTION — Corrección total máxima [PWM%]
  *  Suma de P + I. Previene saturación del canal.
  */
-#define SC_MAX_CORRECTION 15.0f
+#define SC_MAX_CORRECTION 10.0f
 
 /*
  *  SC_DT — Período de muestreo [s]
