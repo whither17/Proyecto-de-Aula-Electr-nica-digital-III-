@@ -68,14 +68,14 @@
  *  ↓ Bajar si el robot tarda demasiado en alcanzar velocidad de crucero.
  */
 #define NAV_RAMP_CYCLES         70
-
+#define DETECTION_CONFIRM_COUNT  3
 /*
  *  NAV_LINEAR_SPEED_MM_S — velocidad de avance en línea recta [mm/s]
  *
  *  Debe ser un valor que el Bloque 1 ya haya demostrado que controla bien.
  *  130 mm/s es el valor validado con el controlador diferencial actual.
  */
-#define NAV_LINEAR_SPEED_MM_S   130.0f
+#define NAV_LINEAR_SPEED_MM_S   95.0f
 
 /*
  *  NAV_TURN_SPEED — velocidad angular de giro en el sitio [PWM%]
