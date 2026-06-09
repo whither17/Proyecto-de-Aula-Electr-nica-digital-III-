@@ -131,8 +131,11 @@ void encoder_handle_irq(uint gpio, uint32_t events) {
         bool a_rise = (events & GPIO_IRQ_EDGE_RISE) != 0;
         bool b_high = gpio_get(ENCODER_LEFT_B);
 
-        /* Mismo estado → adelante, estado opuesto → atrás */
-        if (a_rise == b_high) {
+        /*
+         *  Ambos canales contaban negativo al avanzar → lógica invertida.
+         *  Corregido: estado opuesto → adelante, mismo estado → atrás.
+         */
+        if (a_rise != b_high) {
             ticks_left++;
         } else {
             ticks_left--;
@@ -143,9 +146,8 @@ void encoder_handle_irq(uint gpio, uint32_t events) {
         bool b_high = gpio_get(ENCODER_RIGHT_B);
 
         /*
-         *  El motor derecho está montado en espejo respecto al izquierdo.
-         *  Si al probar el robot los ticks del derecho cuentan al revés,
-         *  invierte esta lógica cambiando == por !=
+         *  Motor derecho montado en espejo + mismo problema de signo.
+         *  Corregido: cambiar == por != respecto al canal izquierdo.
          */
         if (a_rise == b_high) {
             ticks_right++;

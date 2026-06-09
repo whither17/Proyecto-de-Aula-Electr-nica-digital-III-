@@ -7,6 +7,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#define MAXPWM       70  /* % — límite superior absoluto de velocidad        */
+#define MINPWM_LEFT  38   /* % — zona muerta motor izquierdo (calibrar)       */
+#define MINPWM_RIGHT 38   /* % — zona muerta motor derecho   (calibrar)       */
+
 void motor_driver_init(void);
 void motors_set(int left_speed, int right_speed);
 

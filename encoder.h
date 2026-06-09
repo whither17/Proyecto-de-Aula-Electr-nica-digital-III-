@@ -9,10 +9,10 @@
 
 /* DEFINICIÓN DE PINES */
 
-#define ENCODER_LEFT_A  0   /* GP0  — canal A rueda izquierda (dispara IRQ) */
-#define ENCODER_LEFT_B  1   /* GP1  — canal B rueda izquierda (lee dirección) */
-#define ENCODER_RIGHT_A 17  /* GP17 — canal A rueda derecha   (dispara IRQ) */
-#define ENCODER_RIGHT_B 16  /* GP16 — canal B rueda derecha   (lee dirección) */
+#define ENCODER_LEFT_A  0    /* GP0  — canal A rueda izquierda (dispara IRQ) */
+#define ENCODER_LEFT_B  1    /* GP1  — canal B rueda izquierda (lee dirección) */
+#define ENCODER_RIGHT_A 17   /* GP17 — canal A rueda derecha   (dispara IRQ) */
+#define ENCODER_RIGHT_B 16   /* GP16 — canal B rueda derecha   (lee dirección) */
 
 void encoder_init(void);
 

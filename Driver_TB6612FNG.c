@@ -5,14 +5,14 @@
    ───────────────────────────────────────────────────────────────────────────── */
 
 /* Motor izquierdo — canal A */
-#define PIN_AIN1   20  /* GP20 — dirección izquierdo bit-0 */
-#define PIN_AIN2   21  /* GP21 — dirección izquierdo bit-1 */
-#define PIN_PWMA   12  /* GP12 — PWM slice 6, canal A      */
+#define PIN_AIN1   19  /* GP20 — dirección izquierdo bit-0 */
+#define PIN_AIN2   18  /* GP21 — dirección izquierdo bit-1 */
+#define PIN_PWMA   13  /* GP12 — PWM slice 6, canal A      */
 
 /* Motor derecho — canal B */
-#define PIN_BIN1   19  /* GP19 — dirección derecho bit-0   */
-#define PIN_BIN2   18  /* GP18 — dirección derecho bit-1   */
-#define PIN_PWMB   13  /* GP13 — PWM slice 6, canal B     */
+#define PIN_BIN1   20  /* GP19 — dirección derecho bit-0   */
+#define PIN_BIN2   21  /* GP18 — dirección derecho bit-1   */
+#define PIN_PWMB   12  /* GP13 — PWM slice 6, canal B     */
 
 /* CONSTANTES */
 #define MAXPWM 70 /* Los motores solo reciben hasta 6v la alimentacion es de 7.4v con valores de hasta 8.4v usamos un 70% como segurridad*/
@@ -106,10 +106,25 @@ static inline void set_motor_direction_right(int speed) {
  * Convierte porcentaje [-100, 100] a valor de wrap [0, PWM_WRAP].
  * La dirección va por los pines IN, no por el duty — siempre positivo.
  */
-static inline uint16_t speed_to_duty(int speed) {
+static inline uint16_t speed_to_duty(int speed, int minpwm) {
+ 
+    /* Saturar rango */
     if (speed >  100) speed =  100;
     if (speed < -100) speed = -100;
-    return (uint16_t)((abs(speed) * (int)PWM_WRAP) / 100);
+ 
+    int mag = abs(speed);
+ 
+    /* Zona muerta → freno limpio, nunca stall */
+    if (mag < minpwm) return 0;
+ 
+    /* Mapeo lineal [minpwm, MAXPWM] → [0, PWM_WRAP] */
+    int range  = MAXPWM - minpwm;
+    int scaled = ((mag - minpwm) * (int)PWM_WRAP) / range;
+ 
+    /* Saturar al wrap máximo por si acaso */
+    if (scaled > (int)PWM_WRAP) scaled = (int)PWM_WRAP;
+ 
+    return (uint16_t)scaled;
 }
 
 /**
@@ -117,12 +132,25 @@ static inline uint16_t speed_to_duty(int speed) {
  * pasamos de un valor de velocidad cruda a la organizacion de los diferentes pines
  * y el ciclo de dureza de los canales PWM
  */
- void motors_set(int left_speed, int right_speed) {
+void motors_set(int left_speed, int right_speed) {
+ 
+    /*
+     *  Zona muerta por canal: si la magnitud no alcanza el umbral
+     *  del motor, forzar a 0 para que set_motor_direction ponga
+     *  AINx=0 → freno activo, no stall.
+     */
+    if (abs(left_speed)  < MINPWM_LEFT)  left_speed  = 0;
+    if (abs(right_speed) < MINPWM_RIGHT) right_speed = 0;
+ 
+    /* Configurar dirección en los pines IN */
     set_motor_direction_left(left_speed);
     set_motor_direction_right(right_speed);
-
-    g_duty_left  = speed_to_duty(left_speed);
-    g_duty_right = speed_to_duty(right_speed);
+ 
+    /* Calcular duty con el MINPWM calibrado de cada canal */
+    g_duty_left  = speed_to_duty(left_speed,  MINPWM_LEFT);
+    g_duty_right = speed_to_duty(right_speed, MINPWM_RIGHT);
+ 
+    /* Señalar a la ISR que hay un nuevo comando */
     g_cmd_pending = true;
 }
 
