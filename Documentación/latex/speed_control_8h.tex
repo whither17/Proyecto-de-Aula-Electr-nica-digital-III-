@@ -1,0 +1,215 @@
+\doxysection{speed\+Control.\+h File Reference}
+\hypertarget{speed_control_8h}{}\label{speed_control_8h}\index{speedControl.h@{speedControl.h}}
+
+
+Controlador diferencial de velocidad.  
+
+
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structsc__command__t}{sc\+\_\+command\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Comando de velocidad para el robot. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structsc__state__t}{sc\+\_\+state\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Estado de diagnóstico del controlador. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_a515126ed59e959564a8a9657b2cffdc6}{SC\+\_\+\+WINDOW\+\_\+\+CYCLES}}~3
+\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_a31eae097e278e76299f192160c15a19c}{SC\+\_\+\+KP}}~0.\+3f
+\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_aa28ec86690701f53899d9ea3647e9279}{SC\+\_\+\+KI}}~0.\+05f
+\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_ac09e8c25317301a061964396cf7c2e64}{SC\+\_\+\+FF\+\_\+\+SLOPE\+\_\+\+LEFT}}~7.\+5f
+\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_a3ed2bae5004a9d75c73f9e4c1c1292d7}{SC\+\_\+\+FF\+\_\+\+SLOPE\+\_\+\+RIGHT}}~7.\+5f
+\item 
+\Hypertarget{speed_control_8h_ab482577b8c9e792b9dce761e90dd6197}\label{speed_control_8h_ab482577b8c9e792b9dce761e90dd6197} 
+\+\#define {\bfseries SC\+\_\+\+INTEGRAL\+\_\+\+DEADBAND}~1.\+0f
+\begin{DoxyCompactList}\small\item\em SC\+\_\+\+INTEGRAL\+\_\+\+DEADBAND \+[ticks]\+ El integrador solo actúa cuando \texorpdfstring{$\vert$}{|}error\texorpdfstring{$\vert$}{|} supera este umbral. Ajustado a 0.\+5 para corregir pequeños sesgos entre canales. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_a2704a56321bbe3c5e9fb72e2a38bfb9f}{SC\+\_\+\+INTEGRAL\+\_\+\+LIMIT}}~15.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_afdcc592c38982717efe830aef8c7422a}{SC\+\_\+\+MAX\+\_\+\+CORRECTION}}~10.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{speed_control_8h_a27337bad4f5a585e1d6a9fd990a14a7f}{SC\+\_\+\+DT}}~0.\+01f
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{speed_control_8h_ad5c36d54094d5c15da767292122d68b5}{speed\+\_\+control\+\_\+init}} (float mm\+\_\+per\+\_\+tick)
+\begin{DoxyCompactList}\small\item\em Inicializa el controlador con los parámetros físicos del robot. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{speed_control_8h_a18ebc914d8c540379b1b769a7f6a1e5a}{speed\+\_\+control\+\_\+set}} (const \doxymbox{\hyperlink{structsc__command__t}{sc\+\_\+command\+\_\+t}} \texorpdfstring{$\ast$}{*}cmd)
+\begin{DoxyCompactList}\small\item\em Establece el comando de velocidad objetivo. El controlador usa estos valores en los próximos ciclos. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{speed_control_8h_aab00a0789a5ae1d960cafdff4f08b5fd}{speed\+\_\+control\+\_\+update}} ()
+\begin{DoxyCompactList}\small\item\em Ejecuta un ciclo del controlador P. Llamar a 100 Hz desde el main, justo después de que imu\+\_\+data\+\_\+ready() devuelva true (mismo ciclo que \doxylink{odometry_8h_ad57d4389ef608b9558767dade4e6a608}{odometry\+\_\+update()}) para que los valores sean los reales. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{speed_control_8h_a5a43a0470f368b8f9df69ed46423d7d0}{speed\+\_\+control\+\_\+get\+\_\+state}} (\doxymbox{\hyperlink{structsc__state__t}{sc\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}out)
+\begin{DoxyCompactList}\small\item\em Copia el estado diagnóstico del último ciclo en {\itshape out}. Usar solo para tuning y logging. \end{DoxyCompactList}\item 
+\Hypertarget{speed_control_8h_a9a68a3c9943eda186149eafa6bc77c0f}\label{speed_control_8h_a9a68a3c9943eda186149eafa6bc77c0f} 
+void {\bfseries speed\+\_\+control\+\_\+stop} ()
+\begin{DoxyCompactList}\small\item\em Freno inmediato:\+ pone el comando a cero y llama motors\+\_\+set(0,0) directamente sin esperar al próximo ciclo. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Controlador diferencial de velocidad. 
+
+\begin{DoxyAuthor}{Author}
+Robinson Correa Morales (\href{mailto:robinson.corream@udea.edu.co}{\texttt{robinson.\+corream@udea.\+edu.\+co}}) 
+\end{DoxyAuthor}
+Objetivo:\+
+
+Garantizar que ambas orugas giren a la misma velocidad real garantizando movimiento en linea recta, compensando las diferencias físicas entre motores con un control proporcional (P) de lazo cerrado sobre ticks de encoder.
+
+Relación con los módulos de bajo nivel:\+
+
+Lee :\+ encoder\+\_\+get\+\_\+left(), encoder\+\_\+get\+\_\+right() \+[encoder.\+h]\+ Escribe :\+ motors\+\_\+set() \+[Driver\+\_\+\+TB6612\+FNG.\+h]\+ Llamado por :\+ \doxylink{odometry_8h_ad57d4389ef608b9558767dade4e6a608}{odometry\+\_\+update()} o el main, a 100 Hz
+
+Filosofía de diseño:\+
+
+La referencia de velocidad se expresa en mm/\+s y se convierte internamente a ticks/\+ciclo usando mm\+\_\+per\+\_\+tick. Esto desacopla la capa de navegación de los parámetros físicos del encoder.
+
+El PWM resultante se calcula así en cada ciclo:\+
+
+ticks\+\_\+objetivo = (v\+\_\+ref\+\_\+mm\+\_\+s \texorpdfstring{$\ast$}{*} ODO\+\_\+\+DT) /\+ mm\+\_\+per\+\_\+tick
+
+error\+\_\+L = ticks\+\_\+objetivo\+\_\+L -\/ delta\+\_\+ticks\+\_\+L error\+\_\+R = ticks\+\_\+objetivo\+\_\+R -\/ delta\+\_\+ticks\+\_\+R
+
+integral\+\_\+L += error\+\_\+L (si \texorpdfstring{$\vert$}{|}error\+\_\+\+L\texorpdfstring{$\vert$}{|} \texorpdfstring{$>$}{>} DEADBAND) integral\+\_\+R += error\+\_\+R (si \texorpdfstring{$\vert$}{|}error\+\_\+\+R\texorpdfstring{$\vert$}{|} \texorpdfstring{$>$}{>} DEADBAND)
+
+pwm\+\_\+L = FF\+\_\+\+SLOPE\+\_\+\+LEFT \texorpdfstring{$\ast$}{*} \texorpdfstring{$\vert$}{|}target\+\_\+\+L\texorpdfstring{$\vert$}{|} + Kp\texorpdfstring{$\ast$}{*}error\+\_\+L + Ki\texorpdfstring{$\ast$}{*}integral\+\_\+L pwm\+\_\+R = FF\+\_\+\+SLOPE\+\_\+\+RIGHT \texorpdfstring{$\ast$}{*} \texorpdfstring{$\vert$}{|}target\+\_\+\+R\texorpdfstring{$\vert$}{|} + Kp\texorpdfstring{$\ast$}{*}error\+\_\+R + Ki\texorpdfstring{$\ast$}{*}integral\+\_\+R
+
+El feed-\/forward por canal (FF\+\_\+\+SLOPE\+\_\+\+LEFT /\+ FF\+\_\+\+SLOPE\+\_\+\+RIGHT) absorbe la diferencia DC estática entre motores. El PI elimina la varianza corrida a corrida.
+
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2026-\/06-\/09
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2026 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{speed_control_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{speed_control_8h_a27337bad4f5a585e1d6a9fd990a14a7f}\index{speedControl.h@{speedControl.h}!SC\_DT@{SC\_DT}}
+\index{SC\_DT@{SC\_DT}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_DT}{SC\_DT}}
+{\footnotesize\ttfamily \label{speed_control_8h_a27337bad4f5a585e1d6a9fd990a14a7f} 
+\+\#define SC\+\_\+\+DT~0.\+01f}
+
+Periodo de muestreo Coincidente con IMU\+\_\+\+SAMPLE\+\_\+\+US \Hypertarget{speed_control_8h_ac09e8c25317301a061964396cf7c2e64}\index{speedControl.h@{speedControl.h}!SC\_FF\_SLOPE\_LEFT@{SC\_FF\_SLOPE\_LEFT}}
+\index{SC\_FF\_SLOPE\_LEFT@{SC\_FF\_SLOPE\_LEFT}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_FF\_SLOPE\_LEFT}{SC\_FF\_SLOPE\_LEFT}}
+{\footnotesize\ttfamily \label{speed_control_8h_ac09e8c25317301a061964396cf7c2e64} 
+\+\#define SC\+\_\+\+FF\+\_\+\+SLOPE\+\_\+\+LEFT~7.\+5f}
+
+Pendiente feed-\/forward por canal \+[PWM\% /\+ (tick/\+ciclo)]\+ \Hypertarget{speed_control_8h_a3ed2bae5004a9d75c73f9e4c1c1292d7}\index{speedControl.h@{speedControl.h}!SC\_FF\_SLOPE\_RIGHT@{SC\_FF\_SLOPE\_RIGHT}}
+\index{SC\_FF\_SLOPE\_RIGHT@{SC\_FF\_SLOPE\_RIGHT}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_FF\_SLOPE\_RIGHT}{SC\_FF\_SLOPE\_RIGHT}}
+{\footnotesize\ttfamily \label{speed_control_8h_a3ed2bae5004a9d75c73f9e4c1c1292d7} 
+\+\#define SC\+\_\+\+FF\+\_\+\+SLOPE\+\_\+\+RIGHT~7.\+5f}
+
+Pendiente feed-\/forward por canal \+[PWM\% /\+ (tick/\+ciclo)]\+ \Hypertarget{speed_control_8h_a2704a56321bbe3c5e9fb72e2a38bfb9f}\index{speedControl.h@{speedControl.h}!SC\_INTEGRAL\_LIMIT@{SC\_INTEGRAL\_LIMIT}}
+\index{SC\_INTEGRAL\_LIMIT@{SC\_INTEGRAL\_LIMIT}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_INTEGRAL\_LIMIT}{SC\_INTEGRAL\_LIMIT}}
+{\footnotesize\ttfamily \label{speed_control_8h_a2704a56321bbe3c5e9fb72e2a38bfb9f} 
+\+\#define SC\+\_\+\+INTEGRAL\+\_\+\+LIMIT~15.\+0f}
+
+Limite del integrador \Hypertarget{speed_control_8h_aa28ec86690701f53899d9ea3647e9279}\index{speedControl.h@{speedControl.h}!SC\_KI@{SC\_KI}}
+\index{SC\_KI@{SC\_KI}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_KI}{SC\_KI}}
+{\footnotesize\ttfamily \label{speed_control_8h_aa28ec86690701f53899d9ea3647e9279} 
+\+\#define SC\+\_\+\+KI~0.\+05f}
+
+Ganancia Integral \Hypertarget{speed_control_8h_a31eae097e278e76299f192160c15a19c}\index{speedControl.h@{speedControl.h}!SC\_KP@{SC\_KP}}
+\index{SC\_KP@{SC\_KP}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_KP}{SC\_KP}}
+{\footnotesize\ttfamily \label{speed_control_8h_a31eae097e278e76299f192160c15a19c} 
+\+\#define SC\+\_\+\+KP~0.\+3f}
+
+Ganancia Proporcional \Hypertarget{speed_control_8h_afdcc592c38982717efe830aef8c7422a}\index{speedControl.h@{speedControl.h}!SC\_MAX\_CORRECTION@{SC\_MAX\_CORRECTION}}
+\index{SC\_MAX\_CORRECTION@{SC\_MAX\_CORRECTION}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_MAX\_CORRECTION}{SC\_MAX\_CORRECTION}}
+{\footnotesize\ttfamily \label{speed_control_8h_afdcc592c38982717efe830aef8c7422a} 
+\+\#define SC\+\_\+\+MAX\+\_\+\+CORRECTION~10.\+0f}
+
+Corrección total máxima PWM \Hypertarget{speed_control_8h_a515126ed59e959564a8a9657b2cffdc6}\index{speedControl.h@{speedControl.h}!SC\_WINDOW\_CYCLES@{SC\_WINDOW\_CYCLES}}
+\index{SC\_WINDOW\_CYCLES@{SC\_WINDOW\_CYCLES}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{SC\_WINDOW\_CYCLES}{SC\_WINDOW\_CYCLES}}
+{\footnotesize\ttfamily \label{speed_control_8h_a515126ed59e959564a8a9657b2cffdc6} 
+\+\#define SC\+\_\+\+WINDOW\+\_\+\+CYCLES~3}
+
+Número de ciclos del controlador que se acumulan 
+
+\label{doc-func-members}
+\Hypertarget{speed_control_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{speed_control_8h_a5a43a0470f368b8f9df69ed46423d7d0}\index{speedControl.h@{speedControl.h}!speed\_control\_get\_state@{speed\_control\_get\_state}}
+\index{speed\_control\_get\_state@{speed\_control\_get\_state}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{speed\_control\_get\_state()}{speed\_control\_get\_state()}}
+{\footnotesize\ttfamily \label{speed_control_8h_a5a43a0470f368b8f9df69ed46423d7d0} 
+void speed\+\_\+control\+\_\+get\+\_\+state (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structsc__state__t}{sc\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{out}{}\end{DoxyParamCaption})}
+
+
+
+Copia el estado diagnóstico del último ciclo en {\itshape out}. Usar solo para tuning y logging. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em out} & Apuntador a estado de diagnóstico del controlador \\
+\hline
+\end{DoxyParams}
+\Hypertarget{speed_control_8h_ad5c36d54094d5c15da767292122d68b5}\index{speedControl.h@{speedControl.h}!speed\_control\_init@{speed\_control\_init}}
+\index{speed\_control\_init@{speed\_control\_init}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{speed\_control\_init()}{speed\_control\_init()}}
+{\footnotesize\ttfamily \label{speed_control_8h_ad5c36d54094d5c15da767292122d68b5} 
+void speed\+\_\+control\+\_\+init (\begin{DoxyParamCaption}\item[{float}]{mm\+\_\+per\+\_\+tick}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el controlador con los parámetros físicos del robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mm\+\_\+per\+\_\+tick} & Distancia en mm por pulso de encoder. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{speed_control_8h_a18ebc914d8c540379b1b769a7f6a1e5a}\index{speedControl.h@{speedControl.h}!speed\_control\_set@{speed\_control\_set}}
+\index{speed\_control\_set@{speed\_control\_set}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{speed\_control\_set()}{speed\_control\_set()}}
+{\footnotesize\ttfamily \label{speed_control_8h_a18ebc914d8c540379b1b769a7f6a1e5a} 
+void speed\+\_\+control\+\_\+set (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structsc__command__t}{sc\+\_\+command\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cmd}{}\end{DoxyParamCaption})}
+
+
+
+Establece el comando de velocidad objetivo. El controlador usa estos valores en los próximos ciclos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & Apuntador a comando de velocidad \\
+\hline
+\end{DoxyParams}
+\Hypertarget{speed_control_8h_aab00a0789a5ae1d960cafdff4f08b5fd}\index{speedControl.h@{speedControl.h}!speed\_control\_update@{speed\_control\_update}}
+\index{speed\_control\_update@{speed\_control\_update}!speedControl.h@{speedControl.h}}
+\doxysubsubsection{\texorpdfstring{speed\_control\_update()}{speed\_control\_update()}}
+{\footnotesize\ttfamily \label{speed_control_8h_aab00a0789a5ae1d960cafdff4f08b5fd} 
+void speed\+\_\+control\+\_\+update (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Ejecuta un ciclo del controlador P. Llamar a 100 Hz desde el main, justo después de que imu\+\_\+data\+\_\+ready() devuelva true (mismo ciclo que \doxylink{odometry_8h_ad57d4389ef608b9558767dade4e6a608}{odometry\+\_\+update()}) para que los valores sean los reales. 
+
+Internamente:\+
+\begin{DoxyEnumerate}
+\item Lee delta de ticks desde la última llamada (atómico).
+\item Calcula ticks objetivo a partir del comando actual.
+\item Calcula error por canal.
+\item Aplica feed-\/forward + corrección P.
+\item Satura y aplica via motors\+\_\+set(). 
+\end{DoxyEnumerate}

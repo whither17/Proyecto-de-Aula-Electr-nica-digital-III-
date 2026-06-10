@@ -1,0 +1,48 @@
+\doxysection{odometry.\+h}
+\hypertarget{odometry_8h_source}{}\label{odometry_8h_source}\doxymbox{\hyperlink{odometry_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#ifndef\ ODOMETRY\_H}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ ODOMETRY\_H}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}hardware/sync.h"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ ODO\_CALIB\_SAMPLES\ 200}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ ODO\_ALPHA\ 0.5f\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ ODO\_DT\ 0.01f\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structpose__t_a78210a10a2bc0973bd20aa6552418ded}{x}};\ \ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structpose__t_aeec9f21213a8d7d86cc90caa50caa5fa}{y}};\ \ \ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structpose__t_a1d23750529c6a98bf3c245acf12642e3}{theta}};\ \ \ }
+\DoxyCodeLine{00059\ \}\ \doxymbox{\hyperlink{structpose__t}{pose\_t}};}
+\DoxyCodeLine{00060\ \ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00065\ \{}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structodo__params__t_a912139b33adb63d64a1d77893fb836b7}{mm\_per\_tick}};\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structodo__params__t_ac0df118e0546c961daee93b029b6fa2a}{baseline}};\ \ \ \ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \}\ \doxymbox{\hyperlink{structodo__params__t}{odo\_params\_t}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Funciones\ Públicas\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00086\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{odometry_8h_a29b01621c52d72a355633c65836b4555}{odometry\_init}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structodo__params__t}{odo\_params\_t}}\ *params,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structpose__t}{pose\_t}}\ *init\_pose);}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00093\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{odometry_8h_ad57d4389ef608b9558767dade4e6a608}{odometry\_update}}();}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00102\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{odometry_8h_aaf1c6d3d4e47462da8bbe710c9995e51}{odometry\_get\_pose}}(\doxymbox{\hyperlink{structpose__t}{pose\_t}}\ *out);}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00109\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{odometry_8h_afafc3463b85e37327e7ac079cbb5eb5f}{odometry\_set\_pose}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structpose__t}{pose\_t}}\ *new\_pose);}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00117\ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{odometry_8h_aa7e65359e5bb8f0ba2a9df37fca045ad}{odometry\_get\_bias}}();}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,61 @@
+\doxysection{speed\+Control.\+h}
+\hypertarget{speed_control_8h_source}{}\label{speed_control_8h_source}\doxymbox{\hyperlink{speed_control_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#ifndef\ SPEED\_CONTROL\_H}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ SPEED\_CONTROL\_H}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ SC\_WINDOW\_CYCLES\ \ 3\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Constantes\ PI\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ SC\_KP\ 0.3f\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ SC\_KI\ 0.05f\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ SC\_FF\_SLOPE\_LEFT\ 7.5f\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ SC\_FF\_SLOPE\_RIGHT\ 7.5f\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ SC\_INTEGRAL\_DEADBAND\ 1.0f}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ SC\_INTEGRAL\_LIMIT\ 15.0f\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ SC\_MAX\_CORRECTION\ 10.0f\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#define\ SC\_DT\ 0.01f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00087\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00088\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structsc__command__t_a913bcf4f5c9fd74ec68f726f7b973297}{v\_left\_mm\_s}};\ \ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structsc__command__t_a7b3e43463a7f00c3d341f65cea611a70}{v\_right\_mm\_s}};\ }
+\DoxyCodeLine{00091\ \}\ \doxymbox{\hyperlink{structsc__command__t}{sc\_command\_t}};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00096\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00097\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structsc__state__t_afaf7899d163659ac4ebe9437c7b10c25}{ticks\_target\_left}};\ \ \ \ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structsc__state__t_a898359e89f75dfaf83106c6ec599f3c8}{ticks\_target\_right}};\ \ \ }
+\DoxyCodeLine{00100\ \ \ \ \ int32\_t\ \doxymbox{\hyperlink{structsc__state__t_ae99a7a8ef6124c4405566e6d64330838}{ticks\_actual\_left}};\ \ }
+\DoxyCodeLine{00101\ \ \ \ \ int32\_t\ \doxymbox{\hyperlink{structsc__state__t_a3188e65802d6f52ed043b25e04f92a77}{ticks\_actual\_right}};\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structsc__state__t_a5318ba63f9727b7790378bd2886c1481}{error\_left}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structsc__state__t_aaa2ae825196521fe2a5a3b963ff1f9d0}{error\_right}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structsc__state__t_a601b3a5b2a83c81b7edbadbd1db90514}{pwm\_left}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structsc__state__t_a4fa7987efce27bc0e1d19c08c917922e}{pwm\_right}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00106\ \}\ \doxymbox{\hyperlink{structsc__state__t}{sc\_state\_t}};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Funciones\ Públicas\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00115\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{speed_control_8h_ad5c36d54094d5c15da767292122d68b5}{speed\_control\_init}}(\textcolor{keywordtype}{float}\ mm\_per\_tick);}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00123\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{speed_control_8h_a18ebc914d8c540379b1b769a7f6a1e5a}{speed\_control\_set}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structsc__command__t}{sc\_command\_t}}\ *cmd);}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00138\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{speed_control_8h_aab00a0789a5ae1d960cafdff4f08b5fd}{speed\_control\_update}}();}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00146\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{speed_control_8h_a5a43a0470f368b8f9df69ed46423d7d0}{speed\_control\_get\_state}}(\doxymbox{\hyperlink{structsc__state__t}{sc\_state\_t}}\ *out);}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00153\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{speed_control_8h_a9a68a3c9943eda186149eafa6bc77c0f}{speed\_control\_stop}}();}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

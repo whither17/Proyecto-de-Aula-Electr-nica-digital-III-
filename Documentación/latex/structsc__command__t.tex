@@ -1,0 +1,47 @@
+\doxysection{sc\+\_\+command\+\_\+t Struct Reference}
+\hypertarget{structsc__command__t}{}\label{structsc__command__t}\index{sc\_command\_t@{sc\_command\_t}}
+
+
+Comando de velocidad para el robot.  
+
+
+
+
+{\ttfamily \+\#include $<$speed\+Control.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \doxymbox{\hyperlink{structsc__command__t_a913bcf4f5c9fd74ec68f726f7b973297}{v\+\_\+left\+\_\+mm\+\_\+s}}
+\item 
+float \doxymbox{\hyperlink{structsc__command__t_a7b3e43463a7f00c3d341f65cea611a70}{v\+\_\+right\+\_\+mm\+\_\+s}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Comando de velocidad para el robot. 
+
+Para movimiento recto:\+ v\+\_\+left\+\_\+mm\+\_\+s == v\+\_\+right\+\_\+mm\+\_\+s == V Para giro en el lugar:\+ v\+\_\+left\+\_\+mm\+\_\+s == -\/v\+\_\+right\+\_\+mm\+\_\+s Para curva:\+ valores distintos con el mismo signo
+
+Velocidades negativas producen movimiento hacia atrás. Cero en ambos genera freno activo. 
+
+\label{doc-variable-members}
+\Hypertarget{structsc__command__t_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structsc__command__t_a913bcf4f5c9fd74ec68f726f7b973297}\index{sc\_command\_t@{sc\_command\_t}!v\_left\_mm\_s@{v\_left\_mm\_s}}
+\index{v\_left\_mm\_s@{v\_left\_mm\_s}!sc\_command\_t@{sc\_command\_t}}
+\doxysubsubsection{\texorpdfstring{v\_left\_mm\_s}{v\_left\_mm\_s}}
+{\footnotesize\ttfamily \label{structsc__command__t_a913bcf4f5c9fd74ec68f726f7b973297} 
+float sc\+\_\+command\+\_\+t::\+v\+\_\+left\+\_\+mm\+\_\+s}
+
+Velocidad lineal de la oruga izquierda en mm/\+s \Hypertarget{structsc__command__t_a7b3e43463a7f00c3d341f65cea611a70}\index{sc\_command\_t@{sc\_command\_t}!v\_right\_mm\_s@{v\_right\_mm\_s}}
+\index{v\_right\_mm\_s@{v\_right\_mm\_s}!sc\_command\_t@{sc\_command\_t}}
+\doxysubsubsection{\texorpdfstring{v\_right\_mm\_s}{v\_right\_mm\_s}}
+{\footnotesize\ttfamily \label{structsc__command__t_a7b3e43463a7f00c3d341f65cea611a70} 
+float sc\+\_\+command\+\_\+t::\+v\+\_\+right\+\_\+mm\+\_\+s}
+
+Velocidad lineal de la oruga derecha en mm/\+s 
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{speed_control_8h}{speed\+Control.\+h}}\end{DoxyCompactItemize}

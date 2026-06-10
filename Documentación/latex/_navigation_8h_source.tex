@@ -1,0 +1,65 @@
+\doxysection{Navigation.\+h}
+\hypertarget{_navigation_8h_source}{}\label{_navigation_8h_source}\doxymbox{\hyperlink{_navigation_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00026\ \ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#ifndef\ NAVIGATION\_H}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ NAVIGATION\_H}}
+\DoxyCodeLine{00029\ \ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{odometry_8h}{odometry.h}}"{}}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00034\ \ }
+\DoxyCodeLine{00035\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Parámetros\ Configurables\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{00036\ \ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ NAV\_RAMP\_CYCLES\ \ \ \ \ \ \ \ \ \ 70\ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00044\ \ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ NAV\_LINEAR\_SPEED\_MM\_S\ \ \ \ 100.0f\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00049\ \ }
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ NAV\_TURN\_SPEED\ \ \ \ \ \ \ \ \ \ \ 60\ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00057\ \ }
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ NAV\_ANGLE\_TOL\ \ \ \ \ \ \ \ \ \ \ \ 0.03f\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00065\ \ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ NAV\_POS\_TOL\_DEFAULT\ \ \ \ \ \ 20.0f\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00071\ \ }
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ NAV\_KP\_TURN\ \ \ \ \ \ \ \ \ \ \ \ \ \ 47.0f\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00079\ \ }
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#define\ NAV\_TURN\_PWM\_MIN\ \ \ \ \ \ \ \ \ 47\ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00086\ \ }
+\DoxyCodeLine{00087\ \ }
+\DoxyCodeLine{00098\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9cafb8a4100d41fb4d1475a68bf200705ec}{NAV\_IDLE}}\ \ \ \ =\ 0,\ }
+\DoxyCodeLine{00102\ \ \ \ \ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca3bf4e1ab7a822bfb25f0db3806003aaf}{NAV\_TURNING}}\ =\ 1,\ }
+\DoxyCodeLine{00105\ \ \ \ \ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9caf6d98ac492a2fcc6697e14c14cb709d0}{NAV\_DRIVING}}\ =\ 2,\ }
+\DoxyCodeLine{00109\ \ \ \ \ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca5fc977fa951ba2f7369f77112d969a34}{NAV\_DONE}}\ \ \ \ =\ 3\ \ }
+\DoxyCodeLine{00112\ \}\ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\_state\_t}};}
+\DoxyCodeLine{00113\ \ }
+\DoxyCodeLine{00120\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00121\ \ \ \ \ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\_state\_t}}\ \doxymbox{\hyperlink{structnav__status__t_a67e9e00783bdee7215336841d334b9c9}{state}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ \ \ \ \doxymbox{\hyperlink{structnav__status__t_a2631200560f5ddd1cdaa6e7669300806}{target\_x}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ \ \ \ \doxymbox{\hyperlink{structnav__status__t_addd82e1b897214a9e2b705a8ef14de23}{target\_y}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ \ \ \ \doxymbox{\hyperlink{structnav__status__t_a8ab6da0d0118b94cf712f73ddb22205b}{distance\_to\_goal}};\ \ \ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ \ \ \ \doxymbox{\hyperlink{structnav__status__t_a4543a6e4c3f7341b4d2d81dd7bf33f19}{angle\_error}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ \ \ \ \doxymbox{\hyperlink{structnav__status__t_a9eb8e6bbfdef90c37a67fc59f08cdcac}{pos\_tolerance}};\ \ \ \ \ \ }
+\DoxyCodeLine{00130\ \}\ \doxymbox{\hyperlink{structnav__status__t}{nav\_status\_t}};}
+\DoxyCodeLine{00131\ \ }
+\DoxyCodeLine{00132\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Funciones\ Públicas\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\///}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00140\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{_navigation_8h_ae4e432ce117501524ff616b091d3616b}{nav\_init}}();}
+\DoxyCodeLine{00141\ \ }
+\DoxyCodeLine{00155\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{_navigation_8h_ae73ea3673db1c8132c3e0312aa11d13d}{nav\_go\_to}}(\textcolor{keywordtype}{float}\ x\_mm,\ \textcolor{keywordtype}{float}\ y\_mm);}
+\DoxyCodeLine{00156\ \ }
+\DoxyCodeLine{00171\ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\_state\_t}}\ \doxymbox{\hyperlink{_navigation_8h_af97e087a125dff1eaf7332844682a11c}{nav\_update}}();}
+\DoxyCodeLine{00172\ \ }
+\DoxyCodeLine{00179\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{_navigation_8h_a696bdab2a220b69f26e080fd9ff3a871}{nav\_is\_done}}();}
+\DoxyCodeLine{00180\ \ }
+\DoxyCodeLine{00187\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{_navigation_8h_a81d0b1a0ac794dcec70c9573cf8e0668}{nav\_stop}}();}
+\DoxyCodeLine{00188\ \ }
+\DoxyCodeLine{00200\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{_navigation_8h_a6fc15d546335feb15109c48c23a25699}{nav\_set\_pos\_tolerance}}(\textcolor{keywordtype}{float}\ tol\_mm);}
+\DoxyCodeLine{00201\ \ }
+\DoxyCodeLine{00208\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{_navigation_8h_ab92777f9a204b4debf718f75411a805d}{nav\_get\_status}}(\doxymbox{\hyperlink{structnav__status__t}{nav\_status\_t}}\ *out);}
+\DoxyCodeLine{00209\ \ }
+\DoxyCodeLine{00210\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

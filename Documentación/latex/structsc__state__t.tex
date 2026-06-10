@@ -1,0 +1,91 @@
+\doxysection{sc\+\_\+state\+\_\+t Struct Reference}
+\hypertarget{structsc__state__t}{}\label{structsc__state__t}\index{sc\_state\_t@{sc\_state\_t}}
+
+
+Estado de diagnóstico del controlador.  
+
+
+
+
+{\ttfamily \+\#include $<$speed\+Control.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \doxymbox{\hyperlink{structsc__state__t_afaf7899d163659ac4ebe9437c7b10c25}{ticks\+\_\+target\+\_\+left}}
+\item 
+float \doxymbox{\hyperlink{structsc__state__t_a898359e89f75dfaf83106c6ec599f3c8}{ticks\+\_\+target\+\_\+right}}
+\item 
+int32\+\_\+t \doxymbox{\hyperlink{structsc__state__t_ae99a7a8ef6124c4405566e6d64330838}{ticks\+\_\+actual\+\_\+left}}
+\item 
+int32\+\_\+t \doxymbox{\hyperlink{structsc__state__t_a3188e65802d6f52ed043b25e04f92a77}{ticks\+\_\+actual\+\_\+right}}
+\item 
+float \doxymbox{\hyperlink{structsc__state__t_a5318ba63f9727b7790378bd2886c1481}{error\+\_\+left}}
+\item 
+float \doxymbox{\hyperlink{structsc__state__t_aaa2ae825196521fe2a5a3b963ff1f9d0}{error\+\_\+right}}
+\item 
+int \doxymbox{\hyperlink{structsc__state__t_a601b3a5b2a83c81b7edbadbd1db90514}{pwm\+\_\+left}}
+\item 
+int \doxymbox{\hyperlink{structsc__state__t_a4fa7987efce27bc0e1d19c08c917922e}{pwm\+\_\+right}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Estado de diagnóstico del controlador. 
+
+\label{doc-variable-members}
+\Hypertarget{structsc__state__t_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structsc__state__t_a5318ba63f9727b7790378bd2886c1481}\index{sc\_state\_t@{sc\_state\_t}!error\_left@{error\_left}}
+\index{error\_left@{error\_left}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{error\_left}{error\_left}}
+{\footnotesize\ttfamily \label{structsc__state__t_a5318ba63f9727b7790378bd2886c1481} 
+float sc\+\_\+state\+\_\+t::\+error\+\_\+left}
+
+Error izquierdo = objetivo -\/ real \Hypertarget{structsc__state__t_aaa2ae825196521fe2a5a3b963ff1f9d0}\index{sc\_state\_t@{sc\_state\_t}!error\_right@{error\_right}}
+\index{error\_right@{error\_right}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{error\_right}{error\_right}}
+{\footnotesize\ttfamily \label{structsc__state__t_aaa2ae825196521fe2a5a3b963ff1f9d0} 
+float sc\+\_\+state\+\_\+t::\+error\+\_\+right}
+
+Error derecho = objetivo -\/ real \Hypertarget{structsc__state__t_a601b3a5b2a83c81b7edbadbd1db90514}\index{sc\_state\_t@{sc\_state\_t}!pwm\_left@{pwm\_left}}
+\index{pwm\_left@{pwm\_left}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{pwm\_left}{pwm\_left}}
+{\footnotesize\ttfamily \label{structsc__state__t_a601b3a5b2a83c81b7edbadbd1db90514} 
+int sc\+\_\+state\+\_\+t::\+pwm\+\_\+left}
+
+PWM\% izquierdo aplicado \+[-\/100, 100]\+ \Hypertarget{structsc__state__t_a4fa7987efce27bc0e1d19c08c917922e}\index{sc\_state\_t@{sc\_state\_t}!pwm\_right@{pwm\_right}}
+\index{pwm\_right@{pwm\_right}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{pwm\_right}{pwm\_right}}
+{\footnotesize\ttfamily \label{structsc__state__t_a4fa7987efce27bc0e1d19c08c917922e} 
+int sc\+\_\+state\+\_\+t::\+pwm\+\_\+right}
+
+PWM\% izquierdo aplicado \+[-\/100, 100]\+ \Hypertarget{structsc__state__t_ae99a7a8ef6124c4405566e6d64330838}\index{sc\_state\_t@{sc\_state\_t}!ticks\_actual\_left@{ticks\_actual\_left}}
+\index{ticks\_actual\_left@{ticks\_actual\_left}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{ticks\_actual\_left}{ticks\_actual\_left}}
+{\footnotesize\ttfamily \label{structsc__state__t_ae99a7a8ef6124c4405566e6d64330838} 
+int32\+\_\+t sc\+\_\+state\+\_\+t::\+ticks\+\_\+actual\+\_\+left}
+
+ticks reales del último ciclo \Hypertarget{structsc__state__t_a3188e65802d6f52ed043b25e04f92a77}\index{sc\_state\_t@{sc\_state\_t}!ticks\_actual\_right@{ticks\_actual\_right}}
+\index{ticks\_actual\_right@{ticks\_actual\_right}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{ticks\_actual\_right}{ticks\_actual\_right}}
+{\footnotesize\ttfamily \label{structsc__state__t_a3188e65802d6f52ed043b25e04f92a77} 
+int32\+\_\+t sc\+\_\+state\+\_\+t::\+ticks\+\_\+actual\+\_\+right}
+
+ticks reales del último ciclo \Hypertarget{structsc__state__t_afaf7899d163659ac4ebe9437c7b10c25}\index{sc\_state\_t@{sc\_state\_t}!ticks\_target\_left@{ticks\_target\_left}}
+\index{ticks\_target\_left@{ticks\_target\_left}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{ticks\_target\_left}{ticks\_target\_left}}
+{\footnotesize\ttfamily \label{structsc__state__t_afaf7899d163659ac4ebe9437c7b10c25} 
+float sc\+\_\+state\+\_\+t::\+ticks\+\_\+target\+\_\+left}
+
+ticks/\+ciclo objetivo canal izquierdo \Hypertarget{structsc__state__t_a898359e89f75dfaf83106c6ec599f3c8}\index{sc\_state\_t@{sc\_state\_t}!ticks\_target\_right@{ticks\_target\_right}}
+\index{ticks\_target\_right@{ticks\_target\_right}!sc\_state\_t@{sc\_state\_t}}
+\doxysubsubsection{\texorpdfstring{ticks\_target\_right}{ticks\_target\_right}}
+{\footnotesize\ttfamily \label{structsc__state__t_a898359e89f75dfaf83106c6ec599f3c8} 
+float sc\+\_\+state\+\_\+t::\+ticks\+\_\+target\+\_\+right}
+
+ticks/\+ciclo objetivo canal derecho 
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{speed_control_8h}{speed\+Control.\+h}}\end{DoxyCompactItemize}

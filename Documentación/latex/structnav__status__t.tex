@@ -1,0 +1,77 @@
+\doxysection{nav\+\_\+status\+\_\+t Struct Reference}
+\hypertarget{structnav__status__t}{}\label{structnav__status__t}\index{nav\_status\_t@{nav\_status\_t}}
+
+
+Snapshot del estado de navegación para diagnóstico y logging.  
+
+
+
+
+{\ttfamily \+\#include $<$Navigation.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}} \doxymbox{\hyperlink{structnav__status__t_a67e9e00783bdee7215336841d334b9c9}{state}}
+\item 
+float \doxymbox{\hyperlink{structnav__status__t_a2631200560f5ddd1cdaa6e7669300806}{target\+\_\+x}}
+\item 
+float \doxymbox{\hyperlink{structnav__status__t_addd82e1b897214a9e2b705a8ef14de23}{target\+\_\+y}}
+\item 
+float \doxymbox{\hyperlink{structnav__status__t_a8ab6da0d0118b94cf712f73ddb22205b}{distance\+\_\+to\+\_\+goal}}
+\item 
+float \doxymbox{\hyperlink{structnav__status__t_a4543a6e4c3f7341b4d2d81dd7bf33f19}{angle\+\_\+error}}
+\item 
+float \doxymbox{\hyperlink{structnav__status__t_a9eb8e6bbfdef90c37a67fc59f08cdcac}{pos\+\_\+tolerance}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Snapshot del estado de navegación para diagnóstico y logging. 
+
+Se actualiza en cada ciclo de \doxylink{_navigation_8c_a735ef684d3eb5919e65563df7da1dcfd}{nav\+\_\+update()}. Accesible externamente mediante \doxylink{_navigation_8c_ab92777f9a204b4debf718f75411a805d}{nav\+\_\+get\+\_\+status()}. No debe usarse en el camino crítico de control. 
+
+\label{doc-variable-members}
+\Hypertarget{structnav__status__t_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structnav__status__t_a4543a6e4c3f7341b4d2d81dd7bf33f19}\index{nav\_status\_t@{nav\_status\_t}!angle\_error@{angle\_error}}
+\index{angle\_error@{angle\_error}!nav\_status\_t@{nav\_status\_t}}
+\doxysubsubsection{\texorpdfstring{angle\_error}{angle\_error}}
+{\footnotesize\ttfamily \label{structnav__status__t_a4543a6e4c3f7341b4d2d81dd7bf33f19} 
+float nav\+\_\+status\+\_\+t::\+angle\+\_\+error}
+
+Error angular normalizado al destino en el ciclo actual \+[rad]\+. Rango (-\/π, π]\+. \Hypertarget{structnav__status__t_a8ab6da0d0118b94cf712f73ddb22205b}\index{nav\_status\_t@{nav\_status\_t}!distance\_to\_goal@{distance\_to\_goal}}
+\index{distance\_to\_goal@{distance\_to\_goal}!nav\_status\_t@{nav\_status\_t}}
+\doxysubsubsection{\texorpdfstring{distance\_to\_goal}{distance\_to\_goal}}
+{\footnotesize\ttfamily \label{structnav__status__t_a8ab6da0d0118b94cf712f73ddb22205b} 
+float nav\+\_\+status\+\_\+t::\+distance\+\_\+to\+\_\+goal}
+
+Distancia euclidiana al destino en el ciclo actual \+[mm]\+. \Hypertarget{structnav__status__t_a9eb8e6bbfdef90c37a67fc59f08cdcac}\index{nav\_status\_t@{nav\_status\_t}!pos\_tolerance@{pos\_tolerance}}
+\index{pos\_tolerance@{pos\_tolerance}!nav\_status\_t@{nav\_status\_t}}
+\doxysubsubsection{\texorpdfstring{pos\_tolerance}{pos\_tolerance}}
+{\footnotesize\ttfamily \label{structnav__status__t_a9eb8e6bbfdef90c37a67fc59f08cdcac} 
+float nav\+\_\+status\+\_\+t::\+pos\+\_\+tolerance}
+
+Radio de llegada activo en el ciclo actual \+[mm]\+. \Hypertarget{structnav__status__t_a67e9e00783bdee7215336841d334b9c9}\index{nav\_status\_t@{nav\_status\_t}!state@{state}}
+\index{state@{state}!nav\_status\_t@{nav\_status\_t}}
+\doxysubsubsection{\texorpdfstring{state}{state}}
+{\footnotesize\ttfamily \label{structnav__status__t_a67e9e00783bdee7215336841d334b9c9} 
+\doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}} nav\+\_\+status\+\_\+t::\+state}
+
+Estado actual de la FSM. \Hypertarget{structnav__status__t_a2631200560f5ddd1cdaa6e7669300806}\index{nav\_status\_t@{nav\_status\_t}!target\_x@{target\_x}}
+\index{target\_x@{target\_x}!nav\_status\_t@{nav\_status\_t}}
+\doxysubsubsection{\texorpdfstring{target\_x}{target\_x}}
+{\footnotesize\ttfamily \label{structnav__status__t_a2631200560f5ddd1cdaa6e7669300806} 
+float nav\+\_\+status\+\_\+t::\+target\+\_\+x}
+
+Coordenada X del destino activo \+[mm]\+. \Hypertarget{structnav__status__t_addd82e1b897214a9e2b705a8ef14de23}\index{nav\_status\_t@{nav\_status\_t}!target\_y@{target\_y}}
+\index{target\_y@{target\_y}!nav\_status\_t@{nav\_status\_t}}
+\doxysubsubsection{\texorpdfstring{target\_y}{target\_y}}
+{\footnotesize\ttfamily \label{structnav__status__t_addd82e1b897214a9e2b705a8ef14de23} 
+float nav\+\_\+status\+\_\+t::\+target\+\_\+y}
+
+Coordenada Y del destino activo \+[mm]\+. 
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{_navigation_8h}{Navigation.\+h}}\end{DoxyCompactItemize}

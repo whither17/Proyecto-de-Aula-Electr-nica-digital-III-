@@ -1,0 +1,154 @@
+\doxysection{odometry.\+h File Reference}
+\hypertarget{odometry_8h}{}\label{odometry_8h}\index{odometry.h@{odometry.h}}
+
+
+Módulo de Odometría.  
+
+
+{\ttfamily \+\#include "{}hardware/\+sync.\+h"{}}\newline
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structpose__t}{pose\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Estado del robot en el plano. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structodo__params__t}{odo\+\_\+params\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Parámetros físicos del robot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{odometry_8h_a13668f0a587de16e98730d00c358f1ee}\label{odometry_8h_a13668f0a587de16e98730d00c358f1ee} 
+\+\#define {\bfseries ODO\+\_\+\+CALIB\+\_\+\+SAMPLES}~200
+\begin{DoxyCompactList}\small\item\em Número de muestras para estimar el bias del giroscopio durante la calibración. A 100 Hz, 200 muestras = 2 segundos quieto. El robot debe estar completamente inmóvil durante este tiempo. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{odometry_8h_ada9c7f5634f565a62b844ef5354b5179}{ODO\+\_\+\+ALPHA}}~0.\+5f
+\item 
+\+\#define \doxymbox{\hyperlink{odometry_8h_aa315ba467b5d631407557ef83cd76c61}{ODO\+\_\+\+DT}}~0.\+01f
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{odometry_8h_a29b01621c52d72a355633c65836b4555}{odometry\+\_\+init}} (const \doxymbox{\hyperlink{structodo__params__t}{odo\+\_\+params\+\_\+t}} \texorpdfstring{$\ast$}{*}params, const \doxymbox{\hyperlink{structpose__t}{pose\+\_\+t}} \texorpdfstring{$\ast$}{*}init\+\_\+pose)
+\begin{DoxyCompactList}\small\item\em Inicializa el módulo con los parámetros físicos del robot y realiza la calibración del bias del giroscopio. \end{DoxyCompactList}\item 
+\Hypertarget{odometry_8h_ad57d4389ef608b9558767dade4e6a608}\label{odometry_8h_ad57d4389ef608b9558767dade4e6a608} 
+void {\bfseries odometry\+\_\+update} ()
+\begin{DoxyCompactList}\small\item\em Ejecuta un ciclo completo de estimación de pose. Debe llamarse cada vez que la IMU tiene datos nuevos, es decir cuando imu\+\_\+data\+\_\+ready() devuelve true. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{odometry_8h_aaf1c6d3d4e47462da8bbe710c9995e51}{odometry\+\_\+get\+\_\+pose}} (\doxymbox{\hyperlink{structpose__t}{pose\+\_\+t}} \texorpdfstring{$\ast$}{*}out)
+\begin{DoxyCompactList}\small\item\em Copia la pose estimada actual en la estructura apuntada por \texorpdfstring{$\ast$}{*}out. Lectura atómica — deshabilita interrupciones brevemente para garantizar consistencia de los tres campos. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{odometry_8h_afafc3463b85e37327e7ac079cbb5eb5f}{odometry\+\_\+set\+\_\+pose}} (const \doxymbox{\hyperlink{structpose__t}{pose\+\_\+t}} \texorpdfstring{$\ast$}{*}new\+\_\+pose)
+\begin{DoxyCompactList}\small\item\em Sobreescribe la pose estimada con un valor conocido. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{odometry_8h_aa7e65359e5bb8f0ba2a9df37fca045ad}{odometry\+\_\+get\+\_\+bias}} ()
+\begin{DoxyCompactList}\small\item\em Devuelve el bias del giroscopio estimado durante la calibración, en rad/\+s. Útil para diagnóstico o logging. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Módulo de Odometría. 
+
+\begin{DoxyAuthor}{Author}
+Andrés Felipe Agudelo Zapata (\href{mailto:andresf.agudeloz@udea.edu.co}{\texttt{andresf.\+agudeloz@udea.\+edu.\+co}}) 
+\end{DoxyAuthor}
+Estima la pose del robot (x, y, θ) combinando encoders de cuadratura con el giroscopio del MPU6050 mediante un filtro complementario.
+
+Depende de:\+ encoder.\+h — encoder\+\_\+get\+\_\+left(), encoder\+\_\+get\+\_\+right() imu.\+h — imu\+\_\+data\+\_\+ready(), imu\+\_\+read(), imu\+\_\+get\+\_\+data()
+
+Unidades del sistema:\+ Posición → milímetros (mm) Ángulo → radianes, rango normalizado (-\/π, π]\+ Tiempo → segundos (internamente)
+
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2026-\/06-\/09
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2026 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{odometry_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{odometry_8h_ada9c7f5634f565a62b844ef5354b5179}\index{odometry.h@{odometry.h}!ODO\_ALPHA@{ODO\_ALPHA}}
+\index{ODO\_ALPHA@{ODO\_ALPHA}!odometry.h@{odometry.h}}
+\doxysubsubsection{\texorpdfstring{ODO\_ALPHA}{ODO\_ALPHA}}
+{\footnotesize\ttfamily \label{odometry_8h_ada9c7f5634f565a62b844ef5354b5179} 
+\+\#define ODO\+\_\+\+ALPHA~0.\+5f}
+
+Peso del giroscopio en el filtro complementario (α). α → 1.\+0 :\+ confía casi totalmente en el giroscopio, α → 0.\+0 :\+ confía casi totalmente en los encoders \Hypertarget{odometry_8h_aa315ba467b5d631407557ef83cd76c61}\index{odometry.h@{odometry.h}!ODO\_DT@{ODO\_DT}}
+\index{ODO\_DT@{ODO\_DT}!odometry.h@{odometry.h}}
+\doxysubsubsection{\texorpdfstring{ODO\_DT}{ODO\_DT}}
+{\footnotesize\ttfamily \label{odometry_8h_aa315ba467b5d631407557ef83cd76c61} 
+\+\#define ODO\+\_\+\+DT~0.\+01f}
+
+Período de muestreo en segundos — debe coincidir con IMU\+\_\+\+SAMPLE\+\_\+\+US. 
+
+\label{doc-func-members}
+\Hypertarget{odometry_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{odometry_8h_aa7e65359e5bb8f0ba2a9df37fca045ad}\index{odometry.h@{odometry.h}!odometry\_get\_bias@{odometry\_get\_bias}}
+\index{odometry\_get\_bias@{odometry\_get\_bias}!odometry.h@{odometry.h}}
+\doxysubsubsection{\texorpdfstring{odometry\_get\_bias()}{odometry\_get\_bias()}}
+{\footnotesize\ttfamily \label{odometry_8h_aa7e65359e5bb8f0ba2a9df37fca045ad} 
+float odometry\+\_\+get\+\_\+bias (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Devuelve el bias del giroscopio estimado durante la calibración, en rad/\+s. Útil para diagnóstico o logging. 
+
+\begin{DoxyReturn}{Returns}
+float Bias estimado 
+\end{DoxyReturn}
+\Hypertarget{odometry_8h_aaf1c6d3d4e47462da8bbe710c9995e51}\index{odometry.h@{odometry.h}!odometry\_get\_pose@{odometry\_get\_pose}}
+\index{odometry\_get\_pose@{odometry\_get\_pose}!odometry.h@{odometry.h}}
+\doxysubsubsection{\texorpdfstring{odometry\_get\_pose()}{odometry\_get\_pose()}}
+{\footnotesize\ttfamily \label{odometry_8h_aaf1c6d3d4e47462da8bbe710c9995e51} 
+void odometry\+\_\+get\+\_\+pose (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structpose__t}{pose\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{out}{}\end{DoxyParamCaption})}
+
+
+
+Copia la pose estimada actual en la estructura apuntada por \texorpdfstring{$\ast$}{*}out. Lectura atómica — deshabilita interrupciones brevemente para garantizar consistencia de los tres campos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em out} & Pose de salida (por referencia) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{odometry_8h_a29b01621c52d72a355633c65836b4555}\index{odometry.h@{odometry.h}!odometry\_init@{odometry\_init}}
+\index{odometry\_init@{odometry\_init}!odometry.h@{odometry.h}}
+\doxysubsubsection{\texorpdfstring{odometry\_init()}{odometry\_init()}}
+{\footnotesize\ttfamily \label{odometry_8h_a29b01621c52d72a355633c65836b4555} 
+bool odometry\+\_\+init (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structodo__params__t}{odo\+\_\+params\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{params}{, }\item[{const \doxymbox{\hyperlink{structpose__t}{pose\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{init\+\_\+pose}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el módulo con los parámetros físicos del robot y realiza la calibración del bias del giroscopio. 
+
+IMPORTANTE:\+ el robot debe estar quieto y nivelado durante toda la calibración (ODO\+\_\+\+CALIB\+\_\+\+SAMPLES \texorpdfstring{$\ast$}{*} ODO\+\_\+\+DT segundos ≈ 2 segundos).
+
+
+\begin{DoxyParams}{Parameters}
+{\em params} & Parámetros físicos del robot \doxylink{structodo__params__t}{odo\+\_\+params\+\_\+t} \\
+\hline
+{\em init\+\_\+pose} & Pose inicial del robot \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true Inicialización y calibración exitosas 
+
+false La IMU no respondió o no se pudo completar la calibración 
+\end{DoxyReturn}
+\Hypertarget{odometry_8h_afafc3463b85e37327e7ac079cbb5eb5f}\index{odometry.h@{odometry.h}!odometry\_set\_pose@{odometry\_set\_pose}}
+\index{odometry\_set\_pose@{odometry\_set\_pose}!odometry.h@{odometry.h}}
+\doxysubsubsection{\texorpdfstring{odometry\_set\_pose()}{odometry\_set\_pose()}}
+{\footnotesize\ttfamily \label{odometry_8h_afafc3463b85e37327e7ac079cbb5eb5f} 
+void odometry\+\_\+set\+\_\+pose (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structpose__t}{pose\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{new\+\_\+pose}{}\end{DoxyParamCaption})}
+
+
+
+Sobreescribe la pose estimada con un valor conocido. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+\_\+pose} & Nueva pose \\
+\hline
+\end{DoxyParams}

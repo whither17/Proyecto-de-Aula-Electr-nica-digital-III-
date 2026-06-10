@@ -1,0 +1,344 @@
+\doxysection{Navigation.\+h File Reference}
+\hypertarget{_navigation_8h}{}\label{_navigation_8h}\index{Navigation.h@{Navigation.h}}
+
+
+Módulo de navegación punto a punto para robot diferencial autónomo.  
+
+
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include "{}odometry.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structnav__status__t}{nav\+\_\+status\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Snapshot del estado de navegación para diagnóstico y logging. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{_navigation_8h_a3612cd8c140ec10ce2d999f783f2f528}{NAV\+\_\+\+RAMP\+\_\+\+CYCLES}}~70
+\item 
+\+\#define \doxymbox{\hyperlink{_navigation_8h_a424e67bca5317a4ecc690e32bfe5de23}{NAV\+\_\+\+LINEAR\+\_\+\+SPEED\+\_\+\+MM\+\_\+S}}~100.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{_navigation_8h_a8f58b448b4dd70980ea82015d493da46}{NAV\+\_\+\+TURN\+\_\+\+SPEED}}~60
+\item 
+\+\#define \doxymbox{\hyperlink{_navigation_8h_ae5075aa9c8c4dd465bb15a2998ddad9f}{NAV\+\_\+\+ANGLE\+\_\+\+TOL}}~0.\+03f
+\item 
+\+\#define \doxymbox{\hyperlink{_navigation_8h_ae9d872b3599d0c4afe2f221627ea1488}{NAV\+\_\+\+POS\+\_\+\+TOL\+\_\+\+DEFAULT}}~20.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{_navigation_8h_ae590e01f2789832bf4ef1df167a9e48c}{NAV\+\_\+\+KP\+\_\+\+TURN}}~47.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{_navigation_8h_ad449eeecb5e69cb4306ed21aec03b3a0}{NAV\+\_\+\+TURN\+\_\+\+PWM\+\_\+\+MIN}}~47
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}} \{ \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9cafb8a4100d41fb4d1475a68bf200705ec}{NAV\+\_\+\+IDLE}} = 0
+, \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca3bf4e1ab7a822bfb25f0db3806003aaf}{NAV\+\_\+\+TURNING}} = 1
+, \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9caf6d98ac492a2fcc6697e14c14cb709d0}{NAV\+\_\+\+DRIVING}} = 2
+, \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca5fc977fa951ba2f7369f77112d969a34}{NAV\+\_\+\+DONE}} = 3
+ \}
+\begin{DoxyCompactList}\small\item\em Estados de la máquina de navegación punto a punto. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{_navigation_8h_ae4e432ce117501524ff616b091d3616b}{nav\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Inicializa el módulo de navegación. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{_navigation_8h_ae73ea3673db1c8132c3e0312aa11d13d}{nav\+\_\+go\+\_\+to}} (float x\+\_\+mm, float y\+\_\+mm)
+\begin{DoxyCompactList}\small\item\em Establece un nuevo destino y arranca la navegación. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}} \doxymbox{\hyperlink{_navigation_8h_af97e087a125dff1eaf7332844682a11c}{nav\+\_\+update}} ()
+\begin{DoxyCompactList}\small\item\em Ejecuta un ciclo de la FSM de navegación. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{_navigation_8h_a696bdab2a220b69f26e080fd9ff3a871}{nav\+\_\+is\+\_\+done}} ()
+\begin{DoxyCompactList}\small\item\em Consulta si la navegación ha terminado. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{_navigation_8h_a81d0b1a0ac794dcec70c9573cf8e0668}{nav\+\_\+stop}} ()
+\begin{DoxyCompactList}\small\item\em Cancela el movimiento actual y detiene los motores. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{_navigation_8h_a6fc15d546335feb15109c48c23a25699}{nav\+\_\+set\+\_\+pos\+\_\+tolerance}} (float tol\+\_\+mm)
+\begin{DoxyCompactList}\small\item\em Cambia el radio de llegada en tiempo de ejecución. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{_navigation_8h_ab92777f9a204b4debf718f75411a805d}{nav\+\_\+get\+\_\+status}} (\doxymbox{\hyperlink{structnav__status__t}{nav\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*}out)
+\begin{DoxyCompactList}\small\item\em Copia el snapshot de diagnóstico del ciclo actual. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Módulo de navegación punto a punto para robot diferencial autónomo. 
+
+\begin{DoxyAuthor}{Author}
+Robinson Correa Morales -\/ Andres Felipe Agudelo Zapata 
+\end{DoxyAuthor}
+Implementa una FSM de tres fases (TURNING → DRIVING → DONE) que lleva al robot desde su posición actual hasta un destino arbitrario en el plano XY.
+
+La navegación se divide en dos etapas secuenciales:\+
+\begin{DoxyEnumerate}
+\item {\bfseries{TURNING}} :\+ giro en el sitio mediante control P sobre el error angular.
+\item {\bfseries{DRIVING}} :\+ avance recto con rampa de aceleración, delegando el control de velocidad diferencial al módulo speed\+\_\+control (Bloque 1).
+\end{DoxyEnumerate}
+
+La pose del robot se obtiene en cada ciclo de odometry\+\_\+get\+\_\+pose(), lo que hace el módulo robusto a la deriva acumulada:\+ si el robot se desvía durante el avance, la detección de llegada usa la distancia real al destino.
+
+\begin{DoxyNote}{Note}
+Debe llamarse \doxylink{_navigation_8h_ae4e432ce117501524ff616b091d3616b}{nav\+\_\+init()} después de speed\+\_\+control\+\_\+init() y odometry\+\_\+init(). \doxylink{_navigation_8h_af97e087a125dff1eaf7332844682a11c}{nav\+\_\+update()} debe invocarse a 100 Hz en el mismo ciclo que \doxylink{odometry_8h_ad57d4389ef608b9558767dade4e6a608}{odometry\+\_\+update()} y \doxylink{speed_control_8h_aab00a0789a5ae1d960cafdff4f08b5fd}{speed\+\_\+control\+\_\+update()}.
+\end{DoxyNote}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2026-\/06-\/09 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2026 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{_navigation_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{_navigation_8h_ae5075aa9c8c4dd465bb15a2998ddad9f}\index{Navigation.h@{Navigation.h}!NAV\_ANGLE\_TOL@{NAV\_ANGLE\_TOL}}
+\index{NAV\_ANGLE\_TOL@{NAV\_ANGLE\_TOL}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{NAV\_ANGLE\_TOL}{NAV\_ANGLE\_TOL}}
+{\footnotesize\ttfamily \label{_navigation_8h_ae5075aa9c8c4dd465bb15a2998ddad9f} 
+\+\#define NAV\+\_\+\+ANGLE\+\_\+\+TOL~0.\+03f}
+
+Tolerancia angular para salir de TURNING \+[rad]\+. 0.\+05 rad ≈ 2.\+9°. Con velocidad de giro baja, el robot debería detenerse dentro de esta ventana sin overshoot apreciable. \begin{DoxyNote}{Note}
+Subir (más tolerante) si el robot oscila mucho en la fase de giro; bajar (más estricto) si el error de llegada viene del heading inicial. 
+\end{DoxyNote}
+\Hypertarget{_navigation_8h_ae590e01f2789832bf4ef1df167a9e48c}\index{Navigation.h@{Navigation.h}!NAV\_KP\_TURN@{NAV\_KP\_TURN}}
+\index{NAV\_KP\_TURN@{NAV\_KP\_TURN}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{NAV\_KP\_TURN}{NAV\_KP\_TURN}}
+{\footnotesize\ttfamily \label{_navigation_8h_ae590e01f2789832bf4ef1df167a9e48c} 
+\+\#define NAV\+\_\+\+KP\+\_\+\+TURN~47.\+0f}
+
+Ganancia proporcional del controlador de giro \+[-\/]\+. Escala el error angular \+[rad]\+ a corrección en PWM. Con error de π rad y KP=45, la corrección sería 141 PWM, saturada al límite \doxylink{_navigation_8h_a8f58b448b4dd70980ea82015d493da46}{NAV\+\_\+\+TURN\+\_\+\+SPEED}. \begin{DoxyNote}{Note}
+Subir si el robot tarda demasiado en centrarse en el ángulo; bajar si oscila alrededor del ángulo objetivo durante el giro. 
+\end{DoxyNote}
+\Hypertarget{_navigation_8h_a424e67bca5317a4ecc690e32bfe5de23}\index{Navigation.h@{Navigation.h}!NAV\_LINEAR\_SPEED\_MM\_S@{NAV\_LINEAR\_SPEED\_MM\_S}}
+\index{NAV\_LINEAR\_SPEED\_MM\_S@{NAV\_LINEAR\_SPEED\_MM\_S}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{NAV\_LINEAR\_SPEED\_MM\_S}{NAV\_LINEAR\_SPEED\_MM\_S}}
+{\footnotesize\ttfamily \label{_navigation_8h_a424e67bca5317a4ecc690e32bfe5de23} 
+\+\#define NAV\+\_\+\+LINEAR\+\_\+\+SPEED\+\_\+\+MM\+\_\+S~100.\+0f}
+
+Velocidad de avance en línea recta \+[mm/\+s]\+. Valor validado con el controlador diferencial actual. Debe ser un valor que el Bloque 1 ya haya demostrado controlar correctamente. \Hypertarget{_navigation_8h_ae9d872b3599d0c4afe2f221627ea1488}\index{Navigation.h@{Navigation.h}!NAV\_POS\_TOL\_DEFAULT@{NAV\_POS\_TOL\_DEFAULT}}
+\index{NAV\_POS\_TOL\_DEFAULT@{NAV\_POS\_TOL\_DEFAULT}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{NAV\_POS\_TOL\_DEFAULT}{NAV\_POS\_TOL\_DEFAULT}}
+{\footnotesize\ttfamily \label{_navigation_8h_ae9d872b3599d0c4afe2f221627ea1488} 
+\+\#define NAV\+\_\+\+POS\+\_\+\+TOL\+\_\+\+DEFAULT~20.\+0f}
+
+Radio de llegada por defecto \+[mm]\+. El robot declara "{}llegué"{} cuando la distancia euclidiana al destino es menor que este valor. Modificable en tiempo de ejecución con \doxylink{_navigation_8h_a6fc15d546335feb15109c48c23a25699}{nav\+\_\+set\+\_\+pos\+\_\+tolerance()}. \Hypertarget{_navigation_8h_a3612cd8c140ec10ce2d999f783f2f528}\index{Navigation.h@{Navigation.h}!NAV\_RAMP\_CYCLES@{NAV\_RAMP\_CYCLES}}
+\index{NAV\_RAMP\_CYCLES@{NAV\_RAMP\_CYCLES}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{NAV\_RAMP\_CYCLES}{NAV\_RAMP\_CYCLES}}
+{\footnotesize\ttfamily \label{_navigation_8h_a3612cd8c140ec10ce2d999f783f2f528} 
+\+\#define NAV\+\_\+\+RAMP\+\_\+\+CYCLES~70}
+
+Ciclos de aceleración al entrar en DRIVING. La velocidad sube linealmente de 0 a \doxylink{_navigation_8h_a424e67bca5317a4ecc690e32bfe5de23}{NAV\+\_\+\+LINEAR\+\_\+\+SPEED\+\_\+\+MM\+\_\+S} durante este número de ciclos (a 100 Hz → 70 ciclos = 700 ms). \begin{DoxyNote}{Note}
+Subir si los motores patinan al arrancar; bajar si el robot tarda demasiado en alcanzar velocidad de crucero. 
+\end{DoxyNote}
+\Hypertarget{_navigation_8h_ad449eeecb5e69cb4306ed21aec03b3a0}\index{Navigation.h@{Navigation.h}!NAV\_TURN\_PWM\_MIN@{NAV\_TURN\_PWM\_MIN}}
+\index{NAV\_TURN\_PWM\_MIN@{NAV\_TURN\_PWM\_MIN}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{NAV\_TURN\_PWM\_MIN}{NAV\_TURN\_PWM\_MIN}}
+{\footnotesize\ttfamily \label{_navigation_8h_ad449eeecb5e69cb4306ed21aec03b3a0} 
+\+\#define NAV\+\_\+\+TURN\+\_\+\+PWM\+\_\+\+MIN~47}
+
+PWM mínimo aplicado durante el giro \+[PWM]\+. Umbral justo por encima del punto de arranque de los motores para vencer la fricción estática. Si el control P devuelve un valor entre 0 y este umbral, se reemplaza por NAV\+\_\+\+TURN\+\_\+\+PWM\+\_\+\+MIN para garantizar que el robot siempre se mueva. \Hypertarget{_navigation_8h_a8f58b448b4dd70980ea82015d493da46}\index{Navigation.h@{Navigation.h}!NAV\_TURN\_SPEED@{NAV\_TURN\_SPEED}}
+\index{NAV\_TURN\_SPEED@{NAV\_TURN\_SPEED}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{NAV\_TURN\_SPEED}{NAV\_TURN\_SPEED}}
+{\footnotesize\ttfamily \label{_navigation_8h_a8f58b448b4dd70980ea82015d493da46} 
+\+\#define NAV\+\_\+\+TURN\+\_\+\+SPEED~60}
+
+Velocidad angular máxima de giro en el sitio \+[PWM]\+. Se aplica como diferencial puro a motors\+\_\+set():\+
+\begin{DoxyItemize}
+\item Giro izquierda:\+ motors\+\_\+set(+NAV\+\_\+\+TURN\+\_\+\+SPEED, -\/NAV\+\_\+\+TURN\+\_\+\+SPEED)
+\item Giro derecha:\+ motors\+\_\+set(-\/NAV\+\_\+\+TURN\+\_\+\+SPEED, +NAV\+\_\+\+TURN\+\_\+\+SPEED) \begin{DoxyNote}{Note}
+Subir si el giro es demasiado lento; bajar si el robot sobrepasa el ángulo objetivo y oscila antes de estabilizar. 
+\end{DoxyNote}
+
+\end{DoxyItemize}
+
+\label{doc-enum-members}
+\Hypertarget{_navigation_8h_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}\index{Navigation.h@{Navigation.h}!nav\_state\_t@{nav\_state\_t}}
+\index{nav\_state\_t@{nav\_state\_t}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_state\_t}{nav\_state\_t}}
+{\footnotesize\ttfamily \label{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c} 
+enum \doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}}}
+
+
+
+Estados de la máquina de navegación punto a punto. 
+
+Diagrama de transiciones:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{IDLE\ ──nav\_go\_to()──→\ TURNING\ ──|error|<TOL──→\ DRIVING\ ──dist<tol──→\ DONE}
+\DoxyCodeLine{\ ▲\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ │}
+\DoxyCodeLine{\ └────────────────────────────\ (siguiente\ ciclo)\ ──────────────────────┘}
+
+\end{DoxyCode}
+ \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NAV\_IDLE@{NAV\_IDLE}!Navigation.h@{Navigation.h}}
+\index{Navigation.h@{Navigation.h}!NAV\_IDLE@{NAV\_IDLE}}
+}\Hypertarget{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9cafb8a4100d41fb4d1475a68bf200705ec}\label{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9cafb8a4100d41fb4d1475a68bf200705ec} 
+NAV\+\_\+\+IDLE&Sin objetivo activo. Motores detenidos. Estado inicial y de reposo tras completar una navegación o llamar \doxylink{_navigation_8h_a81d0b1a0ac794dcec70c9573cf8e0668}{nav\+\_\+stop()}. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NAV\_TURNING@{NAV\_TURNING}!Navigation.h@{Navigation.h}}
+\index{Navigation.h@{Navigation.h}!NAV\_TURNING@{NAV\_TURNING}}
+}\Hypertarget{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca3bf4e1ab7a822bfb25f0db3806003aaf}\label{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca3bf4e1ab7a822bfb25f0db3806003aaf} 
+NAV\+\_\+\+TURNING&Girando en el sitio hacia el heading del destino. Control P sobre el error angular. Transiciona a NAV\+\_\+\+DRIVING cuando \texorpdfstring{$\vert$}{|}angle\+\_\+error\texorpdfstring{$\vert$}{|} \texorpdfstring{$<$}{<} \doxylink{_navigation_8h_ae5075aa9c8c4dd465bb15a2998ddad9f}{NAV\+\_\+\+ANGLE\+\_\+\+TOL}. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NAV\_DRIVING@{NAV\_DRIVING}!Navigation.h@{Navigation.h}}
+\index{Navigation.h@{Navigation.h}!NAV\_DRIVING@{NAV\_DRIVING}}
+}\Hypertarget{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9caf6d98ac492a2fcc6697e14c14cb709d0}\label{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9caf6d98ac492a2fcc6697e14c14cb709d0} 
+NAV\+\_\+\+DRIVING&Avanzando en línea recta hacia el destino. Rampa de aceleración activa durante \doxylink{_navigation_8h_a3612cd8c140ec10ce2d999f783f2f528}{NAV\+\_\+\+RAMP\+\_\+\+CYCLES} ciclos. Delega el control diferencial a speed\+\_\+control. Transiciona a NAV\+\_\+\+DONE cuando dist \texorpdfstring{$<$}{<} pos\+\_\+tolerance. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NAV\_DONE@{NAV\_DONE}!Navigation.h@{Navigation.h}}
+\index{Navigation.h@{Navigation.h}!NAV\_DONE@{NAV\_DONE}}
+}\Hypertarget{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca5fc977fa951ba2f7369f77112d969a34}\label{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9ca5fc977fa951ba2f7369f77112d969a34} 
+NAV\+\_\+\+DONE&Destino alcanzado. Motores detenidos. Transiciona automáticamente a NAV\+\_\+\+IDLE en el siguiente ciclo de \doxylink{_navigation_8h_af97e087a125dff1eaf7332844682a11c}{nav\+\_\+update()} si no se llama \doxylink{_navigation_8h_ae73ea3673db1c8132c3e0312aa11d13d}{nav\+\_\+go\+\_\+to()}. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\label{doc-func-members}
+\Hypertarget{_navigation_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{_navigation_8h_ab92777f9a204b4debf718f75411a805d}\index{Navigation.h@{Navigation.h}!nav\_get\_status@{nav\_get\_status}}
+\index{nav\_get\_status@{nav\_get\_status}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_get\_status()}{nav\_get\_status()}}
+{\footnotesize\ttfamily \label{_navigation_8h_ab92777f9a204b4debf718f75411a805d} 
+void nav\+\_\+get\+\_\+status (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structnav__status__t}{nav\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{out}{}\end{DoxyParamCaption})}
+
+
+
+Copia el snapshot de diagnóstico del ciclo actual. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em out} & Puntero al buffer donde se escribe el estado. No debe ser NULL. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Solo para logging y tuning. No llamar en el camino crítico de control.
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
+\end{DoxySeeAlso}
+\Hypertarget{_navigation_8h_ae73ea3673db1c8132c3e0312aa11d13d}\index{Navigation.h@{Navigation.h}!nav\_go\_to@{nav\_go\_to}}
+\index{nav\_go\_to@{nav\_go\_to}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_go\_to()}{nav\_go\_to()}}
+{\footnotesize\ttfamily \label{_navigation_8h_ae73ea3673db1c8132c3e0312aa11d13d} 
+void nav\+\_\+go\+\_\+to (\begin{DoxyParamCaption}\item[{float}]{x\+\_\+mm}{, }\item[{float}]{y\+\_\+mm}{}\end{DoxyParamCaption})}
+
+
+
+Establece un nuevo destino y arranca la navegación. 
+
+Si hay un movimiento en curso lo cancela inmediatamente (llama \doxylink{speed_control_8h_a9a68a3c9943eda186149eafa6bc77c0f}{speed\+\_\+control\+\_\+stop()} y motors\+\_\+set(0,0)) antes de iniciar el nuevo.
+
+La FSM siempre arranca desde NAV\+\_\+\+TURNING:\+ si el robot ya apunta al destino, la primera llamada a \doxylink{_navigation_8c_a735ef684d3eb5919e65563df7da1dcfd}{nav\+\_\+update()} transicionará a DRIVING en el mismo ciclo.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+mm} & Coordenada X del destino \+[mm]\+, referida al origen de odometría. \\
+\hline
+{\em y\+\_\+mm} & Coordenada Y del destino \+[mm]\+, referida al origen de odometría.\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
+\end{DoxySeeAlso}
+\Hypertarget{_navigation_8h_ae4e432ce117501524ff616b091d3616b}\index{Navigation.h@{Navigation.h}!nav\_init@{nav\_init}}
+\index{nav\_init@{nav\_init}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_init()}{nav\_init()}}
+{\footnotesize\ttfamily \label{_navigation_8h_ae4e432ce117501524ff616b091d3616b} 
+void nav\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el módulo de navegación. 
+
+Pone la FSM en NAV\+\_\+\+IDLE, carga la tolerancia de posición por defecto (\doxylink{_navigation_8h_ae9d872b3599d0c4afe2f221627ea1488}{NAV\+\_\+\+POS\+\_\+\+TOL\+\_\+\+DEFAULT}) y pone a cero el snapshot de diagnóstico.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{_navigation_8h}{navigation.\+h} para precondiciones. 
+\end{DoxySeeAlso}
+\Hypertarget{_navigation_8h_a696bdab2a220b69f26e080fd9ff3a871}\index{Navigation.h@{Navigation.h}!nav\_is\_done@{nav\_is\_done}}
+\index{nav\_is\_done@{nav\_is\_done}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_is\_done()}{nav\_is\_done()}}
+{\footnotesize\ttfamily \label{_navigation_8h_a696bdab2a220b69f26e080fd9ff3a871} 
+bool nav\+\_\+is\+\_\+done (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Consulta si la navegación ha terminado. 
+
+\begin{DoxyReturn}{Returns}
+true si la FSM está en NAV\+\_\+\+DONE o NAV\+\_\+\+IDLE. false si está en NAV\+\_\+\+TURNING o NAV\+\_\+\+DRIVING.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
+\end{DoxySeeAlso}
+\Hypertarget{_navigation_8h_a6fc15d546335feb15109c48c23a25699}\index{Navigation.h@{Navigation.h}!nav\_set\_pos\_tolerance@{nav\_set\_pos\_tolerance}}
+\index{nav\_set\_pos\_tolerance@{nav\_set\_pos\_tolerance}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_set\_pos\_tolerance()}{nav\_set\_pos\_tolerance()}}
+{\footnotesize\ttfamily \label{_navigation_8h_a6fc15d546335feb15109c48c23a25699} 
+void nav\+\_\+set\+\_\+pos\+\_\+tolerance (\begin{DoxyParamCaption}\item[{float}]{tol\+\_\+mm}{}\end{DoxyParamCaption})}
+
+
+
+Cambia el radio de llegada en tiempo de ejecución. 
+
+Toma efecto en el próximo ciclo de \doxylink{_navigation_8c_a735ef684d3eb5919e65563df7da1dcfd}{nav\+\_\+update()}. Permite ajustar la tolerancia por segmento de trayectoria según la precisión requerida:\+
+\begin{DoxyItemize}
+\item Waypoints intermedios:\+ valor más alto (ej. 40 mm).
+\item Aproximación final a un objeto:\+ valor más bajo (ej. 20 mm).
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em tol\+\_\+mm} & Nuevo radio de llegada \+[mm]\+. Debe ser \texorpdfstring{$>$}{>} 0; valores menores o iguales a cero se ignoran.\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
+\end{DoxySeeAlso}
+\Hypertarget{_navigation_8h_a81d0b1a0ac794dcec70c9573cf8e0668}\index{Navigation.h@{Navigation.h}!nav\_stop@{nav\_stop}}
+\index{nav\_stop@{nav\_stop}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_stop()}{nav\_stop()}}
+{\footnotesize\ttfamily \label{_navigation_8h_a81d0b1a0ac794dcec70c9573cf8e0668} 
+void nav\+\_\+stop (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Cancela el movimiento actual y detiene los motores. 
+
+Llama \doxylink{speed_control_8h_a9a68a3c9943eda186149eafa6bc77c0f}{speed\+\_\+control\+\_\+stop()} y motors\+\_\+set(0,0) internamente. Deja la FSM en NAV\+\_\+\+IDLE.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
+\end{DoxySeeAlso}
+\Hypertarget{_navigation_8h_af97e087a125dff1eaf7332844682a11c}\index{Navigation.h@{Navigation.h}!nav\_update@{nav\_update}}
+\index{nav\_update@{nav\_update}!Navigation.h@{Navigation.h}}
+\doxysubsubsection{\texorpdfstring{nav\_update()}{nav\_update()}}
+{\footnotesize\ttfamily \label{_navigation_8h_af97e087a125dff1eaf7332844682a11c} 
+\doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}} nav\+\_\+update (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Ejecuta un ciclo de la FSM de navegación. 
+
+Debe invocarse a 100 Hz, en el mismo ciclo que \doxylink{odometry_8h_ad57d4389ef608b9558767dade4e6a608}{odometry\+\_\+update()} y \doxylink{speed_control_8h_aab00a0789a5ae1d960cafdff4f08b5fd}{speed\+\_\+control\+\_\+update()}. Cada llamada:\+
+\begin{DoxyItemize}
+\item En {\bfseries{TURNING}} :\+ calcula error angular, aplica control P con PWM mínimo, verifica convergencia.
+\item En {\bfseries{DRIVING}} :\+ gestiona rampa de aceleración, verifica distancia al destino.
+\item En {\bfseries{DONE}} :\+ transiciona a NAV\+\_\+\+IDLE para liberar la FSM.
+\item En {\bfseries{IDLE}} :\+ no hace nada.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Estado de la FSM al finalizar el ciclo. Útil para que el main detecte NAV\+\_\+\+DONE sin llamar \doxylink{_navigation_8c_ab92777f9a204b4debf718f75411a805d}{nav\+\_\+get\+\_\+status()}.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
+\end{DoxySeeAlso}
