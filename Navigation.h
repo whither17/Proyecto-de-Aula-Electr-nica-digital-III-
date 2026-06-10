@@ -37,12 +37,9 @@
 #define NAV_RAMP_CYCLES          70     /**< Ciclos de aceleración al entrar en DRIVING.
                                           *   La velocidad sube linealmente de 0 a
                                           *   #NAV_LINEAR_SPEED_MM_S durante este número
-                                          *   de ciclos (a 100 Hz → 70 ciclos = 700 ms).
-                                          *   @note Subir si los motores patinan al arrancar;
-                                          *         bajar si el robot tarda demasiado en
-                                          *         alcanzar velocidad de crucero. */
+                                          *   de ciclos (a 100 Hz → 70 ciclos = 700 ms).*/
  
-#define NAV_LINEAR_SPEED_MM_S    100.0f  /**< Velocidad de avance en línea recta [mm/s].
+#define NAV_LINEAR_SPEED_MM_S    98.0f  /**< Velocidad de avance en línea recta [mm/s].
                                           *   Valor validado con el controlador diferencial
                                           *   actual. Debe ser un valor que el Bloque 1
                                           *   ya haya demostrado controlar correctamente. */
@@ -50,18 +47,12 @@
 #define NAV_TURN_SPEED           60     /**< Velocidad angular máxima de giro en el sitio [%PWM].
                                           *   Se aplica como diferencial puro a motors_set():
                                           *   - Giro izquierda: motors_set(+NAV_TURN_SPEED, -NAV_TURN_SPEED)
-                                          *   - Giro derecha:   motors_set(-NAV_TURN_SPEED, +NAV_TURN_SPEED)
-                                          *   @note Subir si el giro es demasiado lento;
-                                          *         bajar si el robot sobrepasa el ángulo
-                                          *         objetivo y oscila antes de estabilizar. */
+                                          *   - Giro derecha:   motors_set(-NAV_TURN_SPEED, +NAV_TURN_SPEED). */
  
 #define NAV_ANGLE_TOL            0.03f  /**< Tolerancia angular para salir de TURNING [rad].
                                           *   0.05 rad ≈ 2.9°. Con velocidad de giro baja,
                                           *   el robot debería detenerse dentro de esta ventana
-                                          *   sin overshoot apreciable.
-                                          *   @note Subir (más tolerante) si el robot oscila
-                                          *         mucho en la fase de giro; bajar (más estricto)
-                                          *         si el error de llegada viene del heading inicial. */
+                                          *   sin overshoot apreciable. */
  
 #define NAV_POS_TOL_DEFAULT      20.0f  /**< Radio de llegada por defecto [mm].
                                           *   El robot declara "llegué" cuando la distancia
@@ -72,10 +63,7 @@
 #define NAV_KP_TURN              47.0f  /**< Ganancia proporcional del controlador de giro [-].
                                           *   Escala el error angular [rad] a corrección en %PWM.
                                           *   Con error de π rad y KP=45, la corrección sería
-                                          *   141 %PWM, saturada al límite #NAV_TURN_SPEED.
-                                          *   @note Subir si el robot tarda demasiado en centrarse
-                                          *         en el ángulo; bajar si oscila alrededor del
-                                          *         ángulo objetivo durante el giro. */
+                                          *   141 %PWM, saturada al límite #NAV_TURN_SPEED. */
  
 #define NAV_TURN_PWM_MIN         47     /**< PWM mínimo aplicado durante el giro [%PWM].
                                           *   Umbral justo por encima del punto de arranque
@@ -84,7 +72,16 @@
                                           *   umbral, se reemplaza por NAV_TURN_PWM_MIN para
                                           *   garantizar que el robot siempre se mueva. */
  
- 
+#define NAV_KP_HEADING          25.0f   /**< Ganancia proporcional de corrección de heading en DRIVING
+                                          *  Escala el error angular [rad] a mm/s de corrección que se suma
+                                          *  ÚNICAMENTE a la rueda rezagada — la adelantada se queda en v base.
+                                          *  Esto evita bajar por debajo de la zona muerta del motor.
+                                          */
+#define NAV_HEADING_CORR_MAX    10.0f   /**< Saturación de la corrección de heading. Limita cuánto puede acelerar 
+                                          *  la rueda rezagada durante DRIVING.
+                                          *  Sin este límite, errores grandes (por deriva acumulada) disparan
+                                          *  la corrección y el robot termina girando en círculo.
+                                          */
 /**
  * @brief Estados de la máquina de navegación punto a punto.
  *

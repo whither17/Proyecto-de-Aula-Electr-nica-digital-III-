@@ -96,32 +96,14 @@ $(function(){initNavTree('_navigation_8c.html','',''); });
 <p>Implementación del módulo de navegación punto a punto.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="_navigation_8h_source.html">navigation.h</a>&quot;</code><br />
-</div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a64a3814d1672e69989f80701a0ff5749" id="r_a64a3814d1672e69989f80701a0ff5749"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a64a3814d1672e69989f80701a0ff5749">nav_init</a> (void)</td></tr>
-<tr class="memdesc:a64a3814d1672e69989f80701a0ff5749"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa el módulo de navegación.  <br /></td></tr>
-<tr class="memitem:ae73ea3673db1c8132c3e0312aa11d13d" id="r_ae73ea3673db1c8132c3e0312aa11d13d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae73ea3673db1c8132c3e0312aa11d13d">nav_go_to</a> (float x_mm, float y_mm)</td></tr>
-<tr class="memdesc:ae73ea3673db1c8132c3e0312aa11d13d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece un nuevo destino y arranca la navegación.  <br /></td></tr>
-<tr class="memitem:a735ef684d3eb5919e65563df7da1dcfd" id="r_a735ef684d3eb5919e65563df7da1dcfd"><td class="memItemLeft"><a class="el" href="_navigation_8h.html#a00145d84e2f2925213be62f67f4e4d9c">nav_state_t</a>&#160;</td><td class="memItemRight"><a class="el" href="#a735ef684d3eb5919e65563df7da1dcfd">nav_update</a> (void)</td></tr>
-<tr class="memdesc:a735ef684d3eb5919e65563df7da1dcfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ejecuta un ciclo de la FSM de navegación.  <br /></td></tr>
-<tr class="memitem:a486b4e14dec23e237855292c665442aa" id="r_a486b4e14dec23e237855292c665442aa"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a486b4e14dec23e237855292c665442aa">nav_is_done</a> (void)</td></tr>
-<tr class="memdesc:a486b4e14dec23e237855292c665442aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Consulta si la navegación ha terminado.  <br /></td></tr>
-<tr class="memitem:a7e5c351df2e94b7547c058a3e6ebf9a5" id="r_a7e5c351df2e94b7547c058a3e6ebf9a5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7e5c351df2e94b7547c058a3e6ebf9a5">nav_stop</a> (void)</td></tr>
-<tr class="memdesc:a7e5c351df2e94b7547c058a3e6ebf9a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cancela el movimiento actual y detiene los motores.  <br /></td></tr>
-<tr class="memitem:a6fc15d546335feb15109c48c23a25699" id="r_a6fc15d546335feb15109c48c23a25699"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6fc15d546335feb15109c48c23a25699">nav_set_pos_tolerance</a> (float tol_mm)</td></tr>
-<tr class="memdesc:a6fc15d546335feb15109c48c23a25699"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cambia el radio de llegada en tiempo de ejecución.  <br /></td></tr>
-<tr class="memitem:ab92777f9a204b4debf718f75411a805d" id="r_ab92777f9a204b4debf718f75411a805d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab92777f9a204b4debf718f75411a805d">nav_get_status</a> (<a class="el" href="structnav__status__t.html">nav_status_t</a> *out)</td></tr>
-<tr class="memdesc:ab92777f9a204b4debf718f75411a805d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copia el snapshot de diagnóstico del ciclo actual.  <br /></td></tr>
-</table>
-<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+</div><a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Implementación del módulo de navegación punto a punto. </p>
 <dl class="section author"><dt>Author</dt><dd>Robinson Correa Morales - Andres Felipe Agudelo Zapata </dd></dl>
 <p>Robot autónomo de mapeo — Módulo 5. Plataforma : Raspberry Pi Pico (RP2040). Lenguaje : C puro (bare-metal).</p>
 <p>── Máquina de estados ───────────────────────────────────────────────────────</p>
-<p><a class="el" href="#ae73ea3673db1c8132c3e0312aa11d13d" title="Establece un nuevo destino y arranca la navegación.">nav_go_to()</a> siempre arranca desde TURNING, incluso si el robot ya apunta en la dirección correcta — la fase de giro termina en el primer ciclo si el error angular ya está dentro de la tolerancia.</p>
+<p><a class="el" href="_navigation_8h.html#ae73ea3673db1c8132c3e0312aa11d13d" title="Establece un nuevo destino y arranca la navegación.">nav_go_to()</a> siempre arranca desde TURNING, incluso si el robot ya apunta en la dirección correcta — la fase de giro termina en el primer ciclo si el error angular ya está dentro de la tolerancia.</p>
 <div class="fragment"><div class="line">IDLE</div>
-<div class="line">  │  <a class="code hl_function" href="#ae73ea3673db1c8132c3e0312aa11d13d">nav_go_to</a>(x, y)</div>
+<div class="line">  │  <a class="code hl_function" href="_navigation_8h.html#ae73ea3673db1c8132c3e0312aa11d13d">nav_go_to</a>(x, y)</div>
 <div class="line">  ▼</div>
 <div class="line">TURNING ── |angle_error| &lt; <a class="code hl_define" href="_navigation_8h.html#ae5075aa9c8c4dd465bb15a2998ddad9f">NAV_ANGLE_TOL</a> ──→ DRIVING</div>
 <div class="line">                                                 │</div>
@@ -130,167 +112,22 @@ Functions</h2></td></tr>
 <div class="line">                                                 ▼</div>
 <div class="line">                                               DONE ──→ IDLE (siguiente ciclo</div>
 <div class="line">                                                         si no hay nuevo destino)</div>
-<div class="ttc" id="a_navigation_8c_html_ae73ea3673db1c8132c3e0312aa11d13d"><div class="ttname"><a href="#ae73ea3673db1c8132c3e0312aa11d13d">nav_go_to</a></div><div class="ttdeci">void nav_go_to(float x_mm, float y_mm)</div><div class="ttdoc">Establece un nuevo destino y arranca la navegación.</div><div class="ttdef"><b>Definition</b> Navigation.c:329</div></div>
-<div class="ttc" id="a_navigation_8h_html_ae5075aa9c8c4dd465bb15a2998ddad9f"><div class="ttname"><a href="_navigation_8h.html#ae5075aa9c8c4dd465bb15a2998ddad9f">NAV_ANGLE_TOL</a></div><div class="ttdeci">#define NAV_ANGLE_TOL</div><div class="ttdef"><b>Definition</b> Navigation.h:58</div></div>
+<div class="ttc" id="a_navigation_8h_html_ae5075aa9c8c4dd465bb15a2998ddad9f"><div class="ttname"><a href="_navigation_8h.html#ae5075aa9c8c4dd465bb15a2998ddad9f">NAV_ANGLE_TOL</a></div><div class="ttdeci">#define NAV_ANGLE_TOL</div><div class="ttdef"><b>Definition</b> Navigation.h:52</div></div>
+<div class="ttc" id="a_navigation_8h_html_ae73ea3673db1c8132c3e0312aa11d13d"><div class="ttname"><a href="_navigation_8h.html#ae73ea3673db1c8132c3e0312aa11d13d">nav_go_to</a></div><div class="ttdeci">void nav_go_to(float x_mm, float y_mm)</div><div class="ttdoc">Establece un nuevo destino y arranca la navegación.</div></div>
 </div><!-- fragment --><p>── Control de giro ──────────────────────────────────────────────────────────</p>
 <p>Control P puro sobre el error angular con PWM mínimo para vencer fricción: </p><div class="fragment"><div class="line">angle_to_goal = atan2(dy, dx)</div>
 <div class="line">angle_error   = normalize(angle_to_goal - pose.theta)</div>
 <div class="line">turn_pwm      = clamp(<a class="code hl_define" href="_navigation_8h.html#ae590e01f2789832bf4ef1df167a9e48c">NAV_KP_TURN</a> * angle_error, ±NAV_TURN_SPEED)</div>
 <div class="line">if |turn_pwm| &lt; <a class="code hl_define" href="_navigation_8h.html#ad449eeecb5e69cb4306ed21aec03b3a0">NAV_TURN_PWM_MIN</a> → turn_pwm = ±NAV_TURN_PWM_MIN</div>
-<div class="ttc" id="a_navigation_8h_html_ad449eeecb5e69cb4306ed21aec03b3a0"><div class="ttname"><a href="_navigation_8h.html#ad449eeecb5e69cb4306ed21aec03b3a0">NAV_TURN_PWM_MIN</a></div><div class="ttdeci">#define NAV_TURN_PWM_MIN</div><div class="ttdef"><b>Definition</b> Navigation.h:80</div></div>
-<div class="ttc" id="a_navigation_8h_html_ae590e01f2789832bf4ef1df167a9e48c"><div class="ttname"><a href="_navigation_8h.html#ae590e01f2789832bf4ef1df167a9e48c">NAV_KP_TURN</a></div><div class="ttdeci">#define NAV_KP_TURN</div><div class="ttdef"><b>Definition</b> Navigation.h:72</div></div>
+<div class="ttc" id="a_navigation_8h_html_ad449eeecb5e69cb4306ed21aec03b3a0"><div class="ttname"><a href="_navigation_8h.html#ad449eeecb5e69cb4306ed21aec03b3a0">NAV_TURN_PWM_MIN</a></div><div class="ttdeci">#define NAV_TURN_PWM_MIN</div><div class="ttdef"><b>Definition</b> Navigation.h:68</div></div>
+<div class="ttc" id="a_navigation_8h_html_ae590e01f2789832bf4ef1df167a9e48c"><div class="ttname"><a href="_navigation_8h.html#ae590e01f2789832bf4ef1df167a9e48c">NAV_KP_TURN</a></div><div class="ttdeci">#define NAV_KP_TURN</div><div class="ttdef"><b>Definition</b> Navigation.h:63</div></div>
 </div><!-- fragment --><p>── Control de avance ────────────────────────────────────────────────────────</p>
 <p>Delega completamente en speed_control (Bloque 1): </p><div class="fragment"><div class="line"><a class="code hl_struct" href="structsc__command__t.html">sc_command_t</a> cmd = { v, v };   <span class="comment">// v sube linealmente durante NAV_RAMP_CYCLES</span></div>
 <div class="line">speed_control_set(&amp;cmd);</div>
 <div class="ttc" id="astructsc__command__t_html"><div class="ttname"><a href="structsc__command__t.html">sc_command_t</a></div><div class="ttdoc">Comando de velocidad para el robot.</div><div class="ttdef"><b>Definition</b> speedControl.h:88</div></div>
 </div><!-- fragment --><p>── Cálculo de distancia y ángulo ────────────────────────────────────────────</p>
 <p>Se recalculan en cada ciclo con la pose fresca de odometry_get_pose(). Esto hace el control robusto a la deriva acumulada: si el robot se desplaza lateralmente, el heading al destino cambia y la detección de llegada usa la distancia real, no la planificada. </p>
-</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="ab92777f9a204b4debf718f75411a805d" name="ab92777f9a204b4debf718f75411a805d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab92777f9a204b4debf718f75411a805d">&#9670;&#160;</a></span>nav_get_status()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nav_get_status </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structnav__status__t.html">nav_status_t</a> *</td>          <td class="paramname"><span class="paramname"><em>out</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Copia el snapshot de diagnóstico del ciclo actual. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_navigation_8h.html" title="Módulo de navegación punto a punto para robot diferencial autónomo.">navigation.h</a> para descripción completa. </dd></dl>
-
-</div>
-</div>
-<a id="ae73ea3673db1c8132c3e0312aa11d13d" name="ae73ea3673db1c8132c3e0312aa11d13d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae73ea3673db1c8132c3e0312aa11d13d">&#9670;&#160;</a></span>nav_go_to()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nav_go_to </td>
-          <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>x_mm</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>y_mm</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Establece un nuevo destino y arranca la navegación. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_navigation_8h.html" title="Módulo de navegación punto a punto para robot diferencial autónomo.">navigation.h</a> para descripción completa. </dd></dl>
-
-</div>
-</div>
-<a id="a64a3814d1672e69989f80701a0ff5749" name="a64a3814d1672e69989f80701a0ff5749"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64a3814d1672e69989f80701a0ff5749">&#9670;&#160;</a></span>nav_init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nav_init </td>
-          <td>(</td>
-          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Inicializa el módulo de navegación. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_navigation_8h.html" title="Módulo de navegación punto a punto para robot diferencial autónomo.">navigation.h</a> para precondiciones. </dd></dl>
-
-</div>
-</div>
-<a id="a486b4e14dec23e237855292c665442aa" name="a486b4e14dec23e237855292c665442aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a486b4e14dec23e237855292c665442aa">&#9670;&#160;</a></span>nav_is_done()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool nav_is_done </td>
-          <td>(</td>
-          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Consulta si la navegación ha terminado. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_navigation_8h.html" title="Módulo de navegación punto a punto para robot diferencial autónomo.">navigation.h</a> para descripción completa. </dd></dl>
-
-</div>
-</div>
-<a id="a6fc15d546335feb15109c48c23a25699" name="a6fc15d546335feb15109c48c23a25699"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fc15d546335feb15109c48c23a25699">&#9670;&#160;</a></span>nav_set_pos_tolerance()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nav_set_pos_tolerance </td>
-          <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>tol_mm</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Cambia el radio de llegada en tiempo de ejecución. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_navigation_8h.html" title="Módulo de navegación punto a punto para robot diferencial autónomo.">navigation.h</a> para descripción completa. </dd></dl>
-
-</div>
-</div>
-<a id="a7e5c351df2e94b7547c058a3e6ebf9a5" name="a7e5c351df2e94b7547c058a3e6ebf9a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e5c351df2e94b7547c058a3e6ebf9a5">&#9670;&#160;</a></span>nav_stop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nav_stop </td>
-          <td>(</td>
-          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Cancela el movimiento actual y detiene los motores. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_navigation_8h.html" title="Módulo de navegación punto a punto para robot diferencial autónomo.">navigation.h</a> para descripción completa. </dd></dl>
-
-</div>
-</div>
-<a id="a735ef684d3eb5919e65563df7da1dcfd" name="a735ef684d3eb5919e65563df7da1dcfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a735ef684d3eb5919e65563df7da1dcfd">&#9670;&#160;</a></span>nav_update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="_navigation_8h.html#a00145d84e2f2925213be62f67f4e4d9c">nav_state_t</a> nav_update </td>
-          <td>(</td>
-          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Ejecuta un ciclo de la FSM de navegación. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_navigation_8h.html" title="Módulo de navegación punto a punto para robot diferencial autónomo.">navigation.h</a> para descripción completa. </dd></dl>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
 <div id="page-nav-resize-handle"></div>

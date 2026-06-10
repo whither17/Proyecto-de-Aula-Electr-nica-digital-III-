@@ -6,23 +6,6 @@ Implementación del módulo de navegación punto a punto.
 
 
 {\ttfamily \+\#include "{}navigation.\+h"{}}\newline
-\doxysubsubsection*{Functions}
-\begin{DoxyCompactItemize}
-\item 
-void \doxymbox{\hyperlink{_navigation_8c_a64a3814d1672e69989f80701a0ff5749}{nav\+\_\+init}} (void)
-\begin{DoxyCompactList}\small\item\em Inicializa el módulo de navegación. \end{DoxyCompactList}\item 
-void \doxymbox{\hyperlink{_navigation_8c_ae73ea3673db1c8132c3e0312aa11d13d}{nav\+\_\+go\+\_\+to}} (float x\+\_\+mm, float y\+\_\+mm)
-\begin{DoxyCompactList}\small\item\em Establece un nuevo destino y arranca la navegación. \end{DoxyCompactList}\item 
-\doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}} \doxymbox{\hyperlink{_navigation_8c_a735ef684d3eb5919e65563df7da1dcfd}{nav\+\_\+update}} (void)
-\begin{DoxyCompactList}\small\item\em Ejecuta un ciclo de la FSM de navegación. \end{DoxyCompactList}\item 
-bool \doxymbox{\hyperlink{_navigation_8c_a486b4e14dec23e237855292c665442aa}{nav\+\_\+is\+\_\+done}} (void)
-\begin{DoxyCompactList}\small\item\em Consulta si la navegación ha terminado. \end{DoxyCompactList}\item 
-void \doxymbox{\hyperlink{_navigation_8c_a7e5c351df2e94b7547c058a3e6ebf9a5}{nav\+\_\+stop}} (void)
-\begin{DoxyCompactList}\small\item\em Cancela el movimiento actual y detiene los motores. \end{DoxyCompactList}\item 
-void \doxymbox{\hyperlink{_navigation_8c_a6fc15d546335feb15109c48c23a25699}{nav\+\_\+set\+\_\+pos\+\_\+tolerance}} (float tol\+\_\+mm)
-\begin{DoxyCompactList}\small\item\em Cambia el radio de llegada en tiempo de ejecución. \end{DoxyCompactList}\item 
-void \doxymbox{\hyperlink{_navigation_8c_ab92777f9a204b4debf718f75411a805d}{nav\+\_\+get\+\_\+status}} (\doxymbox{\hyperlink{structnav__status__t}{nav\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*}out)
-\begin{DoxyCompactList}\small\item\em Copia el snapshot de diagnóstico del ciclo actual. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -35,12 +18,12 @@ Robot autónomo de mapeo — Módulo 5. Plataforma :\+ Raspberry Pi Pico (RP2040
 
 ── Máquina de estados ───────────────────────────────────────────────────────
 
-\doxylink{_navigation_8c_ae73ea3673db1c8132c3e0312aa11d13d}{nav\+\_\+go\+\_\+to()} siempre arranca desde TURNING, incluso si el robot ya apunta en la dirección correcta — la fase de giro termina en el primer ciclo si el error angular ya está dentro de la tolerancia.
+\doxylink{_navigation_8h_ae73ea3673db1c8132c3e0312aa11d13d}{nav\+\_\+go\+\_\+to()} siempre arranca desde TURNING, incluso si el robot ya apunta en la dirección correcta — la fase de giro termina en el primer ciclo si el error angular ya está dentro de la tolerancia.
 
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{IDLE}
-\DoxyCodeLine{\ \ │\ \ \doxymbox{\hyperlink{_navigation_8c_ae73ea3673db1c8132c3e0312aa11d13d}{nav\_go\_to}}(x,\ y)}
+\DoxyCodeLine{\ \ │\ \ \doxymbox{\hyperlink{_navigation_8h_ae73ea3673db1c8132c3e0312aa11d13d}{nav\_go\_to}}(x,\ y)}
 \DoxyCodeLine{\ \ ▼}
 \DoxyCodeLine{TURNING\ ──\ |angle\_error|\ <\ \doxymbox{\hyperlink{_navigation_8h_ae5075aa9c8c4dd465bb15a2998ddad9f}{NAV\_ANGLE\_TOL}}\ ──→\ DRIVING}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ │}
@@ -78,98 +61,3 @@ Delega completamente en speed\+\_\+control (Bloque 1):\+
 ── Cálculo de distancia y ángulo ────────────────────────────────────────────
 
 Se recalculan en cada ciclo con la pose fresca de odometry\+\_\+get\+\_\+pose(). Esto hace el control robusto a la deriva acumulada:\+ si el robot se desplaza lateralmente, el heading al destino cambia y la detección de llegada usa la distancia real, no la planificada. 
-
-\label{doc-func-members}
-\Hypertarget{_navigation_8c_doc-func-members}
-\doxysubsection{Function Documentation}
-\Hypertarget{_navigation_8c_ab92777f9a204b4debf718f75411a805d}\index{Navigation.c@{Navigation.c}!nav\_get\_status@{nav\_get\_status}}
-\index{nav\_get\_status@{nav\_get\_status}!Navigation.c@{Navigation.c}}
-\doxysubsubsection{\texorpdfstring{nav\_get\_status()}{nav\_get\_status()}}
-{\footnotesize\ttfamily \label{_navigation_8c_ab92777f9a204b4debf718f75411a805d} 
-void nav\+\_\+get\+\_\+status (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structnav__status__t}{nav\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{out}{}\end{DoxyParamCaption})}
-
-
-
-Copia el snapshot de diagnóstico del ciclo actual. 
-
-\begin{DoxySeeAlso}{See also}
-\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
-\end{DoxySeeAlso}
-\Hypertarget{_navigation_8c_ae73ea3673db1c8132c3e0312aa11d13d}\index{Navigation.c@{Navigation.c}!nav\_go\_to@{nav\_go\_to}}
-\index{nav\_go\_to@{nav\_go\_to}!Navigation.c@{Navigation.c}}
-\doxysubsubsection{\texorpdfstring{nav\_go\_to()}{nav\_go\_to()}}
-{\footnotesize\ttfamily \label{_navigation_8c_ae73ea3673db1c8132c3e0312aa11d13d} 
-void nav\+\_\+go\+\_\+to (\begin{DoxyParamCaption}\item[{float}]{x\+\_\+mm}{, }\item[{float}]{y\+\_\+mm}{}\end{DoxyParamCaption})}
-
-
-
-Establece un nuevo destino y arranca la navegación. 
-
-\begin{DoxySeeAlso}{See also}
-\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
-\end{DoxySeeAlso}
-\Hypertarget{_navigation_8c_a64a3814d1672e69989f80701a0ff5749}\index{Navigation.c@{Navigation.c}!nav\_init@{nav\_init}}
-\index{nav\_init@{nav\_init}!Navigation.c@{Navigation.c}}
-\doxysubsubsection{\texorpdfstring{nav\_init()}{nav\_init()}}
-{\footnotesize\ttfamily \label{_navigation_8c_a64a3814d1672e69989f80701a0ff5749} 
-void nav\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
-
-
-
-Inicializa el módulo de navegación. 
-
-\begin{DoxySeeAlso}{See also}
-\doxylink{_navigation_8h}{navigation.\+h} para precondiciones. 
-\end{DoxySeeAlso}
-\Hypertarget{_navigation_8c_a486b4e14dec23e237855292c665442aa}\index{Navigation.c@{Navigation.c}!nav\_is\_done@{nav\_is\_done}}
-\index{nav\_is\_done@{nav\_is\_done}!Navigation.c@{Navigation.c}}
-\doxysubsubsection{\texorpdfstring{nav\_is\_done()}{nav\_is\_done()}}
-{\footnotesize\ttfamily \label{_navigation_8c_a486b4e14dec23e237855292c665442aa} 
-bool nav\+\_\+is\+\_\+done (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
-
-
-
-Consulta si la navegación ha terminado. 
-
-\begin{DoxySeeAlso}{See also}
-\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
-\end{DoxySeeAlso}
-\Hypertarget{_navigation_8c_a6fc15d546335feb15109c48c23a25699}\index{Navigation.c@{Navigation.c}!nav\_set\_pos\_tolerance@{nav\_set\_pos\_tolerance}}
-\index{nav\_set\_pos\_tolerance@{nav\_set\_pos\_tolerance}!Navigation.c@{Navigation.c}}
-\doxysubsubsection{\texorpdfstring{nav\_set\_pos\_tolerance()}{nav\_set\_pos\_tolerance()}}
-{\footnotesize\ttfamily \label{_navigation_8c_a6fc15d546335feb15109c48c23a25699} 
-void nav\+\_\+set\+\_\+pos\+\_\+tolerance (\begin{DoxyParamCaption}\item[{float}]{tol\+\_\+mm}{}\end{DoxyParamCaption})}
-
-
-
-Cambia el radio de llegada en tiempo de ejecución. 
-
-\begin{DoxySeeAlso}{See also}
-\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
-\end{DoxySeeAlso}
-\Hypertarget{_navigation_8c_a7e5c351df2e94b7547c058a3e6ebf9a5}\index{Navigation.c@{Navigation.c}!nav\_stop@{nav\_stop}}
-\index{nav\_stop@{nav\_stop}!Navigation.c@{Navigation.c}}
-\doxysubsubsection{\texorpdfstring{nav\_stop()}{nav\_stop()}}
-{\footnotesize\ttfamily \label{_navigation_8c_a7e5c351df2e94b7547c058a3e6ebf9a5} 
-void nav\+\_\+stop (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
-
-
-
-Cancela el movimiento actual y detiene los motores. 
-
-\begin{DoxySeeAlso}{See also}
-\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
-\end{DoxySeeAlso}
-\Hypertarget{_navigation_8c_a735ef684d3eb5919e65563df7da1dcfd}\index{Navigation.c@{Navigation.c}!nav\_update@{nav\_update}}
-\index{nav\_update@{nav\_update}!Navigation.c@{Navigation.c}}
-\doxysubsubsection{\texorpdfstring{nav\_update()}{nav\_update()}}
-{\footnotesize\ttfamily \label{_navigation_8c_a735ef684d3eb5919e65563df7da1dcfd} 
-\doxymbox{\hyperlink{_navigation_8h_a00145d84e2f2925213be62f67f4e4d9c}{nav\+\_\+state\+\_\+t}} nav\+\_\+update (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
-
-
-
-Ejecuta un ciclo de la FSM de navegación. 
-
-\begin{DoxySeeAlso}{See also}
-\doxylink{_navigation_8h}{navigation.\+h} para descripción completa. 
-\end{DoxySeeAlso}

@@ -2,6 +2,8 @@ var _navigation_8h =
 [
     [ "nav_status_t", "structnav__status__t.html", "structnav__status__t" ],
     [ "NAV_ANGLE_TOL", "_navigation_8h.html#ae5075aa9c8c4dd465bb15a2998ddad9f", null ],
+    [ "NAV_HEADING_CORR_MAX", "_navigation_8h.html#a39347835ba6d6ebe0bb10b7bc0514e85", null ],
+    [ "NAV_KP_HEADING", "_navigation_8h.html#a9af2405af78f29950a623f2c615a61e4", null ],
     [ "NAV_KP_TURN", "_navigation_8h.html#ae590e01f2789832bf4ef1df167a9e48c", null ],
     [ "NAV_LINEAR_SPEED_MM_S", "_navigation_8h.html#a424e67bca5317a4ecc690e32bfe5de23", null ],
     [ "NAV_POS_TOL_DEFAULT", "_navigation_8h.html#ae9d872b3599d0c4afe2f221627ea1488", null ],

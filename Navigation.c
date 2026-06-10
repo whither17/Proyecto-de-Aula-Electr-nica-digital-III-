@@ -290,6 +290,16 @@ static nav_state_t fsm_driving(void)
         v = NAV_LINEAR_SPEED_MM_S;
     }
 
+    float correction = NAV_KP_HEADING * (-angle_error);
+    if (correction >  NAV_HEADING_CORR_MAX) 
+        correction =  NAV_HEADING_CORR_MAX;
+    else if (correction < -NAV_HEADING_CORR_MAX) 
+        correction = -NAV_HEADING_CORR_MAX;
+
+    sc_command_t cmd = {
+        .v_left_mm_s  = v + (correction < 0.0f ? -correction : 0.0f),
+        .v_right_mm_s = v + (correction > 0.0f ?  correction : 0.0f)
+
     sc_command_t cmd = {
         .v_left_mm_s  = v,
         .v_right_mm_s = v
