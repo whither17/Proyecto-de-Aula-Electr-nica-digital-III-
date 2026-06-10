@@ -91,5 +91,15 @@ bool imu_read();
  * @param out Apuntador a estructura de datos con las mediciones
  */
 void imu_get_data(imu_data_t *out);
+/**
+ * @brief Cancela la alarma de muestreo sin tocar el chip ni el bias.
+ *        Llamar antes de entrar en APP_SLEEPING / APP_ALARM.
+ */
+void imu_alarm_pause(void);
 
+/**
+ * @brief Reanuda la alarma de muestreo con el mismo período.
+ *        Llamar al salir de APP_SLEEPING / APP_ALARM.
+ */
+void imu_alarm_resume(void);
 #endif

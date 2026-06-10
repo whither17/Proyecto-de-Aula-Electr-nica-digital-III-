@@ -6,7 +6,7 @@
 static volatile bool g_data_ready = false; /**< Bandera que indica si la IMU tiene datos nuevos */
 static imu_data_t    g_last_data  = {0};   /**< Estructura de datos de la IMU */
 static alarm_id_t g_alarm_id = -1;         /**< ID de la alarma — necesario para reprogramarla dentro del callback */
-
+extern volatile bool flag_imu;
 
 /**
  * @brief Callback periódico de muestreo de la IMU.
@@ -27,12 +27,11 @@ static alarm_id_t g_alarm_id = -1;         /**< ID de la alarma — necesario pa
  */
 static int64_t imu_alarm_callback(alarm_id_t id, void *user_data)
 {
-   (void)id;
-   (void)user_data;
-
-   g_data_ready = true;
-
-   return -(int64_t)IMU_SAMPLE_US;
+    (void)id;
+    (void)user_data;
+    g_data_ready = true;
+    flag_imu = true;
+    return -(int64_t)IMU_SAMPLE_US;
 }
 
 
@@ -165,7 +164,22 @@ bool imu_read()
 
    return true;
 }
+void imu_alarm_pause(void)
+{
+    if (g_alarm_id >= 0) {
+        cancel_alarm(g_alarm_id);
+        g_alarm_id = -1;
+    }
+}
 
+void imu_alarm_resume(void)
+{
+    if (g_alarm_id < 0) {
+        g_alarm_id = add_alarm_in_us(IMU_SAMPLE_US,
+                                     imu_alarm_callback,
+                                     NULL, true);
+    }
+}
 void imu_get_data(imu_data_t *out) 
 {
     *out = g_last_data;
