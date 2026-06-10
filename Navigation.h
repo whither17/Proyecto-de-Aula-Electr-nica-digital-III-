@@ -1,240 +1,210 @@
 /**
- * =============================================================================
- *  navigation.h
- *  Robot autónomo de mapeo — Módulo 5: Navegación punto a punto
- * =============================================================================
+ * @file navigation.h
+ * @author Robinson Correa Morales - Andres Felipe Agudelo Zapata
+ * @brief Módulo de navegación punto a punto para robot diferencial autónomo.
  *
- *  Lleva el robot desde su pose actual hasta una coordenada destino (x, y)
- *  usando la pose estimada por odometry_get_pose() como retroalimentación.
+ * Implementa una FSM de tres fases (TURNING → DRIVING → DONE) que lleva
+ * al robot desde su posición actual hasta un destino arbitrario en el plano XY.
  *
- *  ── Máquina de estados ───────────────────────────────────────────────────────
+ * La navegación se divide en dos etapas secuenciales:
+ *  -# **TURNING** : giro en el sitio mediante control P sobre el error angular.
+ *  -# **DRIVING** : avance recto con rampa de aceleración, delegando el control
+ *                   de velocidad diferencial al módulo speed_control (Bloque 1).
  *
- *    IDLE ──nav_go_to()──→ TURNING ──ángulo OK──→ DRIVING ──distancia OK──→ IDLE
- *                              ↑                       │
- *                              └──────── nunca ────────┘   (fases estrictas)
+ * La pose del robot se obtiene en cada ciclo de odometry_get_pose(), lo que
+ * hace el módulo robusto a la deriva acumulada: si el robot se desvía durante
+ * el avance, la detección de llegada usa la distancia real al destino.
  *
- *    TURNING : gira en el sitio con control P sobre error angular.
- *              Termina cuando |error_angular| < NAV_ANGLE_TOL.
+ * @note Debe llamarse nav_init() después de speed_control_init() y
+ *       odometry_init(). nav_update() debe invocarse a 100 Hz en el mismo
+ *       ciclo que odometry_update() y speed_control_update().
  *
- *    DRIVING : avanza en línea recta con speed_control_set().
- *              Termina cuando distancia al destino < NAV_POS_TOL.
- *              El Bloque 1 (speed_control) mantiene ambas orugas iguales.
- *
- *  ── Tolerancias ──────────────────────────────────────────────────────────────
- *
- *    NAV_POS_TOL   : radio de llegada en mm. El robot declara "llegué" cuando
- *                    la distancia euclidiana al destino es menor que este valor.
- *                    Valor por defecto: 40 mm (4 cm), ajustable con
- *                    nav_set_pos_tolerance().
- *
- *    NAV_ANGLE_TOL : tolerancia angular antes de arrancar el avance, en rad.
- *                    Valor por defecto: 0.05 rad (~3°).
- *
- *  ── Dependencias ─────────────────────────────────────────────────────────────
- *
- *    odometry.h       → odometry_get_pose()
- *    speedControl.h   → speed_control_set(), speed_control_update()
- *    Driver_TB6612FNG.h → motors_set() para el giro (diferencial puro)
- *
- *  ── Unidades ─────────────────────────────────────────────────────────────────
- *
- *    Posición → mm
- *    Ángulo   → radianes, rango (-π, π]
- *    Velocidad → mm/s
- *
- * =============================================================================
+ * @version 0.1
+ * @date 2026-06-09
+ * @copyright Copyright (c) 2026
  */
-
+ 
 #ifndef NAVIGATION_H
 #define NAVIGATION_H
-
+ 
 #include "pico/stdlib.h"
 #include "odometry.h"
 #include <stdint.h>
 #include <stdbool.h>
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   PARÁMETROS CONFIGURABLES
-   ───────────────────────────────────────────────────────────────────────────── */
-
-/*
- *  NAV_RAMP_CYCLES — ciclos de aceleración al entrar en DRIVING
+ 
+//--------------- Parámetros Configurables ---------------------------//
+ 
+#define NAV_RAMP_CYCLES          70     /**< Ciclos de aceleración al entrar en DRIVING.
+                                          *   La velocidad sube linealmente de 0 a
+                                          *   #NAV_LINEAR_SPEED_MM_S durante este número
+                                          *   de ciclos (a 100 Hz → 70 ciclos = 700 ms).
+                                          *   @note Subir si los motores patinan al arrancar;
+                                          *         bajar si el robot tarda demasiado en
+                                          *         alcanzar velocidad de crucero. */
+ 
+#define NAV_LINEAR_SPEED_MM_S    100.0f  /**< Velocidad de avance en línea recta [mm/s].
+                                          *   Valor validado con el controlador diferencial
+                                          *   actual. Debe ser un valor que el Bloque 1
+                                          *   ya haya demostrado controlar correctamente. */
+ 
+#define NAV_TURN_SPEED           60     /**< Velocidad angular máxima de giro en el sitio [%PWM].
+                                          *   Se aplica como diferencial puro a motors_set():
+                                          *   - Giro izquierda: motors_set(+NAV_TURN_SPEED, -NAV_TURN_SPEED)
+                                          *   - Giro derecha:   motors_set(-NAV_TURN_SPEED, +NAV_TURN_SPEED)
+                                          *   @note Subir si el giro es demasiado lento;
+                                          *         bajar si el robot sobrepasa el ángulo
+                                          *         objetivo y oscila antes de estabilizar. */
+ 
+#define NAV_ANGLE_TOL            0.03f  /**< Tolerancia angular para salir de TURNING [rad].
+                                          *   0.05 rad ≈ 2.9°. Con velocidad de giro baja,
+                                          *   el robot debería detenerse dentro de esta ventana
+                                          *   sin overshoot apreciable.
+                                          *   @note Subir (más tolerante) si el robot oscila
+                                          *         mucho en la fase de giro; bajar (más estricto)
+                                          *         si el error de llegada viene del heading inicial. */
+ 
+#define NAV_POS_TOL_DEFAULT      20.0f  /**< Radio de llegada por defecto [mm].
+                                          *   El robot declara "llegué" cuando la distancia
+                                          *   euclidiana al destino es menor que este valor.
+                                          *   Modificable en tiempo de ejecución con
+                                          *   nav_set_pos_tolerance(). */
+ 
+#define NAV_KP_TURN              47.0f  /**< Ganancia proporcional del controlador de giro [-].
+                                          *   Escala el error angular [rad] a corrección en %PWM.
+                                          *   Con error de π rad y KP=45, la corrección sería
+                                          *   141 %PWM, saturada al límite #NAV_TURN_SPEED.
+                                          *   @note Subir si el robot tarda demasiado en centrarse
+                                          *         en el ángulo; bajar si oscila alrededor del
+                                          *         ángulo objetivo durante el giro. */
+ 
+#define NAV_TURN_PWM_MIN         47     /**< PWM mínimo aplicado durante el giro [%PWM].
+                                          *   Umbral justo por encima del punto de arranque
+                                          *   de los motores para vencer la fricción estática.
+                                          *   Si el control P devuelve un valor entre 0 y este
+                                          *   umbral, se reemplaza por NAV_TURN_PWM_MIN para
+                                          *   garantizar que el robot siempre se mueva. */
+ 
+ 
+/**
+ * @brief Estados de la máquina de navegación punto a punto.
  *
- *  La velocidad sube linealmente de 0 a NAV_LINEAR_SPEED_MM_S
- *  durante este número de ciclos (a 100 Hz → 50 ciclos = 500 ms).
- *  Mismo valor que RAMP_CYCLES en main_example.c para consistencia.
- *
- *  ↑ Subir si los motores patinán al arrancar.
- *  ↓ Bajar si el robot tarda demasiado en alcanzar velocidad de crucero.
- */
-#define NAV_RAMP_CYCLES         70
-#define DETECTION_CONFIRM_COUNT  3
-/*
- *  NAV_LINEAR_SPEED_MM_S — velocidad de avance en línea recta [mm/s]
- *
- *  Debe ser un valor que el Bloque 1 ya haya demostrado que controla bien.
- *  130 mm/s es el valor validado con el controlador diferencial actual.
- */
-#define NAV_LINEAR_SPEED_MM_S   95.0f
-
-/*
- *  NAV_TURN_SPEED — velocidad angular de giro en el sitio [PWM%]
- *
- *  Se aplica directamente a motors_set() como diferencial puro:
- *    motors_set(+NAV_TURN_SPEED, -NAV_TURN_SPEED) → giro izquierda
- *    motors_set(-NAV_TURN_SPEED, +NAV_TURN_SPEED) → giro derecha
- *
- *  Valor bajo para precisión de parada. Si el robot se pasa del ángulo
- *  objetivo consistentemente, bajar este valor.
- *
- *  ↑ Subir si el giro es demasiado lento para el criterio de éxito.
- *  ↓ Bajar si el robot sobrepasa el ángulo y oscila antes de estabilizar.
- */
-#define NAV_TURN_SPEED          60
-
-/*
- *  NAV_ANGLE_TOL — tolerancia angular para salir de TURNING [rad]
- *
- *  0.05 rad ≈ 2.9°. Con la baseline del robot y velocidad de giro baja,
- *  el robot debería detenerse dentro de esta ventana sin overshoot.
- *
- *  ↑ Subir (más tolerante) si el robot oscila mucho en la fase de giro.
- *  ↓ Bajar (más estricto) si el error de llegada viene del heading inicial.
- */
-#define NAV_ANGLE_TOL           0.05f
-
-/*
- *  NAV_POS_TOL_DEFAULT — radio de llegada por defecto [mm]
- *
- *  El robot declara "llegué" cuando la distancia euclidiana al destino
- *  es menor que este valor. 40 mm = 4 cm, dentro del criterio de 5 cm.
- *
- *  Se puede cambiar en tiempo de ejecución con nav_set_pos_tolerance().
- */
-#define NAV_POS_TOL_DEFAULT     20.0f
-
-/*
- *  NAV_KP_TURN — ganancia proporcional del controlador de giro
- *
- *  Escala el error angular [rad] a PWM% de corrección adicional.
- *  Con error de π rad (~180°) y KP=20, la corrección sería 62 PWM%,
- *  que sumada al NAV_TURN_SPEED base da la velocidad máxima.
- *
- *  ↑ Subir si el robot tarda demasiado en centrarse en el ángulo.
- *  ↓ Bajar si oscila alrededor del ángulo objetivo durante el giro.
- */
-#define NAV_KP_TURN             45.0f
-#define NAV_TURN_PWM_MIN  47    // justo encima de tu umbral de arranque
-/* ─────────────────────────────────────────────────────────────────────────────
-   TIPOS PÚBLICOS
-   ───────────────────────────────────────────────────────────────────────────── */
-
-/*
- *  nav_state_t — estado de la máquina de navegación
- *
- *  NAV_IDLE    : sin objetivo activo, motores parados
- *  NAV_TURNING : girando en el sitio hacia el heading del destino
- *  NAV_DRIVING : avanzando en línea recta hacia el destino
- *  NAV_DONE    : llegó al destino (transición automática a IDLE en el
- *                próximo ciclo si no se da un nuevo destino)
+ * Diagrama de transiciones:
+ * @code
+ *   IDLE ──nav_go_to()──→ TURNING ──|error|<TOL──→ DRIVING ──dist<tol──→ DONE
+ *    ▲                                                                      │
+ *    └──────────────────────────── (siguiente ciclo) ──────────────────────┘
+ * @endcode
  */
 typedef enum {
-    NAV_IDLE    = 0,
-    NAV_TURNING = 1,
-    NAV_DRIVING = 2,
-    NAV_DONE    = 3
+    NAV_IDLE    = 0, /**< Sin objetivo activo. Motores detenidos.
+                       *   Estado inicial y de reposo tras completar
+                       *   una navegación o llamar nav_stop(). */
+    NAV_TURNING = 1, /**< Girando en el sitio hacia el heading del destino.
+                       *   Control P sobre el error angular. Transiciona a
+                       *   NAV_DRIVING cuando |angle_error| < #NAV_ANGLE_TOL. */
+    NAV_DRIVING = 2, /**< Avanzando en línea recta hacia el destino.
+                       *   Rampa de aceleración activa durante #NAV_RAMP_CYCLES
+                       *   ciclos. Delega el control diferencial a speed_control.
+                       *   Transiciona a NAV_DONE cuando dist < pos_tolerance. */
+    NAV_DONE    = 3  /**< Destino alcanzado. Motores detenidos.
+                       *   Transiciona automáticamente a NAV_IDLE en el siguiente
+                       *   ciclo de nav_update() si no se llama nav_go_to(). */
 } nav_state_t;
-
-/*
- *  nav_status_t — snapshot del estado de navegación para diagnóstico
+ 
+/**
+ * @brief Snapshot del estado de navegación para diagnóstico y logging.
+ *
+ * Se actualiza en cada ciclo de nav_update(). Accesible externamente
+ * mediante nav_get_status(). No debe usarse en el camino crítico de control.
  */
 typedef struct {
-    nav_state_t state;          /* estado actual de la FSM              */
-    float       target_x;       /* coordenada destino X [mm]            */
-    float       target_y;       /* coordenada destino Y [mm]            */
-    float       distance_to_goal; /* distancia euclidiana restante [mm] */
-    float       angle_error;    /* error angular actual [rad]           */
-    float       pos_tolerance;  /* radio de llegada activo [mm]         */
+    nav_state_t state;              /**< Estado actual de la FSM. */
+    float       target_x;           /**< Coordenada X del destino activo [mm]. */
+    float       target_y;           /**< Coordenada Y del destino activo [mm]. */
+    float       distance_to_goal;   /**< Distancia euclidiana al destino en el
+                                      *   ciclo actual [mm]. */
+    float       angle_error;        /**< Error angular normalizado al destino
+                                      *   en el ciclo actual [rad]. Rango (-π, π]. */
+    float       pos_tolerance;      /**< Radio de llegada activo en el ciclo
+                                      *   actual [mm]. */
 } nav_status_t;
+ 
+//--------------- Funciones Públicas --------------------//
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   API PÚBLICA
-   ───────────────────────────────────────────────────────────────────────────── */
-
-/*
- *  nav_init()
+/**
+ * @brief Inicializa el módulo de navegación.
  *
- *  Inicializa el módulo de navegación. Debe llamarse después de
- *  speed_control_init() y odometry_init().
- *
- *  Deja la FSM en NAV_IDLE y carga la tolerancia de posición por defecto.
+ * Pone la FSM en NAV_IDLE, carga la tolerancia de posición por defecto
+ * (#NAV_POS_TOL_DEFAULT) y pone a cero el snapshot de diagnóstico.
  */
-void nav_init(void);
-
-/*
- *  nav_go_to()
+void nav_init();
+ 
+/**
+ * @brief Establece un nuevo destino y arranca la navegación.
  *
- *  Establece un nuevo destino y arranca la FSM desde TURNING.
- *  Si ya hay un movimiento en curso, lo cancela y empieza el nuevo.
+ * Si hay un movimiento en curso lo cancela inmediatamente (llama
+ * speed_control_stop() y motors_set(0,0)) antes de iniciar el nuevo.
  *
- *  Parámetros:
- *    x_mm, y_mm : coordenadas del destino en mm desde el origen
+ * La FSM siempre arranca desde NAV_TURNING: si el robot ya apunta al
+ * destino, la primera llamada a nav_update() transicionará a DRIVING
+ * en el mismo ciclo.
  *
- *  La pose actual se lee de odometry_get_pose() en el momento de la llamada
- *  para calcular el heading inicial.
+ * @param x_mm  Coordenada X del destino [mm], referida al origen de odometría.
+ * @param y_mm  Coordenada Y del destino [mm], referida al origen de odometría.
  */
 void nav_go_to(float x_mm, float y_mm);
-
-/*
- *  nav_update()
+ 
+/**
+ * @brief Ejecuta un ciclo de la FSM de navegación.
  *
- *  Ejecuta un ciclo de la FSM. Debe llamarse a 100 Hz, en el mismo
- *  ciclo que odometry_update() y speed_control_update().
+ * Debe invocarse a 100 Hz, en el mismo ciclo que odometry_update() y
+ * speed_control_update(). Cada llamada:
+ *  - En **TURNING** : calcula error angular, aplica control P con PWM mínimo,
+ *                     verifica convergencia.
+ *  - En **DRIVING** : gestiona rampa de aceleración, verifica distancia al destino.
+ *  - En **DONE**    : transiciona a NAV_IDLE para liberar la FSM.
+ *  - En **IDLE**    : no hace nada.
  *
- *  Internamente:
- *    - En TURNING : calcula error angular, aplica P, espera convergencia
- *    - En DRIVING : llama speed_control_update(), verifica distancia
- *    - En DONE/IDLE: no hace nada
- *
- *  Retorna el estado actual de la FSM — útil para que el main sepa
- *  cuándo el robot llegó sin tener que llamar nav_get_status().
+ * @return Estado de la FSM al finalizar el ciclo.
+ *         Útil para que el main detecte NAV_DONE sin llamar nav_get_status().
  */
-nav_state_t nav_update(void);
-
-/*
- *  nav_is_done()
+nav_state_t nav_update();
+ 
+/**
+ * @brief Consulta si la navegación ha terminado.
  *
- *  Retorna true si la FSM está en NAV_DONE o NAV_IDLE.
- *  Forma más cómoda de preguntar "¿llegó?" desde el main.
+ * @return  true si la FSM está en NAV_DONE o NAV_IDLE.
+ *          false si está en NAV_TURNING o NAV_DRIVING.
  */
-bool nav_is_done(void);
-
-/*
- *  nav_stop()
+bool nav_is_done();
+ 
+/**
+ * @brief Cancela el movimiento actual y detiene los motores.
  *
- *  Cancela el movimiento actual y pone la FSM en NAV_IDLE.
- *  Llama speed_control_stop() internamente.
+ * Llama speed_control_stop() y motors_set(0,0) internamente.
+ * Deja la FSM en NAV_IDLE.
  */
-void nav_stop(void);
-
-/*
- *  nav_set_pos_tolerance()
+void nav_stop();
+ 
+/**
+ * @brief Cambia el radio de llegada en tiempo de ejecución.
  *
- *  Cambia el radio de llegada en mm.
- *  Útil para ajustar la tolerancia por segmento:
- *    - Esquinas del área de trabajo: 40 mm (por defecto)
- *    - Aproximación a una caja (Bloque 7): 20 mm
+ * Toma efecto en el próximo ciclo de nav_update(). Permite ajustar
+ * la tolerancia por segmento de trayectoria según la precisión requerida:
+ *  - Waypoints intermedios: valor más alto (ej. 40 mm).
+ *  - Aproximación final a un objeto: valor más bajo (ej. 20 mm).
  *
- *  Toma efecto en el próximo ciclo de nav_update().
+ * @param tol_mm  Nuevo radio de llegada [mm]. Debe ser > 0; valores
+ *                menores o iguales a cero se ignoran.
  */
 void nav_set_pos_tolerance(float tol_mm);
-
-/*
- *  nav_get_status()
+ 
+/**
+ * @brief Copia el snapshot de diagnóstico del ciclo actual.
  *
- *  Copia el estado de diagnóstico actual en *out*.
- *  Solo para logging y tuning — no llamar en el camino crítico.
+ * @param out  Puntero al buffer donde se escribe el estado. No debe ser NULL.
+ * @note Solo para logging y tuning. No llamar en el camino crítico de control.
  */
 void nav_get_status(nav_status_t *out);
-
-#endif /* NAVIGATION_H */
+ 
+#endif

@@ -1,63 +1,54 @@
 /**
- * =============================================================================
- *  navigation.c
- *  Robot autónomo de mapeo — Módulo 5: Navegación punto a punto
- * =============================================================================
+ * @file navigation.c
+ * @author Robinson Correa Morales - Andres Felipe Agudelo Zapata
+ * @brief Implementación del módulo de navegación punto a punto.
  *
- *  Plataforma : Raspberry Pi Pico (RP2040)
- *  Lenguaje   : C puro (sin SO, bare-metal)
+ * Robot autónomo de mapeo — Módulo 5.
+ * Plataforma : Raspberry Pi Pico (RP2040). Lenguaje : C puro (bare-metal).
  *
- *  ── Máquina de estados ───────────────────────────────────────────────────────
+ * ── Máquina de estados ───────────────────────────────────────────────────────
  *
- *    nav_go_to() siempre arranca desde TURNING, incluso si el robot ya
- *    apunta en la dirección correcta — la fase de giro termina en el
- *    primer ciclo si el error angular ya está dentro de la tolerancia.
+ * nav_go_to() siempre arranca desde TURNING, incluso si el robot ya apunta
+ * en la dirección correcta — la fase de giro termina en el primer ciclo si
+ * el error angular ya está dentro de la tolerancia.
  *
- *    IDLE
- *      │  nav_go_to(x, y)
- *      ▼
- *    TURNING ── |angle_error| < NAV_ANGLE_TOL ──→ DRIVING
- *                                                     │
- *                                         dist < pos_tol
- *                                                     │
- *                                                     ▼
- *                                                   DONE ──→ (IDLE en el
- *                                                              siguiente ciclo
- *                                                              si no hay nuevo
- *                                                              destino)
+ * @code
+ *   IDLE
+ *     │  nav_go_to(x, y)
+ *     ▼
+ *   TURNING ── |angle_error| < NAV_ANGLE_TOL ──→ DRIVING
+ *                                                    │
+ *                                        dist < pos_tol
+ *                                                    │
+ *                                                    ▼
+ *                                                  DONE ──→ IDLE (siguiente ciclo
+ *                                                            si no hay nuevo destino)
+ * @endcode
  *
- *  ── Control de giro ──────────────────────────────────────────────────────────
+ * ── Control de giro ──────────────────────────────────────────────────────────
  *
- *  Control P puro sobre el error angular:
+ * Control P puro sobre el error angular con PWM mínimo para vencer fricción:
+ * @code
+ *   angle_to_goal = atan2(dy, dx)
+ *   angle_error   = normalize(angle_to_goal - pose.theta)
+ *   turn_pwm      = clamp(NAV_KP_TURN * angle_error, ±NAV_TURN_SPEED)
+ *   if |turn_pwm| < NAV_TURN_PWM_MIN → turn_pwm = ±NAV_TURN_PWM_MIN
+ * @endcode
  *
- *    angle_to_goal = atan2(dy, dx)
- *    angle_error   = normalize(angle_to_goal - pose.theta)
- *    turn_pwm      = clamp(NAV_KP_TURN * angle_error, ±NAV_TURN_SPEED)
+ * ── Control de avance ────────────────────────────────────────────────────────
  *
- *  Si angle_error > 0 → destino a la izquierda → motors_set(-turn_pwm, +turn_pwm)
- *  Si angle_error < 0 → destino a la derecha  → motors_set(+|turn_pwm|, -|turn_pwm|)
+ * Delega completamente en speed_control (Bloque 1):
+ * @code
+ *   sc_command_t cmd = { v, v };   // v sube linealmente durante NAV_RAMP_CYCLES
+ *   speed_control_set(&cmd);
+ * @endcode
  *
- *  El clamp al rango ±NAV_TURN_SPEED limita la velocidad máxima de giro
- *  para mejorar la precisión de parada.
+ * ── Cálculo de distancia y ángulo ────────────────────────────────────────────
  *
- *  ── Control de avance ────────────────────────────────────────────────────────
- *
- *  Delega completamente en el Bloque 1 (speed_control):
- *
- *    sc_command_t cmd = { NAV_LINEAR_SPEED_MM_S, NAV_LINEAR_SPEED_MM_S };
- *    speed_control_set(&cmd);
- *
- *  En cada ciclo de DRIVING solo verifica la distancia al destino.
- *  El controlador diferencial mantiene el avance recto internamente.
- *
- *  ── Cálculo de distancia y ángulo ────────────────────────────────────────────
- *
- *  Se recalculan en cada ciclo con la pose fresca de odometry_get_pose().
- *  Esto hace el control robusto a la deriva acumulada de la odometría:
- *  si el robot se desplaza lateralmente, el heading al destino cambia
- *  y la detección de llegada usa la distancia real, no la planificada.
- *
- * =============================================================================
+ * Se recalculan en cada ciclo con la pose fresca de odometry_get_pose().
+ * Esto hace el control robusto a la deriva acumulada: si el robot se desplaza
+ * lateralmente, el heading al destino cambia y la detección de llegada usa
+ * la distancia real, no la planificada.
  */
 
 #include "navigation.h"
@@ -66,87 +57,98 @@
 #include "Driver_TB6612FNG.h"
 #include <math.h>
 #include <stdio.h>
+
 /* ─────────────────────────────────────────────────────────────────────────────
    ESTADO INTERNO
    ───────────────────────────────────────────────────────────────────────────── */
 
-/* Estado de la FSM */
-static nav_state_t g_state = NAV_IDLE;
+static nav_state_t g_state = NAV_IDLE; /**< Estado actual de la FSM de navegación. */
 
-/* Coordenadas del destino actual [mm] */
-static float g_target_x = 0.0f;
-static float g_target_y = 0.0f;
+static float g_target_x = 0.0f;        /**< Coordenada X del destino activo [mm]. */
+static float g_target_y = 0.0f;        /**< Coordenada Y del destino activo [mm]. */
 
-/* Tolerancia de posición activa [mm] — modificable en tiempo de ejecución */
-static float g_pos_tolerance = NAV_POS_TOL_DEFAULT;
+static float g_pos_tolerance = NAV_POS_TOL_DEFAULT; /**< Radio de llegada activo [mm].
+                                                       *   Modificable en tiempo de ejecución
+                                                       *   con nav_set_pos_tolerance(). */
 
-/* Snapshot de diagnóstico del último ciclo */
-static nav_status_t g_status = {0};
+static nav_status_t g_status = {0};    /**< Snapshot de diagnóstico del último ciclo.
+                                         *   Accesible externamente con nav_get_status(). */
 
-/*
- *  Contador de ciclos de rampa para la fase DRIVING.
- *  Se resetea a 0 cada vez que se entra en DRIVING.
- *  La velocidad sube linealmente durante NAV_RAMP_CYCLES ciclos
- *  antes de alcanzar NAV_LINEAR_SPEED_MM_S.
- *
- *  Con 100 Hz y NAV_RAMP_CYCLES=50 la rampa dura 500 ms —
- *  igual que en el main_example.c existente (RAMP_CYCLES=50).
- */
-static int g_ramp_cycle = 0;
+static int g_ramp_cycle = 0;           /**< Contador de ciclos transcurridos en la rampa
+                                         *   de aceleración de la fase DRIVING.
+                                         *   Rango [0, NAV_RAMP_CYCLES]. Se resetea a 0
+                                         *   cada vez que se entra en DRIVING.
+                                         *   Con 100 Hz y NAV_RAMP_CYCLES = 70, la rampa
+                                         *   dura 700 ms. */
 
 /* ─────────────────────────────────────────────────────────────────────────────
    HELPERS INTERNOS
    ───────────────────────────────────────────────────────────────────────────── */
 
 /**
- * normalize_angle()
+ * @brief Normaliza un ángulo al intervalo (-π, π].
  *
- * Lleva un ángulo al rango (-π, π].
- * Necesario para que el error angular sea siempre el camino más corto:
- *   sin normalizar, girar de 170° a -170° daría error = -340° en vez de 20°.
+ * Necesario para que el error angular represente siempre el camino de giro
+ * más corto. Sin normalizar, girar de 170° a -170° daría un error de -340°
+ * en lugar del correcto de 20°.
+ *
+ * @param a  Ángulo a normalizar [rad].
+ * @return   Ángulo equivalente en (-π, π] [rad].
  */
-static float normalize_angle(float a) {
+static float normalize_angle(float a)
+{
     while (a >  (float)M_PI) a -= 2.0f * (float)M_PI;
     while (a <= -(float)M_PI) a += 2.0f * (float)M_PI;
     return a;
 }
 
 /**
- * clampf()
- * Satura un valor float entre [lo, hi].
+ * @brief Satura un valor flotante al intervalo [lo, hi].
+ *
+ * @param v   Valor a saturar.
+ * @param lo  Límite inferior.
+ * @param hi  Límite superior.
+ * @return    @p v saturado al intervalo [@p lo, @p hi].
  */
-static inline float clampf(float v, float lo, float hi) {
+static inline float clampf(float v, float lo, float hi)
+{
     if (v < lo) return lo;
     if (v > hi) return hi;
     return v;
 }
 
 /**
- * compute_nav_geometry()
+ * @brief Calcula la distancia al destino y el error angular desde la pose actual.
  *
- * A partir de la pose actual y el destino, calcula:
- *   - distancia euclidiana al destino [mm]
- *   - error angular normalizado [rad]
+ * Usa g_target_x / g_target_y como destino y la pose provista como origen.
+ * El error angular se normaliza al rango (-π, π] para garantizar el giro
+ * por el camino más corto.
  *
- * Retorna false si el destino es el mismo punto que la pose actual
- * (distancia < 1 mm), en cuyo caso no tiene sentido calcular el ángulo.
+ * @param[in]  pose            Pose actual del robot (x, y, theta).
+ * @param[out] out_dist        Distancia euclidiana al destino [mm].
+ * @param[out] out_angle_error Error angular normalizado [rad].
+ * @return     @c true  si la geometría es válida (distancia ≥ 1 mm). @n
+ *             @c false si el destino coincide con la pose actual (dist < 1 mm),
+ *                      en cuyo caso no tiene sentido calcular el ángulo y
+ *                      se escribe 0.0 en @p out_angle_error.
  */
 static bool compute_nav_geometry(const pose_t *pose,
-                                  float *out_dist,
-                                  float *out_angle_error) {
+                                  float       *out_dist,
+                                  float       *out_angle_error)
+{
     float dx = g_target_x - pose->x;
     float dy = g_target_y - pose->y;
 
     *out_dist = sqrtf(dx * dx + dy * dy);
 
-    /* Si ya estamos encima del destino, no calcular ángulo */
-    if (*out_dist < 1.0f) {
+    if (*out_dist < 1.0f)
+    {
         *out_angle_error = 0.0f;
         return false;
     }
 
-    float angle_to_goal = atan2f(dy, dx);
-    *out_angle_error = normalize_angle(angle_to_goal - pose->theta);
+    float angle_to_goal  = atan2f(dy, dx);
+    *out_angle_error     = normalize_angle(angle_to_goal - pose->theta);
     return true;
 }
 
@@ -155,77 +157,71 @@ static bool compute_nav_geometry(const pose_t *pose,
    ───────────────────────────────────────────────────────────────────────────── */
 
 /**
- * fsm_turning()
+ * @brief Ejecuta un ciclo de la fase TURNING.
  *
- * Aplica control P sobre el error angular.
- * Transición a DRIVING cuando |error| < NAV_ANGLE_TOL.
+ * Aplica control proporcional sobre el error angular con saturación y PWM
+ * mínimo para vencer la fricción estática de los motores.
  *
- * El PWM de giro se calcula así:
- *   turn_pwm = clamp(KP_TURN * angle_error, ±NAV_TURN_SPEED)
+ * Lógica de signos en motors_set():
+ *  - angle_error > 0 → destino a la izquierda del heading actual →
+ *    motors_set(+turn_pwm, -turn_pwm)
+ *  - angle_error < 0 → destino a la derecha del heading actual →
+ *    motors_set(+turn_pwm, -turn_pwm)  (turn_pwm ya tiene signo negativo)
  *
- * Nota sobre el signo en motors_set():
- *   angle_error > 0 → destino a la izquierda del heading actual
- *                   → oruga izquierda atrás, derecha adelante
- *                   → motors_set(-turn_pwm, +turn_pwm)
- *   angle_error < 0 → destino a la derecha
- *                   → motors_set(+|turn_pwm|, -|turn_pwm|)
+ * La asimetría se resuelve naturalmente por el signo de turn_pwm: un valor
+ * positivo gira a la izquierda, negativo a la derecha, sin condiciones extra.
  *
- * La asimetría de signos en el motors_set hace que un turn_pwm positivo
- * siempre gire hacia donde está el destino, sin condiciones adicionales.
+ * @return NAV_DONE    si la distancia al destino es < 1 mm (ya llegó).
+ * @return NAV_DRIVING si |angle_error| < #NAV_ANGLE_TOL (alineado).
+ * @return NAV_TURNING en cualquier otro caso (continúa girando).
  */
-static nav_state_t fsm_turning(void) {
-
+static nav_state_t fsm_turning(void)
+{
     pose_t pose;
     odometry_get_pose(&pose);
 
     float dist, angle_error;
     bool valid = compute_nav_geometry(&pose, &dist, &angle_error);
 
-    /* Actualizar diagnóstico */
     g_status.distance_to_goal = dist;
     g_status.angle_error      = angle_error;
 
-    /* Si la distancia es cero (mismo punto), no hay ángulo que calcular */
-    if (!valid) {
+    /* Destino coincide con posición actual — no hay ángulo que corregir */
+    if (!valid)
+    {
         motors_set(0, 0);
         return NAV_DONE;
     }
 
-    /* ¿Ya apunta al destino? → pasar a DRIVING */
-    if (fabsf(angle_error) < NAV_ANGLE_TOL) {
+    /* Robot ya apunta al destino — arrancar avance con rampa limpia */
+    if (fabsf(angle_error) < NAV_ANGLE_TOL)
+    {
         motors_set(0, 0);
-        g_ramp_cycle = 0;   /* resetear rampa para el arranque limpio */
+        g_ramp_cycle = 0;
         return NAV_DRIVING;
     }
 
     /*
-     *  Control P sobre el error angular.
-     *
-     *  KP_TURN * angle_error da la intensidad proporcional al error.
-     *  Se satura a ±NAV_TURN_SPEED para no superar la velocidad máxima de giro.
-     *
-     *  turn_pwm tiene el signo del error angular:
-     *    > 0 → hay que girar izquierda
-     *    < 0 → hay que girar derecha
+     * Control P sobre el error angular.
+     * La saturación a ±NAV_TURN_SPEED limita la velocidad máxima de giro
+     * para mejorar la precisión de parada.
      */
-    // navigation.c — en fsm_turning(), reemplazar el bloque del clamp:
+    float turn_pwm_f = clampf(
+        NAV_KP_TURN * angle_error,
+        -(float)NAV_TURN_SPEED,
+         (float)NAV_TURN_SPEED
+    );
 
-float turn_pwm_f = clampf(
-    NAV_KP_TURN * angle_error,
-    -(float)NAV_TURN_SPEED,
-     (float)NAV_TURN_SPEED
-);
+    /*
+     * PWM mínimo para vencer fricción estática.
+     * Si el control P produce un valor inferior al umbral de arranque
+     * de los motores, se fuerza al mínimo garantizado de movimiento.
+     */
+    if      (turn_pwm_f > 0.0f && turn_pwm_f <  NAV_TURN_PWM_MIN) turn_pwm_f =  NAV_TURN_PWM_MIN;
+    else if (turn_pwm_f < 0.0f && turn_pwm_f > -NAV_TURN_PWM_MIN) turn_pwm_f = -NAV_TURN_PWM_MIN;
 
-// ── AGREGAR: PWM mínimo para vencer fricción estática ──────────────
-
-if (turn_pwm_f > 0.0f && turn_pwm_f < NAV_TURN_PWM_MIN)
-    turn_pwm_f = NAV_TURN_PWM_MIN;
-else if (turn_pwm_f < 0.0f && turn_pwm_f > -NAV_TURN_PWM_MIN)
-    turn_pwm_f = -NAV_TURN_PWM_MIN;
-// ────────────────────────────────────────────────────────────────────
-
-int turn_pwm = (int)turn_pwm_f;
-motors_set(turn_pwm, -turn_pwm);
+    int turn_pwm = (int)turn_pwm_f;
+    motors_set(turn_pwm, -turn_pwm);
 
     return NAV_TURNING;
 }
@@ -235,48 +231,62 @@ motors_set(turn_pwm, -turn_pwm);
    ───────────────────────────────────────────────────────────────────────────── */
 
 /**
- * fsm_driving()
+ * @brief Ejecuta un ciclo de la fase DRIVING.
  *
- * Avanza en línea recta delegando el control en speed_control_update().
- * Verifica en cada ciclo si la distancia al destino cayó bajo la tolerancia.
+ * Gestiona la rampa de aceleración y verifica la distancia al destino.
+ * El control diferencial de velocidad se delega completamente al Bloque 1
+ * (speed_control): este módulo solo decide cuándo parar.
  *
- * El Bloque 1 (speed_control) mantiene ambas orugas a la misma velocidad.
- * Este módulo solo necesita verificar cuándo parar.
+ * Rampa lineal durante #NAV_RAMP_CYCLES ciclos:
+ * @code
+ *   v = NAV_LINEAR_SPEED_MM_S * (g_ramp_cycle / NAV_RAMP_CYCLES)
+ * @endcode
+ * Pasada la rampa, la velocidad se fija en #NAV_LINEAR_SPEED_MM_S.
+ *
+ * @return NAV_DONE    si dist < g_pos_tolerance (destino alcanzado).
+ * @return NAV_DRIVING en cualquier otro caso (continúa avanzando).
  */
-static nav_state_t fsm_driving(void) {
-
+static nav_state_t fsm_driving(void)
+{
     pose_t pose;
     odometry_get_pose(&pose);
 
     float dist, angle_error;
     compute_nav_geometry(&pose, &dist, &angle_error);
 
-    /* Actualizar diagnóstico */
     g_status.distance_to_goal = dist;
     g_status.angle_error      = angle_error;
 
-    /* ¿Llegamos? */
-    if (dist < g_pos_tolerance) {
+    if (dist < g_pos_tolerance)
+    {
         speed_control_stop();
         return NAV_DONE;
     }
+    static uint32_t dbg = 0;
+    if (++dbg % 20 == 0)
+    {
+        printf(
+            "dist=%.1f  err=%.2fdeg  x=%.1f y=%.1f\n",
+            dist,
+            angle_error * 180.0f / M_PI,
+            pose.x,
+            pose.y
+        );
+    }
 
     /*
-     *  Rampa de aceleración lineal durante NAV_RAMP_CYCLES ciclos.
-     *
-     *  En los primeros NAV_RAMP_CYCLES ciclos la velocidad sube de 0
-     *  a NAV_LINEAR_SPEED_MM_S de forma proporcional al ciclo actual.
-     *  Pasada la rampa, g_ramp_cycle >= NAV_RAMP_CYCLES y la velocidad
-     *  se fija en NAV_LINEAR_SPEED_MM_S para siempre.
-     *
-     *  Esto evita el golpe de corriente y el patinaje en el arranque,
-     *  igual que el RAMP_CYCLES del main_example.c existente.
+     * Rampa de aceleración lineal.
+     * Evita el golpe de corriente y el patinaje en el arranque,
+     * consistente con el RAMP_CYCLES del main_example.c existente.
      */
     float v;
-    if (g_ramp_cycle < NAV_RAMP_CYCLES) {
+    if (g_ramp_cycle < NAV_RAMP_CYCLES)
+    {
         g_ramp_cycle++;
         v = NAV_LINEAR_SPEED_MM_S * ((float)g_ramp_cycle / (float)NAV_RAMP_CYCLES);
-    } else {
+    }
+    else
+    {
         v = NAV_LINEAR_SPEED_MM_S;
     }
 
@@ -293,7 +303,12 @@ static nav_state_t fsm_driving(void) {
    API PÚBLICA
    ───────────────────────────────────────────────────────────────────────────── */
 
-void nav_init(void) {
+/**
+ * @brief Inicializa el módulo de navegación.
+ * @see navigation.h para precondiciones.
+ */
+void nav_init(void)
+{
     g_state         = NAV_IDLE;
     g_target_x      = 0.0f;
     g_target_y      = 0.0f;
@@ -307,33 +322,37 @@ void nav_init(void) {
     g_status.pos_tolerance    = NAV_POS_TOL_DEFAULT;
 }
 
-void nav_go_to(float x_mm, float y_mm) {
-
-    /* Cancelar movimiento anterior si lo hubiera */
+/**
+ * @brief Establece un nuevo destino y arranca la navegación.
+ * @see navigation.h para descripción completa.
+ */
+void nav_go_to(float x_mm, float y_mm)
+{
     speed_control_stop();
     motors_set(0, 0);
 
-    /* Guardar destino */
     g_target_x = x_mm;
     g_target_y = y_mm;
 
-    /* Siempre arrancar desde TURNING — si ya apunta bien,
-       la primera llamada a fsm_turning() transiciona inmediatamente */
     g_state      = NAV_TURNING;
     g_ramp_cycle = 0;
 
-    /* Actualizar diagnóstico — incluyendo state para que nav_get_status()
-       refleje TURNING inmediatamente sin necesitar un nav_update() previo */
+    /* Actualizar diagnóstico para que nav_get_status() refleje TURNING
+     * inmediatamente, sin necesitar un nav_update() previo. */
     g_status.state         = NAV_TURNING;
     g_status.target_x      = x_mm;
     g_status.target_y      = y_mm;
     g_status.pos_tolerance = g_pos_tolerance;
 }
 
-nav_state_t nav_update(void) {
-
-    switch (g_state) {
-
+/**
+ * @brief Ejecuta un ciclo de la FSM de navegación.
+ * @see navigation.h para descripción completa.
+ */
+nav_state_t nav_update(void)
+{
+    switch (g_state)
+    {
         case NAV_TURNING:
             g_state = fsm_turning();
             break;
@@ -344,10 +363,9 @@ nav_state_t nav_update(void) {
 
         case NAV_DONE:
             /*
-             *  Permanecer en DONE UN ciclo para que el main pueda leerlo.
-             *  Solo transicionar a IDLE si nav_go_to() NO fue llamado
-             *  después de que se puso DONE — en ese caso g_state ya sería
-             *  TURNING y este case nunca se ejecutaría.
+             * Permanecer en DONE UN ciclo para que el main pueda detectarlo.
+             * Si nav_go_to() fue llamado mientras estaba en DONE, g_state ya
+             * sería NAV_TURNING y este case no se ejecutaría.
              */
             g_state = NAV_IDLE;
             break;
@@ -361,24 +379,45 @@ nav_state_t nav_update(void) {
     return g_state;
 }
 
-bool nav_is_done(void) {
+/**
+ * @brief Consulta si la navegación ha terminado.
+ * @see navigation.h para descripción completa.
+ */
+bool nav_is_done(void)
+{
     return (g_state == NAV_DONE || g_state == NAV_IDLE);
 }
 
-void nav_stop(void) {
+/**
+ * @brief Cancela el movimiento actual y detiene los motores.
+ * @see navigation.h para descripción completa.
+ */
+void nav_stop(void)
+{
     speed_control_stop();
     motors_set(0, 0);
     g_state        = NAV_IDLE;
     g_status.state = NAV_IDLE;
 }
 
-void nav_set_pos_tolerance(float tol_mm) {
-    if (tol_mm > 0.0f) {
+/**
+ * @brief Cambia el radio de llegada en tiempo de ejecución.
+ * @see navigation.h para descripción completa.
+ */
+void nav_set_pos_tolerance(float tol_mm)
+{
+    if (tol_mm > 0.0f)
+    {
         g_pos_tolerance        = tol_mm;
         g_status.pos_tolerance = tol_mm;
     }
 }
 
-void nav_get_status(nav_status_t *out) {
+/**
+ * @brief Copia el snapshot de diagnóstico del ciclo actual.
+ * @see navigation.h para descripción completa.
+ */
+void nav_get_status(nav_status_t *out)
+{
     *out = g_status;
 }
