@@ -1,0 +1,189 @@
+\doxysection{Driver\+\_\+\+TB6612\+FNG.\+h File Reference}
+\hypertarget{_driver___t_b6612_f_n_g_8h}{}\label{_driver___t_b6612_f_n_g_8h}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+
+
+Controlador para un driver de motores TB6612\+FNG.  
+
+
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+pwm.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+irq.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdlib.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed3bc161028b25248fc758ef2f209f2d}{PIN\+\_\+\+AIN1}}~19
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_ad5e078ec2e37926094f0dfd337b3b982}{PIN\+\_\+\+AIN2}}~18
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_af2f2e5f939d39ad0bbb1f76c0fbfce24}{PIN\+\_\+\+PWMA}}~13
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a77e64deabef42c2fdfbf134395739f51}{PIN\+\_\+\+BIN1}}~20
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a4a50399a4fccb77e7b8a3bd4cb21fab8}{PIN\+\_\+\+BIN2}}~21
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_acb335cb79900b758b1e014280acd67a7}{PIN\+\_\+\+PWMB}}~12
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a663eb72f2c34d68e830ad1ea14938850}{MAXPWM}}~70
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a19bbd3f95a23c9ecf96180fae5486441}{PWM\+\_\+\+WRAP}}~12499
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a4f73708a205778414d6aedf5cfb17fb4}{PWMSlice}}~6
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_ab470c4ef6980e6d5d29790ba299c82e3}{MAXPWM}}~70
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a16cd3410a69fa1ee73ebad8bc436b06a}{MINPWM\+\_\+\+LEFT}}~38
+\item 
+\+\#define \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a168c103ac63cdaa08b1ae25016b11bb9}{MINPWM\+\_\+\+RIGHT}}~38
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{_driver___t_b6612_f_n_g_8h_a58b014ae06372658bcb776d474312076}\label{_driver___t_b6612_f_n_g_8h_a58b014ae06372658bcb776d474312076} 
+void {\bfseries motor\+\_\+driver\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Inicializa el Driver, configura los pines GPIO, los canales PWM y la interrupción de PWM. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}{motors\+\_\+set}} (int left\+\_\+speed, int right\+\_\+speed)
+\begin{DoxyCompactList}\small\item\em Actualiza la consigna de velocidad de ambos motores. \end{DoxyCompactList}\item 
+uint32\+\_\+t \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_ade0b0ac97754a7e02a26ee61be62dcf7}{motor\+\_\+get\+\_\+ticks}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene el número de períodos PWM transcurridos. Devuelve el contador de eventos de wrap acumulados por la ISR del PWM desde la inicialización del controlador. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Controlador para un driver de motores TB6612\+FNG. 
+
+\begin{DoxyAuthor}{Author}
+Andrés Felipe Agudelo Zapata (\href{mailto:andresf.agudeloz@udea.edu.co}{\texttt{andresf.\+agudeloz@udea.\+edu.\+co}}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2026-\/06-\/09
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2026 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{_driver___t_b6612_f_n_g_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{_driver___t_b6612_f_n_g_8h_ab470c4ef6980e6d5d29790ba299c82e3}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!MAXPWM@{MAXPWM}}
+\index{MAXPWM@{MAXPWM}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{MAXPWM}{MAXPWM}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_ab470c4ef6980e6d5d29790ba299c82e3} 
+\+\#define MAXPWM~70}
+
+Los motores solo reciben hasta 6v la alimentacion es de 7.\+4v con valores de hasta 8.\+4v usamos un 70\% como segurridad
+
+\% — límite superior absoluto de velocidad \Hypertarget{_driver___t_b6612_f_n_g_8h_a663eb72f2c34d68e830ad1ea14938850}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!MAXPWM@{MAXPWM}}
+\index{MAXPWM@{MAXPWM}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{MAXPWM}{MAXPWM}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_a663eb72f2c34d68e830ad1ea14938850} 
+\+\#define MAXPWM~70}
+
+Los motores solo reciben hasta 6v la alimentacion es de 7.\+4v con valores de hasta 8.\+4v usamos un 70\% como segurridad
+
+\% — límite superior absoluto de velocidad \Hypertarget{_driver___t_b6612_f_n_g_8h_a16cd3410a69fa1ee73ebad8bc436b06a}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!MINPWM\_LEFT@{MINPWM\_LEFT}}
+\index{MINPWM\_LEFT@{MINPWM\_LEFT}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{MINPWM\_LEFT}{MINPWM\_LEFT}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_a16cd3410a69fa1ee73ebad8bc436b06a} 
+\+\#define MINPWM\+\_\+\+LEFT~38}
+
+\% — zona muerta motor izquierdo \Hypertarget{_driver___t_b6612_f_n_g_8h_a168c103ac63cdaa08b1ae25016b11bb9}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!MINPWM\_RIGHT@{MINPWM\_RIGHT}}
+\index{MINPWM\_RIGHT@{MINPWM\_RIGHT}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{MINPWM\_RIGHT}{MINPWM\_RIGHT}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_a168c103ac63cdaa08b1ae25016b11bb9} 
+\+\#define MINPWM\+\_\+\+RIGHT~38}
+
+\% — zona muerta motor derecho \Hypertarget{_driver___t_b6612_f_n_g_8h_aed3bc161028b25248fc758ef2f209f2d}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PIN\_AIN1@{PIN\_AIN1}}
+\index{PIN\_AIN1@{PIN\_AIN1}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PIN\_AIN1}{PIN\_AIN1}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_aed3bc161028b25248fc758ef2f209f2d} 
+\+\#define PIN\+\_\+\+AIN1~19}
+
+GP20 — dirección izquierdo bit-\/0 \Hypertarget{_driver___t_b6612_f_n_g_8h_ad5e078ec2e37926094f0dfd337b3b982}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PIN\_AIN2@{PIN\_AIN2}}
+\index{PIN\_AIN2@{PIN\_AIN2}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PIN\_AIN2}{PIN\_AIN2}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_ad5e078ec2e37926094f0dfd337b3b982} 
+\+\#define PIN\+\_\+\+AIN2~18}
+
+GP21 — dirección izquierdo bit-\/1 \Hypertarget{_driver___t_b6612_f_n_g_8h_a77e64deabef42c2fdfbf134395739f51}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PIN\_BIN1@{PIN\_BIN1}}
+\index{PIN\_BIN1@{PIN\_BIN1}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PIN\_BIN1}{PIN\_BIN1}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_a77e64deabef42c2fdfbf134395739f51} 
+\+\#define PIN\+\_\+\+BIN1~20}
+
+GP19 — dirección derecho bit-\/0 \Hypertarget{_driver___t_b6612_f_n_g_8h_a4a50399a4fccb77e7b8a3bd4cb21fab8}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PIN\_BIN2@{PIN\_BIN2}}
+\index{PIN\_BIN2@{PIN\_BIN2}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PIN\_BIN2}{PIN\_BIN2}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_a4a50399a4fccb77e7b8a3bd4cb21fab8} 
+\+\#define PIN\+\_\+\+BIN2~21}
+
+GP18 — dirección derecho bit-\/1 \Hypertarget{_driver___t_b6612_f_n_g_8h_af2f2e5f939d39ad0bbb1f76c0fbfce24}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PIN\_PWMA@{PIN\_PWMA}}
+\index{PIN\_PWMA@{PIN\_PWMA}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PIN\_PWMA}{PIN\_PWMA}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_af2f2e5f939d39ad0bbb1f76c0fbfce24} 
+\+\#define PIN\+\_\+\+PWMA~13}
+
+GP12 — PWM slice 6, canal A \Hypertarget{_driver___t_b6612_f_n_g_8h_acb335cb79900b758b1e014280acd67a7}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PIN\_PWMB@{PIN\_PWMB}}
+\index{PIN\_PWMB@{PIN\_PWMB}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PIN\_PWMB}{PIN\_PWMB}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_acb335cb79900b758b1e014280acd67a7} 
+\+\#define PIN\+\_\+\+PWMB~12}
+
+GP13 — PWM slice 6, canal B \Hypertarget{_driver___t_b6612_f_n_g_8h_a19bbd3f95a23c9ecf96180fae5486441}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PWM\_WRAP@{PWM\_WRAP}}
+\index{PWM\_WRAP@{PWM\_WRAP}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PWM\_WRAP}{PWM\_WRAP}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_a19bbd3f95a23c9ecf96180fae5486441} 
+\+\#define PWM\+\_\+\+WRAP~12499}
+
+Para una frecuencia de 10 KHz con reloj del micro de 125 MHz \Hypertarget{_driver___t_b6612_f_n_g_8h_a4f73708a205778414d6aedf5cfb17fb4}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!PWMSlice@{PWMSlice}}
+\index{PWMSlice@{PWMSlice}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{PWMSlice}{PWMSlice}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_a4f73708a205778414d6aedf5cfb17fb4} 
+\+\#define PWMSlice~6}
+
+Número de slice PWM utilizado para controlar los GPIO 12 y 13 
+
+\label{doc-func-members}
+\Hypertarget{_driver___t_b6612_f_n_g_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{_driver___t_b6612_f_n_g_8h_ade0b0ac97754a7e02a26ee61be62dcf7}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!motor\_get\_ticks@{motor\_get\_ticks}}
+\index{motor\_get\_ticks@{motor\_get\_ticks}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{motor\_get\_ticks()}{motor\_get\_ticks()}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_ade0b0ac97754a7e02a26ee61be62dcf7} 
+uint32\+\_\+t motor\+\_\+get\+\_\+ticks (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene el número de períodos PWM transcurridos. Devuelve el contador de eventos de wrap acumulados por la ISR del PWM desde la inicialización del controlador. 
+
+La lectura se realiza de forma atómica deshabilitando temporalmente la interrupción PWM.
+
+\begin{DoxyReturn}{Returns}
+Número de eventos PWM wrap acumulados. 
+\end{DoxyReturn}
+\Hypertarget{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}\index{Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}!motors\_set@{motors\_set}}
+\index{motors\_set@{motors\_set}!Driver\_TB6612FNG.h@{Driver\_TB6612FNG.h}}
+\doxysubsubsection{\texorpdfstring{motors\_set()}{motors\_set()}}
+{\footnotesize\ttfamily \label{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8} 
+void motors\+\_\+set (\begin{DoxyParamCaption}\item[{int}]{left\+\_\+speed}{, }\item[{int}]{right\+\_\+speed}{}\end{DoxyParamCaption})}
+
+
+
+Actualiza la consigna de velocidad de ambos motores. 
+
+Aplica una zona muerta independiente para cada motor. Si la magnitud de la velocidad solicitada es inferior al umbral mínimo calibrado, el motor se detiene.
+
+Para velocidades válidas, configura la dirección de giro y calcula el duty cycle PWM correspondiente. Los nuevos valores se aplican posteriormente desde la ISR de PWM para mantener la actualización sincronizada con el período PWM.
+
+
+\begin{DoxyParams}{Parameters}
+{\em left\+\_\+speed} & Consigna del motor izquierdo. \\
+\hline
+{\em right\+\_\+speed} & Consigna del motor derecho. \\
+\hline
+\end{DoxyParams}

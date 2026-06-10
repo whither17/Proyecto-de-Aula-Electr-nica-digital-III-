@@ -1,0 +1,123 @@
+\doxysection{hcsr04\+\_\+t Struct Reference}
+\hypertarget{structhcsr04__t}{}\label{structhcsr04__t}\index{hcsr04\_t@{hcsr04\_t}}
+
+
+Estructura de datos del sensor. Describe el sensor HCSR-\/04.  
+
+
+
+
+{\ttfamily \+\#include $<$ultrasonic.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint \doxymbox{\hyperlink{structhcsr04__t_a9d87c0f8be342c46efe6dd90cf668a51}{trig\+\_\+pin}}
+\item 
+uint \doxymbox{\hyperlink{structhcsr04__t_a42c1232a45f3eadf67f13aa751cd1a5d}{echo\+\_\+pin}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structhcsr04__t_a09e6006a5336e89446dd5bbbb73ed99f}{timer\+\_\+period\+\_\+us}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structhcsr04__t_aa8329c9072bb801715b4708ea743be2e}{distance}}
+\item 
+volatile \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677}{states}} \doxymbox{\hyperlink{structhcsr04__t_a1e10a08da7631c4b95db4512d91f06d7}{estado}}
+\item 
+volatile bool \doxymbox{\hyperlink{structhcsr04__t_a3040ba8117e31c8158ee69a7e65a44ba}{data\+\_\+ready}}
+\item 
+bool \doxymbox{\hyperlink{structhcsr04__t_a9bf24fbc7e6c3f38af053c87bb6d977c}{flag\+\_\+rise}}
+\item 
+bool \doxymbox{\hyperlink{structhcsr04__t_a6ec97859bf8a5f66e2d5e6b7d1f30786}{flag\+\_\+fall}}
+\item 
+volatile uint32\+\_\+t \doxymbox{\hyperlink{structhcsr04__t_af219171977f15fd8f1d1fe4400176460}{time\+\_\+rise}}
+\item 
+volatile uint32\+\_\+t \doxymbox{\hyperlink{structhcsr04__t_a1b36c04e3e6ba432cc0bb035675488f8}{time\+\_\+fall}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structhcsr04__t_a16333f58bf9b7538660f48fae5eb1079}{measured\+\_\+period}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structhcsr04__t_ac56ab835d7f1cdada3c106a43533d693}{timeout}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Estructura de datos del sensor. Describe el sensor HCSR-\/04. 
+
+\label{doc-variable-members}
+\Hypertarget{structhcsr04__t_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structhcsr04__t_a3040ba8117e31c8158ee69a7e65a44ba}\index{hcsr04\_t@{hcsr04\_t}!data\_ready@{data\_ready}}
+\index{data\_ready@{data\_ready}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{data\_ready}{data\_ready}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a3040ba8117e31c8158ee69a7e65a44ba} 
+volatile bool hcsr04\+\_\+t::\+data\+\_\+ready}
+
+Bandera que indica si hay medición. \Hypertarget{structhcsr04__t_aa8329c9072bb801715b4708ea743be2e}\index{hcsr04\_t@{hcsr04\_t}!distance@{distance}}
+\index{distance@{distance}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{distance}{distance}}
+{\footnotesize\ttfamily \label{structhcsr04__t_aa8329c9072bb801715b4708ea743be2e} 
+uint32\+\_\+t hcsr04\+\_\+t::\+distance}
+
+Distancia calculada. \Hypertarget{structhcsr04__t_a42c1232a45f3eadf67f13aa751cd1a5d}\index{hcsr04\_t@{hcsr04\_t}!echo\_pin@{echo\_pin}}
+\index{echo\_pin@{echo\_pin}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{echo\_pin}{echo\_pin}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a42c1232a45f3eadf67f13aa751cd1a5d} 
+uint hcsr04\+\_\+t::\+echo\+\_\+pin}
+
+Pin GPIO echo. \Hypertarget{structhcsr04__t_a1e10a08da7631c4b95db4512d91f06d7}\index{hcsr04\_t@{hcsr04\_t}!estado@{estado}}
+\index{estado@{estado}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{estado}{estado}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a1e10a08da7631c4b95db4512d91f06d7} 
+volatile \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677}{states}} hcsr04\+\_\+t::\+estado}
+
+Estado de la FSM del sensor. \Hypertarget{structhcsr04__t_a6ec97859bf8a5f66e2d5e6b7d1f30786}\index{hcsr04\_t@{hcsr04\_t}!flag\_fall@{flag\_fall}}
+\index{flag\_fall@{flag\_fall}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{flag\_fall}{flag\_fall}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a6ec97859bf8a5f66e2d5e6b7d1f30786} 
+bool hcsr04\+\_\+t::\+flag\+\_\+fall}
+
+Bandera de flanco de bajada del ECHO. \Hypertarget{structhcsr04__t_a9bf24fbc7e6c3f38af053c87bb6d977c}\index{hcsr04\_t@{hcsr04\_t}!flag\_rise@{flag\_rise}}
+\index{flag\_rise@{flag\_rise}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{flag\_rise}{flag\_rise}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a9bf24fbc7e6c3f38af053c87bb6d977c} 
+bool hcsr04\+\_\+t::\+flag\+\_\+rise}
+
+Bandera de flanco de subida del ECHO. \Hypertarget{structhcsr04__t_a16333f58bf9b7538660f48fae5eb1079}\index{hcsr04\_t@{hcsr04\_t}!measured\_period@{measured\_period}}
+\index{measured\_period@{measured\_period}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{measured\_period}{measured\_period}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a16333f58bf9b7538660f48fae5eb1079} 
+uint32\+\_\+t hcsr04\+\_\+t::\+measured\+\_\+period}
+
+Periodo medido del ECHO (us). \Hypertarget{structhcsr04__t_a1b36c04e3e6ba432cc0bb035675488f8}\index{hcsr04\_t@{hcsr04\_t}!time\_fall@{time\_fall}}
+\index{time\_fall@{time\_fall}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{time\_fall}{time\_fall}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a1b36c04e3e6ba432cc0bb035675488f8} 
+volatile uint32\+\_\+t hcsr04\+\_\+t::\+time\+\_\+fall}
+
+Tiempo al momento del flanco de bajada del ECHO (us). \Hypertarget{structhcsr04__t_af219171977f15fd8f1d1fe4400176460}\index{hcsr04\_t@{hcsr04\_t}!time\_rise@{time\_rise}}
+\index{time\_rise@{time\_rise}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{time\_rise}{time\_rise}}
+{\footnotesize\ttfamily \label{structhcsr04__t_af219171977f15fd8f1d1fe4400176460} 
+volatile uint32\+\_\+t hcsr04\+\_\+t::\+time\+\_\+rise}
+
+Tiempo al momento del flanco de dubida del ECHO (us). \Hypertarget{structhcsr04__t_ac56ab835d7f1cdada3c106a43533d693}\index{hcsr04\_t@{hcsr04\_t}!timeout@{timeout}}
+\index{timeout@{timeout}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{timeout}{timeout}}
+{\footnotesize\ttfamily \label{structhcsr04__t_ac56ab835d7f1cdada3c106a43533d693} 
+uint32\+\_\+t hcsr04\+\_\+t::\+timeout}
+
+Tiempo de espera entre mediciones. \Hypertarget{structhcsr04__t_a09e6006a5336e89446dd5bbbb73ed99f}\index{hcsr04\_t@{hcsr04\_t}!timer\_period\_us@{timer\_period\_us}}
+\index{timer\_period\_us@{timer\_period\_us}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{timer\_period\_us}{timer\_period\_us}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a09e6006a5336e89446dd5bbbb73ed99f} 
+uint32\+\_\+t hcsr04\+\_\+t::\+timer\+\_\+period\+\_\+us}
+
+Periodo de duración del TRIGGER. \Hypertarget{structhcsr04__t_a9d87c0f8be342c46efe6dd90cf668a51}\index{hcsr04\_t@{hcsr04\_t}!trig\_pin@{trig\_pin}}
+\index{trig\_pin@{trig\_pin}!hcsr04\_t@{hcsr04\_t}}
+\doxysubsubsection{\texorpdfstring{trig\_pin}{trig\_pin}}
+{\footnotesize\ttfamily \label{structhcsr04__t_a9d87c0f8be342c46efe6dd90cf668a51} 
+uint hcsr04\+\_\+t::\+trig\+\_\+pin}
+
+Pin GPIO trigger. 
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{ultrasonic_8h}{ultrasonic.\+h}}\end{DoxyCompactItemize}

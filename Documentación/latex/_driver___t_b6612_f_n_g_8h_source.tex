@@ -1,0 +1,69 @@
+\doxysection{Driver\+\_\+\+TB6612\+FNG.\+h}
+\hypertarget{_driver___t_b6612_f_n_g_8h_source}{}\label{_driver___t_b6612_f_n_g_8h_source}\doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifndef\ DRIVER\_TB6612FNG\_\_H}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ DRIVER\_TB6612FNG\_\_H}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/pwm.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}hardware/irq.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//Motor\ izquierdo\ —\ canal\ A}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ PIN\_AIN1\ 19\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ PIN\_AIN2\ 18\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ PIN\_PWMA\ 13\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{//\ Motor\ derecho\ —\ canal\ B\ }}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ PIN\_BIN1\ 20\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ PIN\_BIN2\ 21\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ PIN\_PWMB\ 12\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ CONSTANTES\ }}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ MAXPWM\ 70\ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ PWM\_WRAP\ 12499\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ PWMSlice\ 6\ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ MAXPWM\ 70\ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ MINPWM\_LEFT\ \ 38\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ MINPWM\_RIGHT\ 38\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_a58b014ae06372658bcb776d474312076}{motor\_driver\_init}}();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}{motors\_set}}(\textcolor{keywordtype}{int}\ left\_speed,\ \textcolor{keywordtype}{int}\ right\_speed);}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00072\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ GoForward(\textcolor{keywordtype}{int}\ speed)\ }
+\DoxyCodeLine{00073\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}{motors\_set}}(speed,\ speed);}
+\DoxyCodeLine{00075\ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00082\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ GoBackwards(\textcolor{keywordtype}{int}\ speed)\ }
+\DoxyCodeLine{00083\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}{motors\_set}}(-\/speed,\ -\/speed);}
+\DoxyCodeLine{00085\ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00092\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ SpinLeft(\textcolor{keywordtype}{int}\ speed)\ }
+\DoxyCodeLine{00093\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}{motors\_set}}(-\/speed,\ speed);}
+\DoxyCodeLine{00095\ \}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00102\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ SpinRight(\textcolor{keywordtype}{int}\ speed)\ }
+\DoxyCodeLine{00103\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}{motors\_set}}(speed,\ -\/speed);}
+\DoxyCodeLine{00105\ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ motors\_stop()\ }
+\DoxyCodeLine{00112\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_aed5553fbc098b80af5da3821a9b464b8}{motors\_set}}(0,\ 0);}
+\DoxyCodeLine{00114\ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00126\ uint32\_t\ \doxymbox{\hyperlink{_driver___t_b6612_f_n_g_8h_ade0b0ac97754a7e02a26ee61be62dcf7}{motor\_get\_ticks}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,251 @@
+\doxysection{imu.\+h File Reference}
+\hypertarget{imu_8h}{}\label{imu_8h}\index{imu.h@{imu.h}}
+
+
+Controlador de una unidad de aceleración inercial MPU6050 por interfaz I2C.  
+
+
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+i2c.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}pico/\+time.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structimu__data__t}{imu\+\_\+data\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Estructura de datos que expone el driver. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a7017fff9860922694b4f02f38acfd787}{IMU\+\_\+\+I2\+C\+\_\+\+PORT}}~i2c1
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_ad618927d48fd1414aed151a572303ce2}{IMU\+\_\+\+PIN\+\_\+\+SDA}}~2
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_aac076887ef35f66dba28d95d422dc833}{IMU\+\_\+\+PIN\+\_\+\+SCL}}~3
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a2a57f9bbbc126a91e2a389c77b927c9b}{IMU\+\_\+\+I2\+C\+\_\+\+FREQ}}~400000
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a3e429d6c82a6dfd9e6ec370ea8c5adc0}{IMU\+\_\+\+SAMPLE\+\_\+\+US}}~10000
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_ad4d6255d8f7e5dc770e773b787977508}{MPU6050\+\_\+\+ADDR}}~0x68
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a9221fccfb00e441e3ac409d76e37bf20}{REG\+\_\+\+SMPLRT\+\_\+\+DIV}}~0x19
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a679325263fb326462f7410d3292171be}{REG\+\_\+\+CONFIG}}~0x1A
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_aa80ccf68f0f11e35a8ff77039922b43d}{REG\+\_\+\+GYRO\+\_\+\+CONFIG}}~0x1B
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a7b8e959d8f7fc470648511d3917efee5}{REG\+\_\+\+ACCEL\+\_\+\+CONFIG}}~0x1C
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a4c5c1b52ef4d960cba4eca99d406947a}{REG\+\_\+\+INT\+\_\+\+ENABLE}}~0x38
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_aab8616dc1b72431e52f4b5370022933e}{REG\+\_\+\+ACCEL\+\_\+\+XOUT\+\_\+H}}~0x3B
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_aa22e489fc09f853f23e2586aac531ed6}{REG\+\_\+\+PWR\+\_\+\+MGMT\+\_\+1}}~0x6B
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a73f4728dfb5c82afcea7bee729af205c}{REG\+\_\+\+WHO\+\_\+\+AM\+\_\+I}}~0x75
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_abdeac7f9288bf09fd6e1739d22ff8bea}{GYRO\+\_\+\+SCALE}}~(1.\+0f /\+ 131.\+0f)
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a212460e743fecb084d717bb2180c5a56}{DEG\+\_\+\+TO\+\_\+\+RAD}}~(3.\+14159265f /\+ 180.\+0f)
+\item 
+\+\#define \doxymbox{\hyperlink{imu_8h_a5dcd67c887f0009e1ec2675a7ebe8b73}{ACCEL\+\_\+\+SCALE}}~(9.\+80665f /\+ 16384.\+0f)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{imu_8h_a6b6478e95ef6f4c5805fe483be44c17f}{imu\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Inicializa I2C, configura chip, arranca la alarma. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{imu_8h_ab572d62d9bf20cb3a4544900c89d5649}{imu\+\_\+data\+\_\+ready}} ()
+\item 
+bool \doxymbox{\hyperlink{imu_8h_a0891fbc69ed78cb08c7cd9debd08a3f6}{imu\+\_\+read}} ()
+\begin{DoxyCompactList}\small\item\em Lee la IMU y entrega los resultados en unidades físicas. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{imu_8h_ab2987ada9721bbfca78749b70b154222}{imu\+\_\+get\+\_\+data}} (\doxymbox{\hyperlink{structimu__data__t}{imu\+\_\+data\+\_\+t}} \texorpdfstring{$\ast$}{*}out)
+\begin{DoxyCompactList}\small\item\em Retorna la estructura de mediciones de la IMU. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Controlador de una unidad de aceleración inercial MPU6050 por interfaz I2C. 
+
+\begin{DoxyAuthor}{Author}
+Robinson Correa Morales (\href{mailto:robinson.corream@udea.edu.co}{\texttt{robinson.\+corream@udea.\+edu.\+co}}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2026-\/06-\/09
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2026 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{imu_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{imu_8h_a5dcd67c887f0009e1ec2675a7ebe8b73}\index{imu.h@{imu.h}!ACCEL\_SCALE@{ACCEL\_SCALE}}
+\index{ACCEL\_SCALE@{ACCEL\_SCALE}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{ACCEL\_SCALE}{ACCEL\_SCALE}}
+{\footnotesize\ttfamily \label{imu_8h_a5dcd67c887f0009e1ec2675a7ebe8b73} 
+\+\#define ACCEL\+\_\+\+SCALE~(9.\+80665f /\+ 16384.\+0f)}
+
+Conversión de LSB (cuentas crudad raw) a m/\+s² (±2 g). \Hypertarget{imu_8h_a212460e743fecb084d717bb2180c5a56}\index{imu.h@{imu.h}!DEG\_TO\_RAD@{DEG\_TO\_RAD}}
+\index{DEG\_TO\_RAD@{DEG\_TO\_RAD}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{DEG\_TO\_RAD}{DEG\_TO\_RAD}}
+{\footnotesize\ttfamily \label{imu_8h_a212460e743fecb084d717bb2180c5a56} 
+\+\#define DEG\+\_\+\+TO\+\_\+\+RAD~(3.\+14159265f /\+ 180.\+0f)}
+
+Conversión de grados a radianes. \Hypertarget{imu_8h_abdeac7f9288bf09fd6e1739d22ff8bea}\index{imu.h@{imu.h}!GYRO\_SCALE@{GYRO\_SCALE}}
+\index{GYRO\_SCALE@{GYRO\_SCALE}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{GYRO\_SCALE}{GYRO\_SCALE}}
+{\footnotesize\ttfamily \label{imu_8h_abdeac7f9288bf09fd6e1739d22ff8bea} 
+\+\#define GYRO\+\_\+\+SCALE~(1.\+0f /\+ 131.\+0f)}
+
+Conversión de LSB (cuentas crudad raw) a °/\+s (±250 °/\+s). \Hypertarget{imu_8h_a2a57f9bbbc126a91e2a389c77b927c9b}\index{imu.h@{imu.h}!IMU\_I2C\_FREQ@{IMU\_I2C\_FREQ}}
+\index{IMU\_I2C\_FREQ@{IMU\_I2C\_FREQ}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{IMU\_I2C\_FREQ}{IMU\_I2C\_FREQ}}
+{\footnotesize\ttfamily \label{imu_8h_a2a57f9bbbc126a91e2a389c77b927c9b} 
+\+\#define IMU\+\_\+\+I2\+C\+\_\+\+FREQ~400000}
+
+Frecuencia de comunicación \Hypertarget{imu_8h_a7017fff9860922694b4f02f38acfd787}\index{imu.h@{imu.h}!IMU\_I2C\_PORT@{IMU\_I2C\_PORT}}
+\index{IMU\_I2C\_PORT@{IMU\_I2C\_PORT}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{IMU\_I2C\_PORT}{IMU\_I2C\_PORT}}
+{\footnotesize\ttfamily \label{imu_8h_a7017fff9860922694b4f02f38acfd787} 
+\+\#define IMU\+\_\+\+I2\+C\+\_\+\+PORT~i2c1}
+
+Instancia I2C \Hypertarget{imu_8h_aac076887ef35f66dba28d95d422dc833}\index{imu.h@{imu.h}!IMU\_PIN\_SCL@{IMU\_PIN\_SCL}}
+\index{IMU\_PIN\_SCL@{IMU\_PIN\_SCL}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{IMU\_PIN\_SCL}{IMU\_PIN\_SCL}}
+{\footnotesize\ttfamily \label{imu_8h_aac076887ef35f66dba28d95d422dc833} 
+\+\#define IMU\+\_\+\+PIN\+\_\+\+SCL~3}
+
+GPIO SLC \Hypertarget{imu_8h_ad618927d48fd1414aed151a572303ce2}\index{imu.h@{imu.h}!IMU\_PIN\_SDA@{IMU\_PIN\_SDA}}
+\index{IMU\_PIN\_SDA@{IMU\_PIN\_SDA}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{IMU\_PIN\_SDA}{IMU\_PIN\_SDA}}
+{\footnotesize\ttfamily \label{imu_8h_ad618927d48fd1414aed151a572303ce2} 
+\+\#define IMU\+\_\+\+PIN\+\_\+\+SDA~2}
+
+GPIO SDA \Hypertarget{imu_8h_a3e429d6c82a6dfd9e6ec370ea8c5adc0}\index{imu.h@{imu.h}!IMU\_SAMPLE\_US@{IMU\_SAMPLE\_US}}
+\index{IMU\_SAMPLE\_US@{IMU\_SAMPLE\_US}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{IMU\_SAMPLE\_US}{IMU\_SAMPLE\_US}}
+{\footnotesize\ttfamily \label{imu_8h_a3e429d6c82a6dfd9e6ec370ea8c5adc0} 
+\+\#define IMU\+\_\+\+SAMPLE\+\_\+\+US~10000}
+
+Periodo de Muestreo \Hypertarget{imu_8h_ad4d6255d8f7e5dc770e773b787977508}\index{imu.h@{imu.h}!MPU6050\_ADDR@{MPU6050\_ADDR}}
+\index{MPU6050\_ADDR@{MPU6050\_ADDR}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{MPU6050\_ADDR}{MPU6050\_ADDR}}
+{\footnotesize\ttfamily \label{imu_8h_ad4d6255d8f7e5dc770e773b787977508} 
+\+\#define MPU6050\+\_\+\+ADDR~0x68}
+
+Direccion I2C de la IMU AD0 a GND \Hypertarget{imu_8h_a7b8e959d8f7fc470648511d3917efee5}\index{imu.h@{imu.h}!REG\_ACCEL\_CONFIG@{REG\_ACCEL\_CONFIG}}
+\index{REG\_ACCEL\_CONFIG@{REG\_ACCEL\_CONFIG}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_ACCEL\_CONFIG}{REG\_ACCEL\_CONFIG}}
+{\footnotesize\ttfamily \label{imu_8h_a7b8e959d8f7fc470648511d3917efee5} 
+\+\#define REG\+\_\+\+ACCEL\+\_\+\+CONFIG~0x1C}
+
+Configuración del acelerómetro. \Hypertarget{imu_8h_aab8616dc1b72431e52f4b5370022933e}\index{imu.h@{imu.h}!REG\_ACCEL\_XOUT\_H@{REG\_ACCEL\_XOUT\_H}}
+\index{REG\_ACCEL\_XOUT\_H@{REG\_ACCEL\_XOUT\_H}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_ACCEL\_XOUT\_H}{REG\_ACCEL\_XOUT\_H}}
+{\footnotesize\ttfamily \label{imu_8h_aab8616dc1b72431e52f4b5370022933e} 
+\+\#define REG\+\_\+\+ACCEL\+\_\+\+XOUT\+\_\+H~0x3B}
+
+Byte alto de Accel X. \Hypertarget{imu_8h_a679325263fb326462f7410d3292171be}\index{imu.h@{imu.h}!REG\_CONFIG@{REG\_CONFIG}}
+\index{REG\_CONFIG@{REG\_CONFIG}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_CONFIG}{REG\_CONFIG}}
+{\footnotesize\ttfamily \label{imu_8h_a679325263fb326462f7410d3292171be} 
+\+\#define REG\+\_\+\+CONFIG~0x1A}
+
+Configuración general y DLPF. \Hypertarget{imu_8h_aa80ccf68f0f11e35a8ff77039922b43d}\index{imu.h@{imu.h}!REG\_GYRO\_CONFIG@{REG\_GYRO\_CONFIG}}
+\index{REG\_GYRO\_CONFIG@{REG\_GYRO\_CONFIG}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_GYRO\_CONFIG}{REG\_GYRO\_CONFIG}}
+{\footnotesize\ttfamily \label{imu_8h_aa80ccf68f0f11e35a8ff77039922b43d} 
+\+\#define REG\+\_\+\+GYRO\+\_\+\+CONFIG~0x1B}
+
+Configuración del giroscopio. \Hypertarget{imu_8h_a4c5c1b52ef4d960cba4eca99d406947a}\index{imu.h@{imu.h}!REG\_INT\_ENABLE@{REG\_INT\_ENABLE}}
+\index{REG\_INT\_ENABLE@{REG\_INT\_ENABLE}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_INT\_ENABLE}{REG\_INT\_ENABLE}}
+{\footnotesize\ttfamily \label{imu_8h_a4c5c1b52ef4d960cba4eca99d406947a} 
+\+\#define REG\+\_\+\+INT\+\_\+\+ENABLE~0x38}
+
+Habilitación de interrupciones. \Hypertarget{imu_8h_aa22e489fc09f853f23e2586aac531ed6}\index{imu.h@{imu.h}!REG\_PWR\_MGMT\_1@{REG\_PWR\_MGMT\_1}}
+\index{REG\_PWR\_MGMT\_1@{REG\_PWR\_MGMT\_1}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_PWR\_MGMT\_1}{REG\_PWR\_MGMT\_1}}
+{\footnotesize\ttfamily \label{imu_8h_aa22e489fc09f853f23e2586aac531ed6} 
+\+\#define REG\+\_\+\+PWR\+\_\+\+MGMT\+\_\+1~0x6B}
+
+Gestión de energía y reloj. \Hypertarget{imu_8h_a9221fccfb00e441e3ac409d76e37bf20}\index{imu.h@{imu.h}!REG\_SMPLRT\_DIV@{REG\_SMPLRT\_DIV}}
+\index{REG\_SMPLRT\_DIV@{REG\_SMPLRT\_DIV}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_SMPLRT\_DIV}{REG\_SMPLRT\_DIV}}
+{\footnotesize\ttfamily \label{imu_8h_a9221fccfb00e441e3ac409d76e37bf20} 
+\+\#define REG\+\_\+\+SMPLRT\+\_\+\+DIV~0x19}
+
+Divisor de frecuencia de muestreo. \Hypertarget{imu_8h_a73f4728dfb5c82afcea7bee729af205c}\index{imu.h@{imu.h}!REG\_WHO\_AM\_I@{REG\_WHO\_AM\_I}}
+\index{REG\_WHO\_AM\_I@{REG\_WHO\_AM\_I}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{REG\_WHO\_AM\_I}{REG\_WHO\_AM\_I}}
+{\footnotesize\ttfamily \label{imu_8h_a73f4728dfb5c82afcea7bee729af205c} 
+\+\#define REG\+\_\+\+WHO\+\_\+\+AM\+\_\+I~0x75}
+
+Identificador del dispositivo. 
+
+\label{doc-func-members}
+\Hypertarget{imu_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{imu_8h_ab572d62d9bf20cb3a4544900c89d5649}\index{imu.h@{imu.h}!imu\_data\_ready@{imu\_data\_ready}}
+\index{imu\_data\_ready@{imu\_data\_ready}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{imu\_data\_ready()}{imu\_data\_ready()}}
+{\footnotesize\ttfamily \label{imu_8h_ab572d62d9bf20cb3a4544900c89d5649} 
+bool imu\+\_\+data\+\_\+ready (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+true true si la alarma disparó desde la última lectura 
+
+false 
+\end{DoxyReturn}
+\Hypertarget{imu_8h_ab2987ada9721bbfca78749b70b154222}\index{imu.h@{imu.h}!imu\_get\_data@{imu\_get\_data}}
+\index{imu\_get\_data@{imu\_get\_data}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{imu\_get\_data()}{imu\_get\_data()}}
+{\footnotesize\ttfamily \label{imu_8h_ab2987ada9721bbfca78749b70b154222} 
+void imu\+\_\+get\+\_\+data (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structimu__data__t}{imu\+\_\+data\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{out}{}\end{DoxyParamCaption})}
+
+
+
+Retorna la estructura de mediciones de la IMU. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em out} & Apuntador a estructura de datos con las mediciones \\
+\hline
+\end{DoxyParams}
+\Hypertarget{imu_8h_a6b6478e95ef6f4c5805fe483be44c17f}\index{imu.h@{imu.h}!imu\_init@{imu\_init}}
+\index{imu\_init@{imu\_init}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{imu\_init()}{imu\_init()}}
+{\footnotesize\ttfamily \label{imu_8h_a6b6478e95ef6f4c5805fe483be44c17f} 
+bool imu\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa I2C, configura chip, arranca la alarma. 
+
+\begin{DoxyReturn}{Returns}
+true Se inició la IMU correctamente 
+
+false Falló la inicialización de la IMU 
+\end{DoxyReturn}
+\Hypertarget{imu_8h_a0891fbc69ed78cb08c7cd9debd08a3f6}\index{imu.h@{imu.h}!imu\_read@{imu\_read}}
+\index{imu\_read@{imu\_read}!imu.h@{imu.h}}
+\doxysubsubsection{\texorpdfstring{imu\_read()}{imu\_read()}}
+{\footnotesize\ttfamily \label{imu_8h_a0891fbc69ed78cb08c7cd9debd08a3f6} 
+bool imu\+\_\+read (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Lee la IMU y entrega los resultados en unidades físicas. 
+
+\begin{DoxyReturn}{Returns}
+true La IMU se leyó correctamente 
+
+false Hubo un error en la lectura 
+\end{DoxyReturn}

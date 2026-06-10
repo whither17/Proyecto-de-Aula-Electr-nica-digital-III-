@@ -1,0 +1,35 @@
+\doxysection{encoder.\+h}
+\hypertarget{encoder_8h_source}{}\label{encoder_8h_source}\doxymbox{\hyperlink{encoder_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#ifndef\ ENCODER\_H}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ ENCODER\_H}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ "{}hardware/irq.h"{}}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{comment}{//\ Definición\ de\ pines}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ ENCODER\_LEFT\_A\ 0\ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ ENCODER\_LEFT\_B\ 1\ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ ENCODER\_RIGHT\_A\ 17\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ ENCODER\_RIGHT\_B\ 16\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00062\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{encoder_8h_a1810f19ef7d35edd2e26a7d4ee29f6bc}{encoder\_init}}();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00083\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{encoder_8h_a4f6c808e1a2c77cb2c5f9ed1187ec3f3}{encoder\_handle\_irq}}(uint\ gpio,\ uint32\_t\ events);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{comment}{/*\ Lectura\ atómica\ de\ ticks\ —\ para\ uso\ de\ la\ capa\ de\ odometría\ */}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00092\ int32\_t\ \doxymbox{\hyperlink{encoder_8h_abb0f45c88fc2072ebad82dbafc955643}{encoder\_get\_left}}();}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00099\ int32\_t\ \doxymbox{\hyperlink{encoder_8h_af580c83830a6c847ee3ef1f98ddbd060}{encoder\_get\_right}}();}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00105\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{encoder_8h_a349492e4c7c080375830f94d859a2e70}{encoder\_reset}}();}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

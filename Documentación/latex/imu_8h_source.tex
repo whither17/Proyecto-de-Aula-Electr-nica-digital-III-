@@ -1,0 +1,63 @@
+\doxysection{imu.\+h}
+\hypertarget{imu_8h_source}{}\label{imu_8h_source}\doxymbox{\hyperlink{imu_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ IMU\_MPU6050\_H}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ IMU\_MPU6050\_H}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}hardware/i2c.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}pico/time.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ Comunicación\ I2C}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ IMU\_I2C\_PORT\ \ \ \ i2c1\ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ IMU\_PIN\_SDA\ \ \ \ \ 2\ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ IMU\_PIN\_SCL\ \ \ \ \ 3\ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ IMU\_I2C\_FREQ\ \ \ \ 400000\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ IMU\_SAMPLE\_US\ \ \ 10000\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ MPU6050\_ADDR\ \ \ \ 0x68\ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{//Registros}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ REG\_SMPLRT\_DIV\ \ \ 0x19\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ REG\_CONFIG\ \ \ \ \ \ \ 0x1A\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ REG\_GYRO\_CONFIG\ \ 0x1B\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ REG\_ACCEL\_CONFIG\ 0x1C\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ REG\_INT\_ENABLE\ \ \ 0x38\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ REG\_ACCEL\_XOUT\_H\ 0x3B\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ REG\_PWR\_MGMT\_1\ \ \ 0x6B\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ REG\_WHO\_AM\_I\ \ \ \ \ 0x75\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{//Conversiones\ lineales}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ GYRO\_SCALE\ \ \ (1.0f\ /\ 131.0f)\ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ DEG\_TO\_RAD\ \ \ (3.14159265f\ /\ 180.0f)\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ ACCEL\_SCALE\ \ (9.80665f\ /\ 16384.0f)\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00052\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{float}\ gyro\_x;\ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structimu__data__t_a915d1e16fdfad2b8e8230047243563c9}{gyro\_y}};\ \ \ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structimu__data__t_ae721c469e16c6c4cd0b7e8d0e266bcee}{gyro\_z}};\ \ \ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structimu__data__t_ac369c312b21135a6f3d5e98b0ed6c555}{accel\_x}};\ \ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structimu__data__t_a9db4032132e022048cd0f7b20282f202}{accel\_y}};\ \ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structimu__data__t_a26bcef494a39b7d457dcca0bd367ea43}{accel\_z}};\ \ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structimu__data__t_a3cb63a9745b97503607a0943115a6918}{temp}};\ \ \ \ \ }
+\DoxyCodeLine{00060\ \}\ \doxymbox{\hyperlink{structimu__data__t}{imu\_data\_t}};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/──\ API\ pública\ ───────────────────//}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{imu_8h_a6b6478e95ef6f4c5805fe483be44c17f}{imu\_init}}();}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00078\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{imu_8h_ab572d62d9bf20cb3a4544900c89d5649}{imu\_data\_ready}}();\ \ \textcolor{comment}{/*\ */}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00086\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{imu_8h_a0891fbc69ed78cb08c7cd9debd08a3f6}{imu\_read}}();}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00093\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{imu_8h_ab2987ada9721bbfca78749b70b154222}{imu\_get\_data}}(\doxymbox{\hyperlink{structimu__data__t}{imu\_data\_t}}\ *out);}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

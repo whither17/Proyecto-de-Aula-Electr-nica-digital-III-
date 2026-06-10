@@ -1,0 +1,229 @@
+\doxysection{ultrasonic.\+h File Reference}
+\hypertarget{ultrasonic_8h}{}\label{ultrasonic_8h}\index{ultrasonic.h@{ultrasonic.h}}
+
+
+Diver de sensor ultrasónico HCSR-\/04. Flujo de uso:\+ ultrasonic\+\_\+init(\&front, 17, 16);
+\begin{DoxyItemize}
+\item 
+\item 
+\item ultrasonic\+\_\+start(\&front); ultrasonic\+\_\+process(\&front); ... if(ultrasonic\+\_\+ready(\&front)) \{ uint32\+\_\+t d = ultrasonic\+\_\+get\+\_\+distance(\&front);. 
+\end{DoxyItemize} 
+
+
+{\ttfamily \+\#include "{}hardware/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+timer.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+irq.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Estructura de datos del sensor. Describe el sensor HCSR-\/04. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{ultrasonic_8h_a89998645ab61dc9feffdba784d9efadd}\label{ultrasonic_8h_a89998645ab61dc9feffdba784d9efadd} 
+\+\#define {\bfseries ULTRASONIC\+\_\+H}
+\item 
+\+\#define \doxymbox{\hyperlink{ultrasonic_8h_ad3f113e79fb54ebc8631766271c58a5e}{NO\+\_\+\+CAPTURE\+\_\+\+READY}}~0xffffffff
+\item 
+\+\#define \doxymbox{\hyperlink{ultrasonic_8h_a291a8e8d9b3ccfd699f55dee9a94f380}{CONSTANTE\+\_\+\+PRESICION}}~58
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677}{states}} \{ \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677afd6a0e4343048b10646dd2976cc5ad18}{IDLE}}
+, \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677ac7e0cae17e8296f4b9e33bf58ac37218}{WAIT\+\_\+\+RISE}}
+, \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a06cda812553d6da75452d7187414b507}{WAIT\+\_\+\+FALL}}
+, \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a9c954bcf443428c80b0f107b3bc48749}{DONE}}
+ \}
+\begin{DoxyCompactList}\small\item\em Estados de la máquina de estados que controla el funcionamiento del sensor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{ultrasonic_8h_adbf1efd28b045722f7241a7dd5203b2f}{ultrasonic\+\_\+ready}} (\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}dev)
+\begin{DoxyCompactList}\small\item\em Función que inicia si hay medición. \end{DoxyCompactList}\item 
+uint32\+\_\+t \doxymbox{\hyperlink{ultrasonic_8h_a20062d12c6ba3e5a76ac9f095303f530}{ultrasonic\+\_\+get\+\_\+distance}} (\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}dev)
+\begin{DoxyCompactList}\small\item\em Retorna la distancia calculada. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{ultrasonic_8h_a925194411695682c5f4b25b5a63466ec}{ultrasonic\+\_\+init}} (\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}dev, uint trig\+\_\+pin, uint echo\+\_\+pin)
+\begin{DoxyCompactList}\small\item\em Inicializa el sensor. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{ultrasonic_8h_a5fe8244fe16d01021d5b074f89c20bf1}{ultrasonic\+\_\+start}} (\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}dev)
+\begin{DoxyCompactList}\small\item\em Inicializa una medición. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{ultrasonic_8h_ae5fb8e2f0b378ae9f2f1afc90106f6d9}{ultrasonic\+\_\+process}} (\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}dev)
+\begin{DoxyCompactList}\small\item\em Procesa el tiempo de espera y calcula la medición. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Diver de sensor ultrasónico HCSR-\/04. Flujo de uso:\+ ultrasonic\+\_\+init(\&front, 17, 16);
+\begin{DoxyItemize}
+\item 
+\item 
+\item ultrasonic\+\_\+start(\&front); ultrasonic\+\_\+process(\&front); ... if(ultrasonic\+\_\+ready(\&front)) \{ uint32\+\_\+t d = ultrasonic\+\_\+get\+\_\+distance(\&front);. 
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Author}
+Robinson Correa Morales (\href{mailto:robinson.corream@udea.edu.co}{\texttt{robinson.\+corream@udea.\+edu.\+co}}) 
+\end{DoxyAuthor}
+printf("{}\+Distancia:\+ \%lu cm\textbackslash{}n"{}, d); ... ultrasonic\+\_\+start(\&front); printf("{}\+READY\textbackslash{}n"{}); \}
+
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2026-\/06-\/06
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2026 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{ultrasonic_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{ultrasonic_8h_a291a8e8d9b3ccfd699f55dee9a94f380}\index{ultrasonic.h@{ultrasonic.h}!CONSTANTE\_PRESICION@{CONSTANTE\_PRESICION}}
+\index{CONSTANTE\_PRESICION@{CONSTANTE\_PRESICION}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{CONSTANTE\_PRESICION}{CONSTANTE\_PRESICION}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_a291a8e8d9b3ccfd699f55dee9a94f380} 
+\+\#define CONSTANTE\+\_\+\+PRESICION~58}
+
+Contante para calcular distancia (d = vel\+\_\+sonido \texorpdfstring{$\ast$}{*} T /\+2). \Hypertarget{ultrasonic_8h_ad3f113e79fb54ebc8631766271c58a5e}\index{ultrasonic.h@{ultrasonic.h}!NO\_CAPTURE\_READY@{NO\_CAPTURE\_READY}}
+\index{NO\_CAPTURE\_READY@{NO\_CAPTURE\_READY}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{NO\_CAPTURE\_READY}{NO\_CAPTURE\_READY}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_ad3f113e79fb54ebc8631766271c58a5e} 
+\+\#define NO\+\_\+\+CAPTURE\+\_\+\+READY~0xffffffff}
+
+No se obtuvo captura válida. 
+
+\label{doc-enum-members}
+\Hypertarget{ultrasonic_8h_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677}\index{ultrasonic.h@{ultrasonic.h}!states@{states}}
+\index{states@{states}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{states}{states}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677} 
+enum \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677}{states}}}
+
+
+
+Estados de la máquina de estados que controla el funcionamiento del sensor. 
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{IDLE@{IDLE}!ultrasonic.h@{ultrasonic.h}}
+\index{ultrasonic.h@{ultrasonic.h}!IDLE@{IDLE}}
+}\Hypertarget{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677afd6a0e4343048b10646dd2976cc5ad18}\label{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677afd6a0e4343048b10646dd2976cc5ad18} 
+IDLE&Iniciar. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_RISE@{WAIT\_RISE}!ultrasonic.h@{ultrasonic.h}}
+\index{ultrasonic.h@{ultrasonic.h}!WAIT\_RISE@{WAIT\_RISE}}
+}\Hypertarget{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677ac7e0cae17e8296f4b9e33bf58ac37218}\label{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677ac7e0cae17e8296f4b9e33bf58ac37218} 
+WAIT\+\_\+\+RISE&Esperar flanco de subida del ECHO. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_FALL@{WAIT\_FALL}!ultrasonic.h@{ultrasonic.h}}
+\index{ultrasonic.h@{ultrasonic.h}!WAIT\_FALL@{WAIT\_FALL}}
+}\Hypertarget{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a06cda812553d6da75452d7187414b507}\label{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a06cda812553d6da75452d7187414b507} 
+WAIT\+\_\+\+FALL&Esperar flanco de bajada del ECHO. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DONE@{DONE}!ultrasonic.h@{ultrasonic.h}}
+\index{ultrasonic.h@{ultrasonic.h}!DONE@{DONE}}
+}\Hypertarget{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a9c954bcf443428c80b0f107b3bc48749}\label{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a9c954bcf443428c80b0f107b3bc48749} 
+DONE&Realizar medición de distancia. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\label{doc-func-members}
+\Hypertarget{ultrasonic_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{ultrasonic_8h_a20062d12c6ba3e5a76ac9f095303f530}\index{ultrasonic.h@{ultrasonic.h}!ultrasonic\_get\_distance@{ultrasonic\_get\_distance}}
+\index{ultrasonic\_get\_distance@{ultrasonic\_get\_distance}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{ultrasonic\_get\_distance()}{ultrasonic\_get\_distance()}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_a20062d12c6ba3e5a76ac9f095303f530} 
+uint32\+\_\+t ultrasonic\+\_\+get\+\_\+distance (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dev}{}\end{DoxyParamCaption})}
+
+
+
+Retorna la distancia calculada. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dev} & Apuntador a estructura \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint32\+\_\+t Distancia en centímetros. 
+\end{DoxyReturn}
+\Hypertarget{ultrasonic_8h_a925194411695682c5f4b25b5a63466ec}\index{ultrasonic.h@{ultrasonic.h}!ultrasonic\_init@{ultrasonic\_init}}
+\index{ultrasonic\_init@{ultrasonic\_init}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{ultrasonic\_init()}{ultrasonic\_init()}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_a925194411695682c5f4b25b5a63466ec} 
+void ultrasonic\+\_\+init (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dev}{, }\item[{uint}]{trig\+\_\+pin}{, }\item[{uint}]{echo\+\_\+pin}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el sensor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dev} & Apuntador a estructura \\
+\hline
+{\em trig\+\_\+pin} & GPIO trigger \\
+\hline
+{\em echo\+\_\+pin} & GPIO ECHO \\
+\hline
+\end{DoxyParams}
+\Hypertarget{ultrasonic_8h_ae5fb8e2f0b378ae9f2f1afc90106f6d9}\index{ultrasonic.h@{ultrasonic.h}!ultrasonic\_process@{ultrasonic\_process}}
+\index{ultrasonic\_process@{ultrasonic\_process}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{ultrasonic\_process()}{ultrasonic\_process()}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_ae5fb8e2f0b378ae9f2f1afc90106f6d9} 
+void ultrasonic\+\_\+process (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dev}{}\end{DoxyParamCaption})}
+
+
+
+Procesa el tiempo de espera y calcula la medición. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dev} & Apuntador a estructura \\
+\hline
+\end{DoxyParams}
+\Hypertarget{ultrasonic_8h_adbf1efd28b045722f7241a7dd5203b2f}\index{ultrasonic.h@{ultrasonic.h}!ultrasonic\_ready@{ultrasonic\_ready}}
+\index{ultrasonic\_ready@{ultrasonic\_ready}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{ultrasonic\_ready()}{ultrasonic\_ready()}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_adbf1efd28b045722f7241a7dd5203b2f} 
+bool ultrasonic\+\_\+ready (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dev}{}\end{DoxyParamCaption})}
+
+
+
+Función que inicia si hay medición. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dev} & Apuntador a estructura \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true Hay medición 
+
+false No hay medición. 
+\end{DoxyReturn}
+\Hypertarget{ultrasonic_8h_a5fe8244fe16d01021d5b074f89c20bf1}\index{ultrasonic.h@{ultrasonic.h}!ultrasonic\_start@{ultrasonic\_start}}
+\index{ultrasonic\_start@{ultrasonic\_start}!ultrasonic.h@{ultrasonic.h}}
+\doxysubsubsection{\texorpdfstring{ultrasonic\_start()}{ultrasonic\_start()}}
+{\footnotesize\ttfamily \label{ultrasonic_8h_a5fe8244fe16d01021d5b074f89c20bf1} 
+void ultrasonic\+\_\+start (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dev}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa una medición. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dev} & Apuntador a estructura \\
+\hline
+\end{DoxyParams}

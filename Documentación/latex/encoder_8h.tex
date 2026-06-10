@@ -1,0 +1,156 @@
+\doxysection{encoder.\+h File Reference}
+\hypertarget{encoder_8h}{}\label{encoder_8h}\index{encoder.h@{encoder.h}}
+
+
+Módulo de encoders Con Cuadratura, para encoders magnéticos de efecto Hall Con canales A y B por rueda.  
+
+
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+irq.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdlib.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{encoder_8h_a014d2d3610587f514ff4e8e0c18fb025}{ENCODER\+\_\+\+LEFT\+\_\+A}}~0
+\item 
+\+\#define \doxymbox{\hyperlink{encoder_8h_a8564b286272ff635f8f2afb794000fc4}{ENCODER\+\_\+\+LEFT\+\_\+B}}~1
+\item 
+\+\#define \doxymbox{\hyperlink{encoder_8h_abd5364738cc685b760ed55791ccc30e2}{ENCODER\+\_\+\+RIGHT\+\_\+A}}~17
+\item 
+\+\#define \doxymbox{\hyperlink{encoder_8h_a338f475388f6f44f6d1b3ce6025a54e8}{ENCODER\+\_\+\+RIGHT\+\_\+B}}~16
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{encoder_8h_a1810f19ef7d35edd2e26a7d4ee29f6bc}\label{encoder_8h_a1810f19ef7d35edd2e26a7d4ee29f6bc} 
+void {\bfseries encoder\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Inicializa los pines GPIO y habilita la interrupción más no la configura. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{encoder_8h_a4f6c808e1a2c77cb2c5f9ed1187ec3f3}{encoder\+\_\+handle\+\_\+irq}} (uint gpio, uint32\+\_\+t events)
+\begin{DoxyCompactList}\small\item\em Manejador de interrupción GPIO para los encoders Expuesta a otros módulos. \end{DoxyCompactList}\item 
+int32\+\_\+t \doxymbox{\hyperlink{encoder_8h_abb0f45c88fc2072ebad82dbafc955643}{encoder\+\_\+get\+\_\+left}} ()
+\begin{DoxyCompactList}\small\item\em Obtiene los ticks de la izquierda. \end{DoxyCompactList}\item 
+int32\+\_\+t \doxymbox{\hyperlink{encoder_8h_af580c83830a6c847ee3ef1f98ddbd060}{encoder\+\_\+get\+\_\+right}} ()
+\begin{DoxyCompactList}\small\item\em Obtiene los ticks de la derecha. \end{DoxyCompactList}\item 
+\Hypertarget{encoder_8h_a349492e4c7c080375830f94d859a2e70}\label{encoder_8h_a349492e4c7c080375830f94d859a2e70} 
+void {\bfseries encoder\+\_\+reset} ()
+\begin{DoxyCompactList}\small\item\em Reestablece ambos contadores a cero. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Módulo de encoders Con Cuadratura, para encoders magnéticos de efecto Hall Con canales A y B por rueda. 
+
+\begin{DoxyAuthor}{Author}
+Andrés Felipe Agudelo Zapata (\href{mailto:andresf.agudeloz@udea.edu.co}{\texttt{andresf.\+agudeloz@udea.\+edu.\+co}}) 
+\end{DoxyAuthor}
+Rueda izquierda Canal A → GP0 (dispara la IRQ en flanco de subida y bajada) Canal B → GP1 (se lee dentro del handler para detectar dirección)
+
+Rueda derecha Canal A → GP17 (dispara la IRQ en flanco de subida y bajada) Canal B → GP16 (se lee dentro del handler para detectar dirección)
+
+En un encoder de cuadratura los canales A y B están desfasados 90°. Cuando el motor gira hacia adelante, A sube ANTES que B:\+
+
+Adelante:\+ A sube → B está en ALTO → tick positivo Atrás:\+ A sube → B está en BAJO → tick negativo
+
+Disparando en ambos flancos (subida Y bajada) de A se duplica la resolución del encoder sin necesidad de leer el canal B dos veces.
+
+Flanco de SUBIDA de A + B en ALTO → avanza → ticks++ Flanco de SUBIDA de A + B en BAJO → retrocede → ticks-- Flanco de BAJADA de A + B en BAJO → avanza → ticks++ Flanco de BAJADA de A + B en ALTO → retrocede → ticks--
+
+Advertencia:\+ Este módulo solo cuenta ticks. La conversión a distancia y ángulo se hace en la capa superior de odometría con
+
+distancia = ticks \texorpdfstring{$\ast$}{*} (PI \texorpdfstring{$\ast$}{*} diametro\+\_\+rueda /\+ pulsos\+\_\+por\+\_\+vuelta)
+
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2026-\/06-\/09
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2026 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{encoder_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{encoder_8h_a014d2d3610587f514ff4e8e0c18fb025}\index{encoder.h@{encoder.h}!ENCODER\_LEFT\_A@{ENCODER\_LEFT\_A}}
+\index{ENCODER\_LEFT\_A@{ENCODER\_LEFT\_A}!encoder.h@{encoder.h}}
+\doxysubsubsection{\texorpdfstring{ENCODER\_LEFT\_A}{ENCODER\_LEFT\_A}}
+{\footnotesize\ttfamily \label{encoder_8h_a014d2d3610587f514ff4e8e0c18fb025} 
+\+\#define ENCODER\+\_\+\+LEFT\+\_\+A~0}
+
+GP0 canal A rueda izquierda (dispara IRQ) \Hypertarget{encoder_8h_a8564b286272ff635f8f2afb794000fc4}\index{encoder.h@{encoder.h}!ENCODER\_LEFT\_B@{ENCODER\_LEFT\_B}}
+\index{ENCODER\_LEFT\_B@{ENCODER\_LEFT\_B}!encoder.h@{encoder.h}}
+\doxysubsubsection{\texorpdfstring{ENCODER\_LEFT\_B}{ENCODER\_LEFT\_B}}
+{\footnotesize\ttfamily \label{encoder_8h_a8564b286272ff635f8f2afb794000fc4} 
+\+\#define ENCODER\+\_\+\+LEFT\+\_\+B~1}
+
+GP1 canal B rueda izquierda (lee dirección) \Hypertarget{encoder_8h_abd5364738cc685b760ed55791ccc30e2}\index{encoder.h@{encoder.h}!ENCODER\_RIGHT\_A@{ENCODER\_RIGHT\_A}}
+\index{ENCODER\_RIGHT\_A@{ENCODER\_RIGHT\_A}!encoder.h@{encoder.h}}
+\doxysubsubsection{\texorpdfstring{ENCODER\_RIGHT\_A}{ENCODER\_RIGHT\_A}}
+{\footnotesize\ttfamily \label{encoder_8h_abd5364738cc685b760ed55791ccc30e2} 
+\+\#define ENCODER\+\_\+\+RIGHT\+\_\+A~17}
+
+GP17 canal A rueda derecha (dispara IRQ) \Hypertarget{encoder_8h_a338f475388f6f44f6d1b3ce6025a54e8}\index{encoder.h@{encoder.h}!ENCODER\_RIGHT\_B@{ENCODER\_RIGHT\_B}}
+\index{ENCODER\_RIGHT\_B@{ENCODER\_RIGHT\_B}!encoder.h@{encoder.h}}
+\doxysubsubsection{\texorpdfstring{ENCODER\_RIGHT\_B}{ENCODER\_RIGHT\_B}}
+{\footnotesize\ttfamily \label{encoder_8h_a338f475388f6f44f6d1b3ce6025a54e8} 
+\+\#define ENCODER\+\_\+\+RIGHT\+\_\+B~16}
+
+GP16 canal B rueda derecha (lee dirección) 
+
+\label{doc-func-members}
+\Hypertarget{encoder_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{encoder_8h_abb0f45c88fc2072ebad82dbafc955643}\index{encoder.h@{encoder.h}!encoder\_get\_left@{encoder\_get\_left}}
+\index{encoder\_get\_left@{encoder\_get\_left}!encoder.h@{encoder.h}}
+\doxysubsubsection{\texorpdfstring{encoder\_get\_left()}{encoder\_get\_left()}}
+{\footnotesize\ttfamily \label{encoder_8h_abb0f45c88fc2072ebad82dbafc955643} 
+int32\+\_\+t encoder\+\_\+get\+\_\+left (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene los ticks de la izquierda. 
+
+\begin{DoxyReturn}{Returns}
+int32\+\_\+t Número de Ticks
+\end{DoxyReturn}
+\doxylink{encoder_8h_abb0f45c88fc2072ebad82dbafc955643}{encoder\+\_\+get\+\_\+left()} \doxylink{encoder_8h_af580c83830a6c847ee3ef1f98ddbd060}{encoder\+\_\+get\+\_\+right()}
+
+Deshabilitan brevemente la IRQ de GPIO para garantizar que el valor de 32 bits se lee completo sin que una interrupción lo modifique a la mitad. Advertencia:\+ En Cortex-\/\+M0+ las lecturas de 32 bits no son atómicas si pueden ser interrumpidas entre los dos accesos de 16 bits internos. \Hypertarget{encoder_8h_af580c83830a6c847ee3ef1f98ddbd060}\index{encoder.h@{encoder.h}!encoder\_get\_right@{encoder\_get\_right}}
+\index{encoder\_get\_right@{encoder\_get\_right}!encoder.h@{encoder.h}}
+\doxysubsubsection{\texorpdfstring{encoder\_get\_right()}{encoder\_get\_right()}}
+{\footnotesize\ttfamily \label{encoder_8h_af580c83830a6c847ee3ef1f98ddbd060} 
+int32\+\_\+t encoder\+\_\+get\+\_\+right (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene los ticks de la derecha. 
+
+\begin{DoxyReturn}{Returns}
+int32\+\_\+t Número de Ticks 
+\end{DoxyReturn}
+\Hypertarget{encoder_8h_a4f6c808e1a2c77cb2c5f9ed1187ec3f3}\index{encoder.h@{encoder.h}!encoder\_handle\_irq@{encoder\_handle\_irq}}
+\index{encoder\_handle\_irq@{encoder\_handle\_irq}!encoder.h@{encoder.h}}
+\doxysubsubsection{\texorpdfstring{encoder\_handle\_irq()}{encoder\_handle\_irq()}}
+{\footnotesize\ttfamily \label{encoder_8h_a4f6c808e1a2c77cb2c5f9ed1187ec3f3} 
+void encoder\+\_\+handle\+\_\+irq (\begin{DoxyParamCaption}\item[{uint}]{gpio}{, }\item[{uint32\+\_\+t}]{events}{}\end{DoxyParamCaption})}
+
+
+
+Manejador de interrupción GPIO para los encoders Expuesta a otros módulos. 
+
+Esta función decide si el evento corresponde a un encoder, en qué dirección giró y actualiza el contador.
+
+Lógica de cuadratura:\+ Flanco RISE en A + B en ALTO → adelante → ++ Flanco RISE en A + B en BAJO → atrás → -- Flanco FALL en A + B en BAJO → adelante → ++ Flanco FALL en A + B en ALTO → atrás → --
+
+En resumen:\+ tick positivo cuando A y B están en el mismo estado, tick negativo cuando están en estados opuestos.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gpio} & PIN GPIO que generó la interrupción \\
+\hline
+{\em events} & Máscara de eventos GPIO\+\_\+\+IRQ\+\_\+\texorpdfstring{$\ast$}{*} asociados al disparo. \\
+\hline
+\end{DoxyParams}

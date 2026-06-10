@@ -1,0 +1,55 @@
+\doxysection{ultrasonic.\+h}
+\hypertarget{ultrasonic_8h_source}{}\label{ultrasonic_8h_source}\doxymbox{\hyperlink{ultrasonic_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifndef\ ULTRASONCI\_H}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ ULTRASONIC\_H}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}hardware/timer.h"{}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ "{}hardware/irq.h"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ NO\_CAPTURE\_READY\ 0xffffffff\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ CONSTANTE\_PRESICION\ 58\ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ }
+\DoxyCodeLine{00049\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677afd6a0e4343048b10646dd2976cc5ad18}{IDLE}},\ \ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677ac7e0cae17e8296f4b9e33bf58ac37218}{WAIT\_RISE}},\ }
+\DoxyCodeLine{00052\ \ \ \ \ \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a06cda812553d6da75452d7187414b507}{WAIT\_FALL}},\ }
+\DoxyCodeLine{00053\ \ \ \ \ \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677a9c954bcf443428c80b0f107b3bc48749}{DONE}},\ \ \ \ \ \ }
+\DoxyCodeLine{00054\ \}\ \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677}{states}};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00061\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ uint\ \doxymbox{\hyperlink{structhcsr04__t_a9d87c0f8be342c46efe6dd90cf668a51}{trig\_pin}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00063\ \ \ \ \ uint\ \doxymbox{\hyperlink{structhcsr04__t_a42c1232a45f3eadf67f13aa751cd1a5d}{echo\_pin}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00064\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{structhcsr04__t_a09e6006a5336e89446dd5bbbb73ed99f}{timer\_period\_us}};\ \ \ \ }
+\DoxyCodeLine{00065\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{structhcsr04__t_aa8329c9072bb801715b4708ea743be2e}{distance}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{volatile}\ \doxymbox{\hyperlink{ultrasonic_8h_aa19be6305a5a4485e1e70de70ed7d677}{states}}\ \doxymbox{\hyperlink{structhcsr04__t_a1e10a08da7631c4b95db4512d91f06d7}{estado}};\ \ \ \ \ \ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{volatile}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structhcsr04__t_a3040ba8117e31c8158ee69a7e65a44ba}{data\_ready}};\ \ \ \ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structhcsr04__t_a9bf24fbc7e6c3f38af053c87bb6d977c}{flag\_rise}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structhcsr04__t_a6ec97859bf8a5f66e2d5e6b7d1f30786}{flag\_fall}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{volatile}\ uint32\_t\ \doxymbox{\hyperlink{structhcsr04__t_af219171977f15fd8f1d1fe4400176460}{time\_rise}};\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{volatile}\ uint32\_t\ \doxymbox{\hyperlink{structhcsr04__t_a1b36c04e3e6ba432cc0bb035675488f8}{time\_fall}};\ }
+\DoxyCodeLine{00072\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{structhcsr04__t_a16333f58bf9b7538660f48fae5eb1079}{measured\_period}};\ \ \ \ }
+\DoxyCodeLine{00073\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{structhcsr04__t_ac56ab835d7f1cdada3c106a43533d693}{timeout}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00074\ \}\ \doxymbox{\hyperlink{structhcsr04__t}{hcsr04\_t}};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00083\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{ultrasonic_8h_adbf1efd28b045722f7241a7dd5203b2f}{ultrasonic\_ready}}(\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\_t}}\ *dev);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00091\ uint32\_t\ \doxymbox{\hyperlink{ultrasonic_8h_a20062d12c6ba3e5a76ac9f095303f530}{ultrasonic\_get\_distance}}(\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\_t}}\ *dev);}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00100\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{ultrasonic_8h_a925194411695682c5f4b25b5a63466ec}{ultrasonic\_init}}(\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\_t}}\ *dev,\ uint\ trig\_pin,\ uint\ echo\_pin);}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00107\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{ultrasonic_8h_a5fe8244fe16d01021d5b074f89c20bf1}{ultrasonic\_start}}(\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\_t}}\ *dev);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00114\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{ultrasonic_8h_ae5fb8e2f0b378ae9f2f1afc90106f6d9}{ultrasonic\_process}}(\doxymbox{\hyperlink{structhcsr04__t}{hcsr04\_t}}\ *dev);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
