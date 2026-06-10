@@ -112,5 +112,5 @@ void ultrasonic_start(hcsr04_t *dev);
  * @param dev Apuntador a estructura
  */
 void ultrasonic_process(hcsr04_t *dev);
-
+void ultrasonic_eco_callback(uint gpio, uint32_t events);
 #endif

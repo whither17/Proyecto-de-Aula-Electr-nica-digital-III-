@@ -148,17 +148,7 @@ void ultrasonic_init(hcsr04_t *dev, uint trig_pin, uint echo_pin)
     gpio_put(trig_pin, 0);
 
     instances[echo_pin] = dev;
-   
-    if (!callback_installed)
-    {
-        gpio_set_irq_enabled_with_callback( echo_pin, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, ultrasonic_eco_callback);
-        callback_installed = true;
-    }
-    else
-    {
-        gpio_set_irq_enabled(echo_pin, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true);
-    }
-
+    gpio_set_irq_enabled(echo_pin, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true);
 }
 
 void ultrasonic_start(hcsr04_t *dev)
