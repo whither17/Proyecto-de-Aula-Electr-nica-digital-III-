@@ -299,10 +299,6 @@ static nav_state_t fsm_driving(void)
     sc_command_t cmd = {
         .v_left_mm_s  = v + (correction < 0.0f ? -correction : 0.0f),
         .v_right_mm_s = v + (correction > 0.0f ?  correction : 0.0f)
-
-    sc_command_t cmd = {
-        .v_left_mm_s  = v,
-        .v_right_mm_s = v
     };
     speed_control_set(&cmd);
 
