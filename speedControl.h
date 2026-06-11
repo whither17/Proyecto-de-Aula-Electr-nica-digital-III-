@@ -57,8 +57,8 @@
 
 //----------------- Constantes PI ---------------------//
 
-#define SC_KP 0.3f  /**< Ganancia Proporcional */
-#define SC_KI 0.05f /**< Ganancia Integral */
+#define SC_KP 0.4f  /**< Ganancia Proporcional */
+#define SC_KI 0.07f /**< Ganancia Integral */
 
 #define SC_FF_SLOPE_LEFT 7.5f  /**<  Pendiente feed-forward por canal [PWM% / (tick/ciclo)] */
 #define SC_FF_SLOPE_RIGHT 7.5f /**<  Pendiente feed-forward por canal [PWM% / (tick/ciclo)] */

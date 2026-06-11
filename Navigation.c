@@ -4,6 +4,7 @@
  * @brief Implementación del módulo de navegación punto a punto.
  *
  * Robot autónomo de mapeo — Módulo 5.
+ * Plataforma : Raspberry Pi Pico (RP2040). Lenguaje : C puro (bare-metal).
  *
  * ── Máquina de estados ───────────────────────────────────────────────────────
  *
@@ -24,7 +25,7 @@
  *                                                            si no hay nuevo destino)
  * @endcode
  *
- * Control de giro:
+ * ── Control de giro ──────────────────────────────────────────────────────────
  *
  * Control P puro sobre el error angular con PWM mínimo para vencer fricción:
  * @code
@@ -34,7 +35,7 @@
  *   if |turn_pwm| < NAV_TURN_PWM_MIN → turn_pwm = ±NAV_TURN_PWM_MIN
  * @endcode
  *
- * Control de avance:
+ * ── Control de avance ────────────────────────────────────────────────────────
  *
  * Delega completamente en speed_control (Bloque 1):
  * @code
@@ -42,9 +43,12 @@
  *   speed_control_set(&cmd);
  * @endcode
  *
- * Cálculo de distancia y ángulo:
+ * ── Cálculo de distancia y ángulo ────────────────────────────────────────────
  *
  * Se recalculan en cada ciclo con la pose fresca de odometry_get_pose().
+ * Esto hace el control robusto a la deriva acumulada: si el robot se desplaza
+ * lateralmente, el heading al destino cambia y la detección de llegada usa
+ * la distancia real, no la planificada.
  */
 
 #include "navigation.h"
@@ -54,8 +58,9 @@
 #include <math.h>
 #include <stdio.h>
 
-
-//------------ Estados Internos ----------------//
+/* ─────────────────────────────────────────────────────────────────────────────
+   ESTADO INTERNO
+   ───────────────────────────────────────────────────────────────────────────── */
 
 static nav_state_t g_state = NAV_IDLE; /**< Estado actual de la FSM de navegación. */
 
@@ -76,7 +81,9 @@ static int g_ramp_cycle = 0;           /**< Contador de ciclos transcurridos en 
                                          *   Con 100 Hz y NAV_RAMP_CYCLES = 70, la rampa
                                          *   dura 700 ms. */
 
-//--------------- Funciones Privadas ------------------//
+/* ─────────────────────────────────────────────────────────────────────────────
+   HELPERS INTERNOS
+   ───────────────────────────────────────────────────────────────────────────── */
 
 /**
  * @brief Normaliza un ángulo al intervalo (-π, π].
@@ -148,6 +155,7 @@ static bool compute_nav_geometry(const pose_t *pose,
 /* ─────────────────────────────────────────────────────────────────────────────
    FSM — FASE TURNING
    ───────────────────────────────────────────────────────────────────────────── */
+
 /**
  * @brief Ejecuta un ciclo de la fase TURNING.
  *
@@ -297,9 +305,14 @@ static nav_state_t fsm_driving(void)
     return NAV_DRIVING;
 }
 
-//---------------- Funciones Públicas -------------------//
+/* ─────────────────────────────────────────────────────────────────────────────
+   API PÚBLICA
+   ───────────────────────────────────────────────────────────────────────────── */
 
-
+/**
+ * @brief Inicializa el módulo de navegación.
+ * @see navigation.h para precondiciones.
+ */
 void nav_init(void)
 {
     g_state         = NAV_IDLE;
@@ -315,7 +328,10 @@ void nav_init(void)
     g_status.pos_tolerance    = NAV_POS_TOL_DEFAULT;
 }
 
-
+/**
+ * @brief Establece un nuevo destino y arranca la navegación.
+ * @see navigation.h para descripción completa.
+ */
 void nav_go_to(float x_mm, float y_mm)
 {
     speed_control_stop();
@@ -335,6 +351,10 @@ void nav_go_to(float x_mm, float y_mm)
     g_status.pos_tolerance = g_pos_tolerance;
 }
 
+/**
+ * @brief Ejecuta un ciclo de la FSM de navegación.
+ * @see navigation.h para descripción completa.
+ */
 nav_state_t nav_update(void)
 {
     switch (g_state)
@@ -365,11 +385,19 @@ nav_state_t nav_update(void)
     return g_state;
 }
 
+/**
+ * @brief Consulta si la navegación ha terminado.
+ * @see navigation.h para descripción completa.
+ */
 bool nav_is_done(void)
 {
     return (g_state == NAV_DONE || g_state == NAV_IDLE);
 }
 
+/**
+ * @brief Cancela el movimiento actual y detiene los motores.
+ * @see navigation.h para descripción completa.
+ */
 void nav_stop(void)
 {
     speed_control_stop();
@@ -378,6 +406,10 @@ void nav_stop(void)
     g_status.state = NAV_IDLE;
 }
 
+/**
+ * @brief Cambia el radio de llegada en tiempo de ejecución.
+ * @see navigation.h para descripción completa.
+ */
 void nav_set_pos_tolerance(float tol_mm)
 {
     if (tol_mm > 0.0f)
@@ -387,6 +419,10 @@ void nav_set_pos_tolerance(float tol_mm)
     }
 }
 
+/**
+ * @brief Copia el snapshot de diagnóstico del ciclo actual.
+ * @see navigation.h para descripción completa.
+ */
 void nav_get_status(nav_status_t *out)
 {
     *out = g_status;

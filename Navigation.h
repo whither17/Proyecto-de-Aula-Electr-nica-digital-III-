@@ -39,12 +39,12 @@
                                           *   #NAV_LINEAR_SPEED_MM_S durante este número
                                           *   de ciclos (a 100 Hz → 70 ciclos = 700 ms).*/
  
-#define NAV_LINEAR_SPEED_MM_S    98.0f  /**< Velocidad de avance en línea recta [mm/s].
+#define NAV_LINEAR_SPEED_MM_S    99.0f  /**< Velocidad de avance en línea recta [mm/s].
                                           *   Valor validado con el controlador diferencial
                                           *   actual. Debe ser un valor que el Bloque 1
                                           *   ya haya demostrado controlar correctamente. */
  
-#define NAV_TURN_SPEED           60     /**< Velocidad angular máxima de giro en el sitio [%PWM].
+#define NAV_TURN_SPEED           55     /**< Velocidad angular máxima de giro en el sitio [%PWM].
                                           *   Se aplica como diferencial puro a motors_set():
                                           *   - Giro izquierda: motors_set(+NAV_TURN_SPEED, -NAV_TURN_SPEED)
                                           *   - Giro derecha:   motors_set(-NAV_TURN_SPEED, +NAV_TURN_SPEED). */

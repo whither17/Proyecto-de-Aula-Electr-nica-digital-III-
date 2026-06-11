@@ -64,15 +64,15 @@
    PARÁMETROS CONFIGURABLES
    ========================================================================= */
 
-#define DETECTION_DISTANCE_CM       40u
-#define DETECTION_CONFIRM_COUNT     11u
-#define APPROACH_DISTANCE_CM        4u
+#define DETECTION_DISTANCE_CM       35u
+#define DETECTION_CONFIRM_COUNT     8u
+#define APPROACH_DISTANCE_CM        5u
 #define WAIT_AFTER_DETECT_CYCLES    200u
 #define SCAN_TURN_PWM               49
 #define BRAKE_PULSE_PWM             43
 #define BRAKE_PULSE_MS              25
 #define SCAN_DIRECTION              1
-#define PUSH_EXIT_THRESHOLD_MM      430.0f
+#define PUSH_EXIT_THRESHOLD_MM      400.0f
 #define ALARM_DURATION_MS           2500u
 #define SLEEP_DURATION_MS           5000u
 #define SCAN_TIMEOUT_CYCLES         500u

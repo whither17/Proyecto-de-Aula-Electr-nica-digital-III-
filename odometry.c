@@ -99,8 +99,7 @@ bool odometry_init(const odo_params_t *params, const pose_t *init_pose)
 
 //Ciclo de actualización
 
-void odometry_update() 
-{
+void odometry_update(void) {
 
     // Leer encoders y calcular delta de ticks
 
@@ -179,7 +178,7 @@ void odometry_set_pose(const pose_t *new_pose)
     restore_interrupts(saved);
 }
 
-float odometry_get_bias() 
+float odometry_get_bias(void) 
 {
     return g_gyro_bias_z;
 }
