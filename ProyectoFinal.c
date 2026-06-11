@@ -1,6 +1,6 @@
 /**
  * @file    ProyectoFinal.c
- * @date    2025
+ * @date    2026
  *
  * @brief   Robot autónomo — barrido rotacional + detección ultrasónica
  *          + clasificación IR
