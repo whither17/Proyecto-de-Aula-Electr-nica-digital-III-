@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['requisitos_20funcionales_3a_0',['2. Requisitos funcionales:',['../md__r_e_a_d_m_e.html#autotoc_md2',1,'']]],
-  ['requisitos_20no_20funcionales_3a_1',['3. Requisitos NO funcionales:',['../md__r_e_a_d_m_e.html#autotoc_md3',1,'']]]
+  ['irq_20compartida_0',['Nota sobre IRQ compartida',['../_proyecto_final_8c.html#autotoc_md3',1,'']]],
+  ['irq_20con_20wfi_1',['Polling + IRQ con WFI',['../_proyecto_final_8c.html#autotoc_md1',1,'']]]
 ];

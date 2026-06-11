@@ -1,0 +1,95 @@
+\doxysection{fsm\+\_\+ctx\+\_\+t Struct Reference}
+\hypertarget{structfsm__ctx__t}{}\label{structfsm__ctx__t}\index{fsm\_ctx\_t@{fsm\_ctx\_t}}
+
+
+Estructura con todo el contexto mutable del FSM.  
+
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structfsm__ctx__t_ab8f5074ed91bf294d8734eb6f6322b96}{cycle}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structfsm__ctx__t_a3ec7fab5e8faf86fa28cdd29ef478007}{last\+\_\+distance}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structfsm__ctx__t_ac2e3328c6f8e9d3241a5156961991030}{detect\+\_\+count}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structfsm__ctx__t_a5304bc429a4095b86f1d57cbdd17b827}{wait\+\_\+cycles}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structfsm__ctx__t_ab00ae5b26cd409325314b490b77808bf}{ir\+\_\+read\+\_\+cycles}}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{structfsm__ctx__t_a94ff8e4835eb700052a1cf2ebecb20f5}{scan\+\_\+no\+\_\+detect\+\_\+cycles}}
+\item 
+float \doxymbox{\hyperlink{structfsm__ctx__t_a5eaafec770c578ca611a8aea13eb30b6}{return\+\_\+dist\+\_\+mm}}
+\item 
+float \doxymbox{\hyperlink{structfsm__ctx__t_a68eb311a0890fc18e952e42a7cce303a}{theta\+\_\+back}}
+\item 
+bool \doxymbox{\hyperlink{structfsm__ctx__t_a6ae88348efa710331acc90bdf1885fb6}{theta\+\_\+back\+\_\+set}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Estructura con todo el contexto mutable del FSM. 
+
+\label{doc-variable-members}
+\Hypertarget{structfsm__ctx__t_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structfsm__ctx__t_ab8f5074ed91bf294d8734eb6f6322b96}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!cycle@{cycle}}
+\index{cycle@{cycle}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{cycle}{cycle}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_ab8f5074ed91bf294d8734eb6f6322b96} 
+uint32\+\_\+t fsm\+\_\+ctx\+\_\+t::\+cycle}
+
+Ciclos de la IMU \Hypertarget{structfsm__ctx__t_ac2e3328c6f8e9d3241a5156961991030}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!detect\_count@{detect\_count}}
+\index{detect\_count@{detect\_count}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{detect\_count}{detect\_count}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_ac2e3328c6f8e9d3241a5156961991030} 
+uint32\+\_\+t fsm\+\_\+ctx\+\_\+t::\+detect\+\_\+count}
+
+Cuentas del ultrasonido consecutivas debajo del umbral \Hypertarget{structfsm__ctx__t_ab00ae5b26cd409325314b490b77808bf}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!ir\_read\_cycles@{ir\_read\_cycles}}
+\index{ir\_read\_cycles@{ir\_read\_cycles}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{ir\_read\_cycles}{ir\_read\_cycles}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_ab00ae5b26cd409325314b490b77808bf} 
+uint32\+\_\+t fsm\+\_\+ctx\+\_\+t::\+ir\+\_\+read\+\_\+cycles}
+
+Ciclos consecutivos que lleva leyendo IR. \Hypertarget{structfsm__ctx__t_a3ec7fab5e8faf86fa28cdd29ef478007}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!last\_distance@{last\_distance}}
+\index{last\_distance@{last\_distance}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{last\_distance}{last\_distance}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_a3ec7fab5e8faf86fa28cdd29ef478007} 
+uint32\+\_\+t fsm\+\_\+ctx\+\_\+t::\+last\+\_\+distance}
+
+Ultima distancia arrojada por el ultrasonido \Hypertarget{structfsm__ctx__t_a5eaafec770c578ca611a8aea13eb30b6}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!return\_dist\_mm@{return\_dist\_mm}}
+\index{return\_dist\_mm@{return\_dist\_mm}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{return\_dist\_mm}{return\_dist\_mm}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_a5eaafec770c578ca611a8aea13eb30b6} 
+float fsm\+\_\+ctx\+\_\+t::\+return\+\_\+dist\+\_\+mm}
+
+Distancia calculada en dirección al origen (mm) \Hypertarget{structfsm__ctx__t_a94ff8e4835eb700052a1cf2ebecb20f5}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!scan\_no\_detect\_cycles@{scan\_no\_detect\_cycles}}
+\index{scan\_no\_detect\_cycles@{scan\_no\_detect\_cycles}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{scan\_no\_detect\_cycles}{scan\_no\_detect\_cycles}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_a94ff8e4835eb700052a1cf2ebecb20f5} 
+uint32\+\_\+t fsm\+\_\+ctx\+\_\+t::\+scan\+\_\+no\+\_\+detect\+\_\+cycles}
+
+Ciclos consecutivos que lleva sin detectar obstáculos \Hypertarget{structfsm__ctx__t_a68eb311a0890fc18e952e42a7cce303a}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!theta\_back@{theta\_back}}
+\index{theta\_back@{theta\_back}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{theta\_back}{theta\_back}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_a68eb311a0890fc18e952e42a7cce303a} 
+float fsm\+\_\+ctx\+\_\+t::\+theta\+\_\+back}
+
+Ángulo objetivo (Theta actual + π) para el retorno \Hypertarget{structfsm__ctx__t_a6ae88348efa710331acc90bdf1885fb6}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!theta\_back\_set@{theta\_back\_set}}
+\index{theta\_back\_set@{theta\_back\_set}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{theta\_back\_set}{theta\_back\_set}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_a6ae88348efa710331acc90bdf1885fb6} 
+bool fsm\+\_\+ctx\+\_\+t::\+theta\+\_\+back\+\_\+set}
+
+Bandera que indica si theta\+\_\+back ya fue calculado \Hypertarget{structfsm__ctx__t_a5304bc429a4095b86f1d57cbdd17b827}\index{fsm\_ctx\_t@{fsm\_ctx\_t}!wait\_cycles@{wait\_cycles}}
+\index{wait\_cycles@{wait\_cycles}!fsm\_ctx\_t@{fsm\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{wait\_cycles}{wait\_cycles}}
+{\footnotesize\ttfamily \label{structfsm__ctx__t_a5304bc429a4095b86f1d57cbdd17b827} 
+uint32\+\_\+t fsm\+\_\+ctx\+\_\+t::\+wait\+\_\+cycles}
+
+Ciclos que lleva esperando para avanzar al obstáculo 
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{_proyecto_final_8c}{Proyecto\+Final.\+c}}\end{DoxyCompactItemize}

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.16.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Capas superiores y navegación: Descripción detallada del proyecto final</title>
+<title>Capas superiores: Descripción detallada del proyecto final</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,9 +26,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Capas superiores y navegación
+   <div id="projectname">Capas superiores
    </div>
-   <div id="projectbrief">Navegación y odometria</div>
+   <div id="projectbrief">Contiene la documentación relacionada a las capas superiores incluyendo la aplicación</div>
   </td>
  </tr>
  </tbody>
@@ -92,13 +92,13 @@ $(function(){initNavTree('md__r_e_a_d_m_e.html','',''); });
   <div class="headertitle"><div class="title">Descripción detallada del proyecto final </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md0"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md4"></a></p>
 <p><em>Black Sisyphus</em></p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md1"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
 1. Descripción detallada del sistema:</h1>
 <p>Para el proyecto final se desarrollará un vehículo autónomo, que navegara en una región de 60 cm x 60 cm, dentro de esta región se encontraran dos tipos de cajas unas de color negro y otras de color blanco, el trabajo del robot será llevar las cajas negras al centro de la región, e ignorar las cajas blancas. Una vez se lleve una caja negra al centro el vehículo se quedará en espera hasta que este bloque sea retirado en ese momento ira en búsqueda del siguiente bloque negro en caso de que lo haya si ya no hay mas bloques negros el vehículo finalizara su trabajo. La posición inicial del vehículo ser en el centro de la región la cual le servirá como referencia al robot para su navegación.</p>
 <p>El nombre del proyecto ha sido cambiado de “Sisifo.IO robot clasificador” a: “Black Sisyphus”, el cual es un nombre más corto, y menos genérico. </p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
 2. Requisitos funcionales:</h1>
 <ul>
 <li>Navegación automática por odometria: el vehículo deberá estimar su posición y orientación en todo momento de su ejecución.</li>
@@ -112,7 +112,7 @@ $(function(){initNavTree('md__r_e_a_d_m_e.html','',''); });
 <li>El vehículo deberá de ser capaz de detectar cuando la caja del centro ha sido retirada.</li>
 <li>Cuando no haya más cajas negras el robot debe de volver al centro y terminar su operación.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
 3. Requisitos NO funcionales:</h1>
 <ul>
 <li>El vehículo tendrá tracción 4 x 4 y el cambio de dirección se realizará cambiando la velocidad y sentido cada rueda.</li>
@@ -120,7 +120,7 @@ $(function(){initNavTree('md__r_e_a_d_m_e.html','',''); });
 <li>El vehículo estará bien ensamblado, evitando que se rompa al transportarlo o manipularlo.</li>
 <li>Las baterías han de garantizar el funcionamiento durante todas las pruebas.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
 4. Esenario de pruebas</h1>
 <p>En un espacio plano se encerrará un espacio de 60 cm x 60 cm con el uso de cinta negra este cuadro corresponderá al área de trabajo del robot, en el centro del cuadrado con la misma cinta se marcará una cruz que coincidirá con el punto de inicio del vehículo. Se utilizarán cajas cubicas de dimensiones de aproximadamente 4 cm x 4 cm x 4 cm, la mitad de estas cajas serán negro y la otra mitad serán blancas, asegurando el mayor contrate posible para el sensor. Al inicio de las pruebas se colocará al robot en el centro del cuadrado, las cajas serán distribuidas aleatoriamente dentro de la arena.</p>
 <ul>

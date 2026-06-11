@@ -1,10 +1,15 @@
 var searchData=
 [
-  ['target_5fx_0',['target_x',['../structnav__status__t.html#a2631200560f5ddd1cdaa6e7669300806',1,'nav_status_t']]],
-  ['target_5fy_1',['target_y',['../structnav__status__t.html#addd82e1b897214a9e2b705a8ef14de23',1,'nav_status_t']]],
-  ['theta_2',['theta',['../structpose__t.html#a1d23750529c6a98bf3c245acf12642e3',1,'pose_t']]],
-  ['ticks_5factual_5fleft_3',['ticks_actual_left',['../structsc__state__t.html#ae99a7a8ef6124c4405566e6d64330838',1,'sc_state_t']]],
-  ['ticks_5factual_5fright_4',['ticks_actual_right',['../structsc__state__t.html#a3188e65802d6f52ed043b25e04f92a77',1,'sc_state_t']]],
-  ['ticks_5ftarget_5fleft_5',['ticks_target_left',['../structsc__state__t.html#afaf7899d163659ac4ebe9437c7b10c25',1,'sc_state_t']]],
-  ['ticks_5ftarget_5fright_6',['ticks_target_right',['../structsc__state__t.html#a898359e89f75dfaf83106c6ec599f3c8',1,'sc_state_t']]]
+  ['polling_20irq_20con_20wfi_0',['Polling + IRQ con WFI',['../_proyecto_final_8c.html#autotoc_md1',1,'']]],
+  ['por_20tabla_20de_20punteros_20a_20funciones_1',['FSM por tabla de punteros a funciones',['../_proyecto_final_8c.html#autotoc_md2',1,'']]],
+  ['pos_5ftolerance_2',['pos_tolerance',['../structnav__status__t.html#a9eb8e6bbfdef90c37a67fc59f08cdcac',1,'nav_status_t']]],
+  ['pose_5ft_3',['pose_t',['../structpose__t.html',1,'']]],
+  ['print_5finterval_5fcycles_4',['PRINT_INTERVAL_CYCLES',['../_proyecto_final_8c.html#a72a6a69fb3ddfbdccbbc20b39585e468',1,'ProyectoFinal.c']]],
+  ['proyecto_20final_5',['Descripción detallada del proyecto final',['../md__r_e_a_d_m_e.html',1,'']]],
+  ['proyectofinal_2ec_6',['ProyectoFinal.c',['../_proyecto_final_8c.html',1,'']]],
+  ['pruebas_7',['4. Esenario de pruebas',['../md__r_e_a_d_m_e.html#autotoc_md8',1,'']]],
+  ['punteros_20a_20funciones_8',['FSM por tabla de punteros a funciones',['../_proyecto_final_8c.html#autotoc_md2',1,'']]],
+  ['push_5fexit_5fthreshold_5fmm_9',['PUSH_EXIT_THRESHOLD_MM',['../_proyecto_final_8c.html#a1903bfcbe2e7127365a3f7903c63917f',1,'ProyectoFinal.c']]],
+  ['pwm_5fleft_10',['pwm_left',['../structsc__state__t.html#a601b3a5b2a83c81b7edbadbd1db90514',1,'sc_state_t']]],
+  ['pwm_5fright_11',['pwm_right',['../structsc__state__t.html#a4fa7987efce27bc0e1d19c08c917922e',1,'sc_state_t']]]
 ];

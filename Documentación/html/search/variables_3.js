@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['error_5fleft_0',['error_left',['../structsc__state__t.html#a5318ba63f9727b7790378bd2886c1481',1,'sc_state_t']]],
-  ['error_5fright_1',['error_right',['../structsc__state__t.html#aaa2ae825196521fe2a5a3b963ff1f9d0',1,'sc_state_t']]]
+  ['detect_5fcount_0',['detect_count',['../structfsm__ctx__t.html#ac2e3328c6f8e9d3241a5156961991030',1,'fsm_ctx_t']]],
+  ['distance_5fto_5fgoal_1',['distance_to_goal',['../structnav__status__t.html#a8ab6da0d0118b94cf712f73ddb22205b',1,'nav_status_t']]]
 ];

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['pos_5ftolerance_0',['pos_tolerance',['../structnav__status__t.html#a9eb8e6bbfdef90c37a67fc59f08cdcac',1,'nav_status_t']]],
-  ['pwm_5fleft_1',['pwm_left',['../structsc__state__t.html#a601b3a5b2a83c81b7edbadbd1db90514',1,'sc_state_t']]],
-  ['pwm_5fright_2',['pwm_right',['../structsc__state__t.html#a4fa7987efce27bc0e1d19c08c917922e',1,'sc_state_t']]]
+  ['flag_5fimu_0',['flag_imu',['../_proyecto_final_8c.html#ad0963a12f60f475f1115a0d778699d0d',1,'ProyectoFinal.c']]],
+  ['flag_5fpause_1',['flag_pause',['../_proyecto_final_8c.html#ad77c1c500df149d9a7f01dddcd67a06e',1,'ProyectoFinal.c']]]
 ];

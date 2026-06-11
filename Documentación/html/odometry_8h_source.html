@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.16.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Capas superiores y navegación: odometry.h Source File</title>
+<title>Capas superiores: odometry.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,9 +26,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Capas superiores y navegación
+   <div id="projectname">Capas superiores
    </div>
-   <div id="projectbrief">Navegación y odometria</div>
+   <div id="projectbrief">Contiene la documentación relacionada a las capas superiores incluyendo la aplicación</div>
   </td>
  </tr>
  </tbody>
@@ -140,10 +140,10 @@ $(function(){initNavTree('odometry_8h_source.html','',''); });
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aodometry_8h_html_a29b01621c52d72a355633c65836b4555"><div class="ttname"><a href="odometry_8h.html#a29b01621c52d72a355633c65836b4555">odometry_init</a></div><div class="ttdeci">bool odometry_init(const odo_params_t *params, const pose_t *init_pose)</div><div class="ttdoc">Inicializa el módulo con los parámetros físicos del robot y realiza la calibración del bias del giros...</div><div class="ttdef"><b>Definition</b> odometry.c:45</div></div>
-<div class="ttc" id="aodometry_8h_html_aa7e65359e5bb8f0ba2a9df37fca045ad"><div class="ttname"><a href="odometry_8h.html#aa7e65359e5bb8f0ba2a9df37fca045ad">odometry_get_bias</a></div><div class="ttdeci">float odometry_get_bias()</div><div class="ttdoc">Devuelve el bias del giroscopio estimado durante la calibración, en rad/s. Útil para diagnóstico o lo...</div><div class="ttdef"><b>Definition</b> odometry.c:181</div></div>
-<div class="ttc" id="aodometry_8h_html_aaf1c6d3d4e47462da8bbe710c9995e51"><div class="ttname"><a href="odometry_8h.html#aaf1c6d3d4e47462da8bbe710c9995e51">odometry_get_pose</a></div><div class="ttdeci">void odometry_get_pose(pose_t *out)</div><div class="ttdoc">Copia la pose estimada actual en la estructura apuntada por *out. Lectura atómica — deshabilita inter...</div><div class="ttdef"><b>Definition</b> odometry.c:165</div></div>
+<div class="ttc" id="aodometry_8h_html_aa7e65359e5bb8f0ba2a9df37fca045ad"><div class="ttname"><a href="odometry_8h.html#aa7e65359e5bb8f0ba2a9df37fca045ad">odometry_get_bias</a></div><div class="ttdeci">float odometry_get_bias()</div><div class="ttdoc">Devuelve el bias del giroscopio estimado durante la calibración, en rad/s. Útil para diagnóstico o lo...</div><div class="ttdef"><b>Definition</b> odometry.c:182</div></div>
+<div class="ttc" id="aodometry_8h_html_aaf1c6d3d4e47462da8bbe710c9995e51"><div class="ttname"><a href="odometry_8h.html#aaf1c6d3d4e47462da8bbe710c9995e51">odometry_get_pose</a></div><div class="ttdeci">void odometry_get_pose(pose_t *out)</div><div class="ttdoc">Copia la pose estimada actual en la estructura apuntada por *out. Lectura atómica — deshabilita inter...</div><div class="ttdef"><b>Definition</b> odometry.c:166</div></div>
 <div class="ttc" id="aodometry_8h_html_ad57d4389ef608b9558767dade4e6a608"><div class="ttname"><a href="odometry_8h.html#ad57d4389ef608b9558767dade4e6a608">odometry_update</a></div><div class="ttdeci">void odometry_update()</div><div class="ttdoc">Ejecuta un ciclo completo de estimación de pose. Debe llamarse cada vez que la IMU tiene datos nuevos...</div><div class="ttdef"><b>Definition</b> odometry.c:102</div></div>
-<div class="ttc" id="aodometry_8h_html_afafc3463b85e37327e7ac079cbb5eb5f"><div class="ttname"><a href="odometry_8h.html#afafc3463b85e37327e7ac079cbb5eb5f">odometry_set_pose</a></div><div class="ttdeci">void odometry_set_pose(const pose_t *new_pose)</div><div class="ttdoc">Sobreescribe la pose estimada con un valor conocido.</div><div class="ttdef"><b>Definition</b> odometry.c:172</div></div>
+<div class="ttc" id="aodometry_8h_html_afafc3463b85e37327e7ac079cbb5eb5f"><div class="ttname"><a href="odometry_8h.html#afafc3463b85e37327e7ac079cbb5eb5f">odometry_set_pose</a></div><div class="ttdeci">void odometry_set_pose(const pose_t *new_pose)</div><div class="ttdoc">Sobreescribe la pose estimada con un valor conocido.</div><div class="ttdef"><b>Definition</b> odometry.c:173</div></div>
 <div class="ttc" id="astructodo__params__t_html"><div class="ttname"><a href="structodo__params__t.html">odo_params_t</a></div><div class="ttdoc">Parámetros físicos del robot.</div><div class="ttdef"><b>Definition</b> odometry.h:65</div></div>
 <div class="ttc" id="astructodo__params__t_html_a912139b33adb63d64a1d77893fb836b7"><div class="ttname"><a href="structodo__params__t.html#a912139b33adb63d64a1d77893fb836b7">odo_params_t::mm_per_tick</a></div><div class="ttdeci">float mm_per_tick</div><div class="ttdef"><b>Definition</b> odometry.h:67</div></div>
 <div class="ttc" id="astructodo__params__t_html_ac0df118e0546c961daee93b029b6fa2a"><div class="ttname"><a href="structodo__params__t.html#ac0df118e0546c961daee93b029b6fa2a">odo_params_t::baseline</a></div><div class="ttdeci">float baseline</div><div class="ttdef"><b>Definition</b> odometry.h:68</div></div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['odo_5fparams_5ft_0',['odo_params_t',['../structodo__params__t.html',1,'']]]
+  ['nav_5fstatus_5ft_0',['nav_status_t',['../structnav__status__t.html',1,'']]]
 ];

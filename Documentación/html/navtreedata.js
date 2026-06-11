@@ -24,12 +24,12 @@
 */
 var NAVTREE =
 [
-  [ "Capas superiores y navegación", "index.html", [
+  [ "Capas superiores", "index.html", [
     [ "Descripción detallada del proyecto final", "md__r_e_a_d_m_e.html", [
-      [ "1. Descripción detallada del sistema:", "md__r_e_a_d_m_e.html#autotoc_md1", null ],
-      [ "2. Requisitos funcionales:", "md__r_e_a_d_m_e.html#autotoc_md2", null ],
-      [ "3. Requisitos NO funcionales:", "md__r_e_a_d_m_e.html#autotoc_md3", null ],
-      [ "4. Esenario de pruebas", "md__r_e_a_d_m_e.html#autotoc_md4", null ]
+      [ "1. Descripción detallada del sistema:", "md__r_e_a_d_m_e.html#autotoc_md5", null ],
+      [ "2. Requisitos funcionales:", "md__r_e_a_d_m_e.html#autotoc_md6", null ],
+      [ "3. Requisitos NO funcionales:", "md__r_e_a_d_m_e.html#autotoc_md7", null ],
+      [ "4. Esenario de pruebas", "md__r_e_a_d_m_e.html#autotoc_md8", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -44,6 +44,7 @@ var NAVTREE =
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
         [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", null ]

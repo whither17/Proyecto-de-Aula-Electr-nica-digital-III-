@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['distance_5fto_5fgoal_0',['distance_to_goal',['../structnav__status__t.html#a8ab6da0d0118b94cf712f73ddb22205b',1,'nav_status_t']]]
+  ['cycle_0',['cycle',['../structfsm__ctx__t.html#ab8f5074ed91bf294d8734eb6f6322b96',1,'fsm_ctx_t']]]
 ];

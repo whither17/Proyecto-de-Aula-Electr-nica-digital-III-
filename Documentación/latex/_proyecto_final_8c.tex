@@ -1,0 +1,261 @@
+\doxysection{Proyecto\+Final.\+c File Reference}
+\hypertarget{_proyecto_final_8c}{}\label{_proyecto_final_8c}\index{ProyectoFinal.c@{ProyectoFinal.c}}
+
+
+Robot autónomo — barrido rotacional + detección ultrasónica.  
+
+
+{\ttfamily \+\#include "{}pico/\+stdlib.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}hardware/\+sync.\+h"{}}\newline
+{\ttfamily \+\#include "{}Driver\+\_\+\+TB6612\+FNG.\+h"{}}\newline
+{\ttfamily \+\#include "{}encoder.\+h"{}}\newline
+{\ttfamily \+\#include "{}imu.\+h"{}}\newline
+{\ttfamily \+\#include "{}odometry.\+h"{}}\newline
+{\ttfamily \+\#include "{}speed\+Control.\+h"{}}\newline
+{\ttfamily \+\#include "{}ultrasonic.\+h"{}}\newline
+{\ttfamily \+\#include "{}navigation.\+h"{}}\newline
+{\ttfamily \+\#include $<$math.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structfsm__ctx__t}{fsm\+\_\+ctx\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Estructura con todo el contexto mutable del FSM. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a25ff550fb1897d2211eef8f519130763}{DETECTION\+\_\+\+DISTANCE\+\_\+\+CM}}~35u
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a4b27e8b2f294012fac2b0f958e7ddd90}{DETECTION\+\_\+\+CONFIRM\+\_\+\+COUNT}}~8u
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a19e21233c263374e5880782f1c29f289}{APPROACH\+\_\+\+DISTANCE\+\_\+\+CM}}~5u
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a08f8d64ea1ed5d24e2957c593a399bf8}{WAIT\+\_\+\+AFTER\+\_\+\+DETECT\+\_\+\+CYCLES}}~200u
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a0223efa106aeb95a426341696374b8c5}{SCAN\+\_\+\+TURN\+\_\+\+PWM}}~49
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_ad175452dcd44ceae2c240d188f68eeda}{BRAKE\+\_\+\+PULSE\+\_\+\+PWM}}~43
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a18cac723de98aa22e4875143ab9322c8}{BRAKE\+\_\+\+PULSE\+\_\+\+MS}}~25
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a2a6ed9eb532f2b2144af6fef9d881147}{SCAN\+\_\+\+DIRECTION}}~1
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a1903bfcbe2e7127365a3f7903c63917f}{PUSH\+\_\+\+EXIT\+\_\+\+THRESHOLD\+\_\+\+MM}}~430.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a8c148d015857a32dff33d24ce89cf4af}{ALARM\+\_\+\+DURATION\+\_\+\+MS}}~2500u
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a069cde010ee18f5e151241364cc0c224}{SLEEP\+\_\+\+DURATION\+\_\+\+MS}}~5000u
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a7b315ed2ab718dbac09ff7068782859d}{SCAN\+\_\+\+TIMEOUT\+\_\+\+CYCLES}}~500u
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a12346b5f556ec4ba70c7afb8303bf64f}{ULTRASONIC\+\_\+\+TRIG\+\_\+\+PIN}}~4
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_ac156969c19ada7414ab321776c8f49ee}{ULTRASONIC\+\_\+\+ECHO\+\_\+\+PIN}}~5
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_ad8efb25d4678a85f5a1b760f8c0aa371}{IR\+\_\+\+SENSOR\+\_\+\+PIN}}~10
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a3df938fa0421e4c4f4a7103221235297}{IR\+\_\+\+WHITE}}~0
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a12efd205607316bec5cb81dfc3ef5b32}{ROBOT\+\_\+\+MM\+\_\+\+PER\+\_\+\+TICK}}~0.\+1682f
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a9b67d9224b6a74d893dc885c4ad3c375}{ROBOT\+\_\+\+BASELINE\+\_\+\+MM}}~105.\+38f
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a72a6a69fb3ddfbdccbbc20b39585e468}{PRINT\+\_\+\+INTERVAL\+\_\+\+CYCLES}}~10
+\item 
+\+\#define \doxymbox{\hyperlink{_proyecto_final_8c_a98a48f9f9d76b5282a79fe4859649ee1}{IR\+\_\+\+SETTLE\+\_\+\+CYCLES}}~5
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{_proyecto_final_8c_a5736e76adfa914b8b0ad25124d4c4ccf}\label{_proyecto_final_8c_a5736e76adfa914b8b0ad25124d4c4ccf} 
+typedef void(\texorpdfstring{$\ast$}{*} {\bfseries state\+\_\+fn\+\_\+t}) (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{_proyecto_final_8c_a840291bc02cba5474a4cb46a9b9566fe}\label{_proyecto_final_8c_a840291bc02cba5474a4cb46a9b9566fe} 
+int {\bfseries main} (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+volatile bool \doxymbox{\hyperlink{_proyecto_final_8c_ad0963a12f60f475f1115a0d778699d0d}{flag\+\_\+imu}} = false
+\item 
+volatile bool \doxymbox{\hyperlink{_proyecto_final_8c_ad77c1c500df149d9a7f01dddcd67a06e}{flag\+\_\+pause}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Robot autónomo — barrido rotacional + detección ultrasónica. 
+
+\begin{DoxyDate}{Date}
+2026
+\end{DoxyDate}
+
+\begin{DoxyItemize}
+\item clasificación IR
+\end{DoxyItemize}\hypertarget{_proyecto_final_8c_autotoc_md0}{}\doxysubsubsection{\texorpdfstring{Arquitectura de control}{Arquitectura de control}}\label{_proyecto_final_8c_autotoc_md0}
+\hypertarget{_proyecto_final_8c_autotoc_md1}{}\doxysubsubsubsection{\texorpdfstring{Polling + IRQ con WFI}{Polling + IRQ con WFI}}\label{_proyecto_final_8c_autotoc_md1}
+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{_proyecto_final_8c_ad0963a12f60f475f1115a0d778699d0d}{flag\+\_\+imu}} — seteada por {\ttfamily imu\+\_\+alarm\+\_\+callback} (\texorpdfstring{$\sim$}{\string~}100 Hz). Gobierna odometría, speed control, sonar y FSM.
+\item {\ttfamily \doxylink{_proyecto_final_8c_ad77c1c500df149d9a7f01dddcd67a06e}{flag\+\_\+pause}} — seteada por {\ttfamily pause\+\_\+alarm\+\_\+callback} al expirar la pausa de APP\+\_\+\+ALARM o APP\+\_\+\+SLEEPING. Reactiva la alarma de IMU y reinicia el barrido.
+\end{DoxyItemize}
+
+Durante APP\+\_\+\+ALARM y APP\+\_\+\+SLEEPING la alarma de IMU se cancela ({\ttfamily imu\+\_\+alarm\+\_\+pause}) para que el robot no procese nada. El WFI solo despertará cuando expire la alarma de pausa.\hypertarget{_proyecto_final_8c_autotoc_md2}{}\doxysubsubsubsection{\texorpdfstring{FSM por tabla de punteros a funciones}{FSM por tabla de punteros a funciones}}\label{_proyecto_final_8c_autotoc_md2}
+Cada estado tiene su propia función {\ttfamily state\+\_\+\texorpdfstring{$\ast$}{*}}. Un puntero {\ttfamily state\+\_\+fn} apunta al estado activo. Transicionar = reasignar el puntero. No hay {\ttfamily switch} central.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{SCANNING\ →\ BRAKING\ →\ WAITING\ →\ APPROACHING\ →\ READING\_IR}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ├─(blanco)→\ TURNING\_BACK\ →\ RETURNING\ →\ ALARM\ →\ SCANNING}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ └─(negro)\ →\ PUSHING\ \ \ \ \ →\ TURNING\_BACK\ →\ RETURNING\ →\ ALARM\ →\ SCANNING}
+\DoxyCodeLine{}
+\DoxyCodeLine{SCANNING\ →(timeout)→\ SLEEPING\ →\ SCANNING}
+
+\end{DoxyCode}
+\hypertarget{_proyecto_final_8c_autotoc_md3}{}\doxysubsubsubsection{\texorpdfstring{Nota sobre IRQ compartida}{Nota sobre IRQ compartida}}\label{_proyecto_final_8c_autotoc_md3}
+Una única función {\ttfamily gpio\+\_\+irq\+\_\+handler} despacha a {\ttfamily encoder\+\_\+handle\+\_\+irq()} y a {\ttfamily ultrasonic\+\_\+eco\+\_\+callback()}. Ambos handlers filtran internamente por pin/\+estado — no se necesitan guardas adicionales en el dispatcher. 
+
+\label{doc-define-members}
+\Hypertarget{_proyecto_final_8c_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{_proyecto_final_8c_a8c148d015857a32dff33d24ce89cf4af}\index{ProyectoFinal.c@{ProyectoFinal.c}!ALARM\_DURATION\_MS@{ALARM\_DURATION\_MS}}
+\index{ALARM\_DURATION\_MS@{ALARM\_DURATION\_MS}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{ALARM\_DURATION\_MS}{ALARM\_DURATION\_MS}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a8c148d015857a32dff33d24ce89cf4af} 
+\+\#define ALARM\+\_\+\+DURATION\+\_\+\+MS~2500u}
+
+Duración de la alarma de espera cuando el robot regresa al origen (ms) \Hypertarget{_proyecto_final_8c_a19e21233c263374e5880782f1c29f289}\index{ProyectoFinal.c@{ProyectoFinal.c}!APPROACH\_DISTANCE\_CM@{APPROACH\_DISTANCE\_CM}}
+\index{APPROACH\_DISTANCE\_CM@{APPROACH\_DISTANCE\_CM}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{APPROACH\_DISTANCE\_CM}{APPROACH\_DISTANCE\_CM}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a19e21233c263374e5880782f1c29f289} 
+\+\#define APPROACH\+\_\+\+DISTANCE\+\_\+\+CM~5u}
+
+Distancia de acecamiento al obstaculo (cm) \Hypertarget{_proyecto_final_8c_a18cac723de98aa22e4875143ab9322c8}\index{ProyectoFinal.c@{ProyectoFinal.c}!BRAKE\_PULSE\_MS@{BRAKE\_PULSE\_MS}}
+\index{BRAKE\_PULSE\_MS@{BRAKE\_PULSE\_MS}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{BRAKE\_PULSE\_MS}{BRAKE\_PULSE\_MS}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a18cac723de98aa22e4875143ab9322c8} 
+\+\#define BRAKE\+\_\+\+PULSE\+\_\+\+MS~25}
+
+Duración del frenado (ms) \Hypertarget{_proyecto_final_8c_ad175452dcd44ceae2c240d188f68eeda}\index{ProyectoFinal.c@{ProyectoFinal.c}!BRAKE\_PULSE\_PWM@{BRAKE\_PULSE\_PWM}}
+\index{BRAKE\_PULSE\_PWM@{BRAKE\_PULSE\_PWM}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{BRAKE\_PULSE\_PWM}{BRAKE\_PULSE\_PWM}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_ad175452dcd44ceae2c240d188f68eeda} 
+\+\#define BRAKE\+\_\+\+PULSE\+\_\+\+PWM~43}
+
+PWM aplicado en el frenado \Hypertarget{_proyecto_final_8c_a4b27e8b2f294012fac2b0f958e7ddd90}\index{ProyectoFinal.c@{ProyectoFinal.c}!DETECTION\_CONFIRM\_COUNT@{DETECTION\_CONFIRM\_COUNT}}
+\index{DETECTION\_CONFIRM\_COUNT@{DETECTION\_CONFIRM\_COUNT}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{DETECTION\_CONFIRM\_COUNT}{DETECTION\_CONFIRM\_COUNT}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a4b27e8b2f294012fac2b0f958e7ddd90} 
+\+\#define DETECTION\+\_\+\+CONFIRM\+\_\+\+COUNT~8u}
+
+Cantidad de ciclos necesarios para que el robot registre el centro del obstaculo \Hypertarget{_proyecto_final_8c_a25ff550fb1897d2211eef8f519130763}\index{ProyectoFinal.c@{ProyectoFinal.c}!DETECTION\_DISTANCE\_CM@{DETECTION\_DISTANCE\_CM}}
+\index{DETECTION\_DISTANCE\_CM@{DETECTION\_DISTANCE\_CM}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{DETECTION\_DISTANCE\_CM}{DETECTION\_DISTANCE\_CM}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a25ff550fb1897d2211eef8f519130763} 
+\+\#define DETECTION\+\_\+\+DISTANCE\+\_\+\+CM~35u}
+
+Distancia de detección de obstaculos (cm) \Hypertarget{_proyecto_final_8c_ad8efb25d4678a85f5a1b760f8c0aa371}\index{ProyectoFinal.c@{ProyectoFinal.c}!IR\_SENSOR\_PIN@{IR\_SENSOR\_PIN}}
+\index{IR\_SENSOR\_PIN@{IR\_SENSOR\_PIN}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{IR\_SENSOR\_PIN}{IR\_SENSOR\_PIN}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_ad8efb25d4678a85f5a1b760f8c0aa371} 
+\+\#define IR\+\_\+\+SENSOR\+\_\+\+PIN~10}
+
+GPIO IR \Hypertarget{_proyecto_final_8c_a98a48f9f9d76b5282a79fe4859649ee1}\index{ProyectoFinal.c@{ProyectoFinal.c}!IR\_SETTLE\_CYCLES@{IR\_SETTLE\_CYCLES}}
+\index{IR\_SETTLE\_CYCLES@{IR\_SETTLE\_CYCLES}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{IR\_SETTLE\_CYCLES}{IR\_SETTLE\_CYCLES}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a98a48f9f9d76b5282a79fe4859649ee1} 
+\+\#define IR\+\_\+\+SETTLE\+\_\+\+CYCLES~5}
+
+Ciclos de lectura del sensor infrarrojo (IR) \Hypertarget{_proyecto_final_8c_a3df938fa0421e4c4f4a7103221235297}\index{ProyectoFinal.c@{ProyectoFinal.c}!IR\_WHITE@{IR\_WHITE}}
+\index{IR\_WHITE@{IR\_WHITE}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{IR\_WHITE}{IR\_WHITE}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a3df938fa0421e4c4f4a7103221235297} 
+\+\#define IR\+\_\+\+WHITE~0}
+
+Define cual estado lógico es blanco \Hypertarget{_proyecto_final_8c_a72a6a69fb3ddfbdccbbc20b39585e468}\index{ProyectoFinal.c@{ProyectoFinal.c}!PRINT\_INTERVAL\_CYCLES@{PRINT\_INTERVAL\_CYCLES}}
+\index{PRINT\_INTERVAL\_CYCLES@{PRINT\_INTERVAL\_CYCLES}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{PRINT\_INTERVAL\_CYCLES}{PRINT\_INTERVAL\_CYCLES}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a72a6a69fb3ddfbdccbbc20b39585e468} 
+\+\#define PRINT\+\_\+\+INTERVAL\+\_\+\+CYCLES~10}
+
+Cada cuanto imprime en serial \Hypertarget{_proyecto_final_8c_a1903bfcbe2e7127365a3f7903c63917f}\index{ProyectoFinal.c@{ProyectoFinal.c}!PUSH\_EXIT\_THRESHOLD\_MM@{PUSH\_EXIT\_THRESHOLD\_MM}}
+\index{PUSH\_EXIT\_THRESHOLD\_MM@{PUSH\_EXIT\_THRESHOLD\_MM}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{PUSH\_EXIT\_THRESHOLD\_MM}{PUSH\_EXIT\_THRESHOLD\_MM}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a1903bfcbe2e7127365a3f7903c63917f} 
+\+\#define PUSH\+\_\+\+EXIT\+\_\+\+THRESHOLD\+\_\+\+MM~430.\+0f}
+
+Distancia tras la cual el robot retorna al origen \Hypertarget{_proyecto_final_8c_a9b67d9224b6a74d893dc885c4ad3c375}\index{ProyectoFinal.c@{ProyectoFinal.c}!ROBOT\_BASELINE\_MM@{ROBOT\_BASELINE\_MM}}
+\index{ROBOT\_BASELINE\_MM@{ROBOT\_BASELINE\_MM}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{ROBOT\_BASELINE\_MM}{ROBOT\_BASELINE\_MM}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a9b67d9224b6a74d893dc885c4ad3c375} 
+\+\#define ROBOT\+\_\+\+BASELINE\+\_\+\+MM~105.\+38f}
+
+Separación empírica entre las orugas del robot \Hypertarget{_proyecto_final_8c_a12efd205607316bec5cb81dfc3ef5b32}\index{ProyectoFinal.c@{ProyectoFinal.c}!ROBOT\_MM\_PER\_TICK@{ROBOT\_MM\_PER\_TICK}}
+\index{ROBOT\_MM\_PER\_TICK@{ROBOT\_MM\_PER\_TICK}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{ROBOT\_MM\_PER\_TICK}{ROBOT\_MM\_PER\_TICK}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a12efd205607316bec5cb81dfc3ef5b32} 
+\+\#define ROBOT\+\_\+\+MM\+\_\+\+PER\+\_\+\+TICK~0.\+1682f}
+
+Relación de Ticks -\/\texorpdfstring{$>$}{>} mm \Hypertarget{_proyecto_final_8c_a2a6ed9eb532f2b2144af6fef9d881147}\index{ProyectoFinal.c@{ProyectoFinal.c}!SCAN\_DIRECTION@{SCAN\_DIRECTION}}
+\index{SCAN\_DIRECTION@{SCAN\_DIRECTION}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{SCAN\_DIRECTION}{SCAN\_DIRECTION}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a2a6ed9eb532f2b2144af6fef9d881147} 
+\+\#define SCAN\+\_\+\+DIRECTION~1}
+
+Sentido de giro (Horario o antihorario) \Hypertarget{_proyecto_final_8c_a7b315ed2ab718dbac09ff7068782859d}\index{ProyectoFinal.c@{ProyectoFinal.c}!SCAN\_TIMEOUT\_CYCLES@{SCAN\_TIMEOUT\_CYCLES}}
+\index{SCAN\_TIMEOUT\_CYCLES@{SCAN\_TIMEOUT\_CYCLES}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{SCAN\_TIMEOUT\_CYCLES}{SCAN\_TIMEOUT\_CYCLES}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a7b315ed2ab718dbac09ff7068782859d} 
+\+\#define SCAN\+\_\+\+TIMEOUT\+\_\+\+CYCLES~500u}
+
+Ciclos de timeout en búsqueda \Hypertarget{_proyecto_final_8c_a0223efa106aeb95a426341696374b8c5}\index{ProyectoFinal.c@{ProyectoFinal.c}!SCAN\_TURN\_PWM@{SCAN\_TURN\_PWM}}
+\index{SCAN\_TURN\_PWM@{SCAN\_TURN\_PWM}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{SCAN\_TURN\_PWM}{SCAN\_TURN\_PWM}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a0223efa106aeb95a426341696374b8c5} 
+\+\#define SCAN\+\_\+\+TURN\+\_\+\+PWM~49}
+
+PWM aplicado en la fase de giro \Hypertarget{_proyecto_final_8c_a069cde010ee18f5e151241364cc0c224}\index{ProyectoFinal.c@{ProyectoFinal.c}!SLEEP\_DURATION\_MS@{SLEEP\_DURATION\_MS}}
+\index{SLEEP\_DURATION\_MS@{SLEEP\_DURATION\_MS}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{SLEEP\_DURATION\_MS}{SLEEP\_DURATION\_MS}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a069cde010ee18f5e151241364cc0c224} 
+\+\#define SLEEP\+\_\+\+DURATION\+\_\+\+MS~5000u}
+
+Duración de espera tras no detectar obstaculos (ms) \Hypertarget{_proyecto_final_8c_ac156969c19ada7414ab321776c8f49ee}\index{ProyectoFinal.c@{ProyectoFinal.c}!ULTRASONIC\_ECHO\_PIN@{ULTRASONIC\_ECHO\_PIN}}
+\index{ULTRASONIC\_ECHO\_PIN@{ULTRASONIC\_ECHO\_PIN}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{ULTRASONIC\_ECHO\_PIN}{ULTRASONIC\_ECHO\_PIN}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_ac156969c19ada7414ab321776c8f49ee} 
+\+\#define ULTRASONIC\+\_\+\+ECHO\+\_\+\+PIN~5}
+
+GPIO ECHO \Hypertarget{_proyecto_final_8c_a12346b5f556ec4ba70c7afb8303bf64f}\index{ProyectoFinal.c@{ProyectoFinal.c}!ULTRASONIC\_TRIG\_PIN@{ULTRASONIC\_TRIG\_PIN}}
+\index{ULTRASONIC\_TRIG\_PIN@{ULTRASONIC\_TRIG\_PIN}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{ULTRASONIC\_TRIG\_PIN}{ULTRASONIC\_TRIG\_PIN}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a12346b5f556ec4ba70c7afb8303bf64f} 
+\+\#define ULTRASONIC\+\_\+\+TRIG\+\_\+\+PIN~4}
+
+GPIO TRIGGER \Hypertarget{_proyecto_final_8c_a08f8d64ea1ed5d24e2957c593a399bf8}\index{ProyectoFinal.c@{ProyectoFinal.c}!WAIT\_AFTER\_DETECT\_CYCLES@{WAIT\_AFTER\_DETECT\_CYCLES}}
+\index{WAIT\_AFTER\_DETECT\_CYCLES@{WAIT\_AFTER\_DETECT\_CYCLES}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{WAIT\_AFTER\_DETECT\_CYCLES}{WAIT\_AFTER\_DETECT\_CYCLES}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_a08f8d64ea1ed5d24e2957c593a399bf8} 
+\+\#define WAIT\+\_\+\+AFTER\+\_\+\+DETECT\+\_\+\+CYCLES~200u}
+
+Ciclos de interrupciones para iniciar state\+\_\+approaching(void); 
+
+\label{doc-var-members}
+\Hypertarget{_proyecto_final_8c_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{_proyecto_final_8c_ad0963a12f60f475f1115a0d778699d0d}\index{ProyectoFinal.c@{ProyectoFinal.c}!flag\_imu@{flag\_imu}}
+\index{flag\_imu@{flag\_imu}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{flag\_imu}{flag\_imu}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_ad0963a12f60f475f1115a0d778699d0d} 
+volatile bool flag\+\_\+imu = false}
+
+Sample listo \Hypertarget{_proyecto_final_8c_ad77c1c500df149d9a7f01dddcd67a06e}\index{ProyectoFinal.c@{ProyectoFinal.c}!flag\_pause@{flag\_pause}}
+\index{flag\_pause@{flag\_pause}!ProyectoFinal.c@{ProyectoFinal.c}}
+\doxysubsubsection{\texorpdfstring{flag\_pause}{flag\_pause}}
+{\footnotesize\ttfamily \label{_proyecto_final_8c_ad77c1c500df149d9a7f01dddcd67a06e} 
+volatile bool flag\+\_\+pause = false}
+
+Fin de pausa SLEE /\+ ALARM 

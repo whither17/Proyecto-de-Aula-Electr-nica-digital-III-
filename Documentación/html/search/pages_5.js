@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['esenario_20de_20pruebas_0',['4. Esenario de pruebas',['../md__r_e_a_d_m_e.html#autotoc_md4',1,'']]]
+  ['compartida_0',['Nota sobre IRQ compartida',['../_proyecto_final_8c.html#autotoc_md3',1,'']]],
+  ['con_20wfi_1',['Polling + IRQ con WFI',['../_proyecto_final_8c.html#autotoc_md1',1,'']]],
+  ['control_2',['Arquitectura de control',['../_proyecto_final_8c.html#autotoc_md0',1,'']]]
 ];

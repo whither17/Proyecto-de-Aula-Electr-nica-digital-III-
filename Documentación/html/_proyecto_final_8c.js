@@ -1,0 +1,26 @@
+var _proyecto_final_8c =
+[
+    [ "fsm_ctx_t", "structfsm__ctx__t.html", "structfsm__ctx__t" ],
+    [ "ALARM_DURATION_MS", "_proyecto_final_8c.html#a8c148d015857a32dff33d24ce89cf4af", null ],
+    [ "APPROACH_DISTANCE_CM", "_proyecto_final_8c.html#a19e21233c263374e5880782f1c29f289", null ],
+    [ "BRAKE_PULSE_MS", "_proyecto_final_8c.html#a18cac723de98aa22e4875143ab9322c8", null ],
+    [ "BRAKE_PULSE_PWM", "_proyecto_final_8c.html#ad175452dcd44ceae2c240d188f68eeda", null ],
+    [ "DETECTION_CONFIRM_COUNT", "_proyecto_final_8c.html#a4b27e8b2f294012fac2b0f958e7ddd90", null ],
+    [ "DETECTION_DISTANCE_CM", "_proyecto_final_8c.html#a25ff550fb1897d2211eef8f519130763", null ],
+    [ "IR_SENSOR_PIN", "_proyecto_final_8c.html#ad8efb25d4678a85f5a1b760f8c0aa371", null ],
+    [ "IR_SETTLE_CYCLES", "_proyecto_final_8c.html#a98a48f9f9d76b5282a79fe4859649ee1", null ],
+    [ "IR_WHITE", "_proyecto_final_8c.html#a3df938fa0421e4c4f4a7103221235297", null ],
+    [ "PRINT_INTERVAL_CYCLES", "_proyecto_final_8c.html#a72a6a69fb3ddfbdccbbc20b39585e468", null ],
+    [ "PUSH_EXIT_THRESHOLD_MM", "_proyecto_final_8c.html#a1903bfcbe2e7127365a3f7903c63917f", null ],
+    [ "ROBOT_BASELINE_MM", "_proyecto_final_8c.html#a9b67d9224b6a74d893dc885c4ad3c375", null ],
+    [ "ROBOT_MM_PER_TICK", "_proyecto_final_8c.html#a12efd205607316bec5cb81dfc3ef5b32", null ],
+    [ "SCAN_DIRECTION", "_proyecto_final_8c.html#a2a6ed9eb532f2b2144af6fef9d881147", null ],
+    [ "SCAN_TIMEOUT_CYCLES", "_proyecto_final_8c.html#a7b315ed2ab718dbac09ff7068782859d", null ],
+    [ "SCAN_TURN_PWM", "_proyecto_final_8c.html#a0223efa106aeb95a426341696374b8c5", null ],
+    [ "SLEEP_DURATION_MS", "_proyecto_final_8c.html#a069cde010ee18f5e151241364cc0c224", null ],
+    [ "ULTRASONIC_ECHO_PIN", "_proyecto_final_8c.html#ac156969c19ada7414ab321776c8f49ee", null ],
+    [ "ULTRASONIC_TRIG_PIN", "_proyecto_final_8c.html#a12346b5f556ec4ba70c7afb8303bf64f", null ],
+    [ "WAIT_AFTER_DETECT_CYCLES", "_proyecto_final_8c.html#a08f8d64ea1ed5d24e2957c593a399bf8", null ],
+    [ "flag_imu", "_proyecto_final_8c.html#ad0963a12f60f475f1115a0d778699d0d", null ],
+    [ "flag_pause", "_proyecto_final_8c.html#ad77c1c500df149d9a7f01dddcd67a06e", null ]
+];
