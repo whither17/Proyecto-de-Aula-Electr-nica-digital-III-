@@ -1,19 +1,14 @@
 /**
- * @file    ProyectoFinal_test.c
- * @author  Andres
+ * @file    ProyectoFinal.c
  * @date    2025
  *
  * @brief   Robot autónomo — barrido rotacional + detección ultrasónica
- *          + clasificación IR. Versión de TESTEO (con printf).
+ *          + clasificación IR
  *
  * @details
  * ## Arquitectura de control
  *
  * ### Polling + IRQ con WFI
- *
- * El loop principal duerme con `__wfi()` y despierta con cualquier IRQ
- * activa. Los handlers SOLO seteen banderas (acknowledgment mínimo);
- * todo el trabajo se hace en el loop dentro de bloques `if (flag_*)`.
  *
  *   - `flag_imu`   — seteada por `imu_alarm_callback` (~100 Hz).
  *                    Gobierna odometría, speed control, sonar y FSM.
@@ -49,7 +44,7 @@
 
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
-#include "hardware/sync.h"   /* __wfi()                    */
+#include "hardware/sync.h"
 #include "Driver_TB6612FNG.h"
 #include "encoder.h"
 #include "imu.h"
@@ -60,59 +55,38 @@
 #include <math.h>
 #include <stdio.h>
 
-/* =========================================================================
-   PARÁMETROS CONFIGURABLES
-   ========================================================================= */
 
-#define DETECTION_DISTANCE_CM       40u
-#define DETECTION_CONFIRM_COUNT     11u
-#define APPROACH_DISTANCE_CM        4u
-#define WAIT_AFTER_DETECT_CYCLES    200u
-#define SCAN_TURN_PWM               49
-#define BRAKE_PULSE_PWM             43
-#define BRAKE_PULSE_MS              25
-#define SCAN_DIRECTION              1
-#define PUSH_EXIT_THRESHOLD_MM      430.0f
-#define ALARM_DURATION_MS           2500u
-#define SLEEP_DURATION_MS           5000u
-#define SCAN_TIMEOUT_CYCLES         500u
+//Parámetros 
 
-/* =========================================================================
-   PINES
-   ========================================================================= */
+#define DETECTION_DISTANCE_CM 35u     /**< Distancia de detección de obstaculos (cm) */
+#define DETECTION_CONFIRM_COUNT 8u    /**< Cantidad de ciclos necesarios para que el robot registre el centro del obstaculo */
+#define APPROACH_DISTANCE_CM 5u       /**< Distancia de acecamiento al obstaculo (cm) */
+#define WAIT_AFTER_DETECT_CYCLES 200u /**< Ciclos de interrupciones para iniciar state_approaching(void); */
+#define SCAN_TURN_PWM 49              /**< PWM aplicado en la fase de giro */
+#define BRAKE_PULSE_PWM 43            /**< PWM aplicado en el frenado */
+#define BRAKE_PULSE_MS 25             /**< Duración del frenado (ms) */
+#define SCAN_DIRECTION 1              /**< Sentido de giro (Horario o antihorario) */
+#define PUSH_EXIT_THRESHOLD_MM 430.0f /**< Distancia tras la cual el robot retorna al origen */
+#define ALARM_DURATION_MS 2500u       /**< Duración de la alarma de espera cuando el robot regresa al origen (ms) */
+#define SLEEP_DURATION_MS 5000u       /**< Duración de espera tras no detectar obstaculos (ms) */
+#define SCAN_TIMEOUT_CYCLES 500u      /**< Ciclos de timeout en búsqueda */
+// Pines
+#define ULTRASONIC_TRIG_PIN 4  /**< GPIO TRIGGER*/
+#define ULTRASONIC_ECHO_PIN 5  /**< GPIO ECHO */
+#define IR_SENSOR_PIN 10       /**< GPIO IR */
+#define IR_WHITE 0             /**< Define cual estado lógico es blanco*/
+// Parámetros Físicos
+#define ROBOT_MM_PER_TICK 0.1682f /**< Relación de Ticks -> mm */
+#define ROBOT_BASELINE_MM 105.38f /**< Separación empírica entre las orugas del robot */
+// Constantes Internas
+#define PRINT_INTERVAL_CYCLES 10 /**< Cada cuanto imprime en serial */
+#define IR_SETTLE_CYCLES 5       /**< Ciclos de lectura del sensor infrarrojo (IR) */
 
-#define ULTRASONIC_TRIG_PIN         4
-#define ULTRASONIC_ECHO_PIN         5
-#define IR_SENSOR_PIN               10
-#define IR_WHITE                    0
+// Banderas de IRQ
 
-/* =========================================================================
-   PARÁMETROS FÍSICOS
-   ========================================================================= */
+volatile bool flag_imu   = false; /**< Sample listo */
+volatile bool flag_pause = false; /**< Fin de pausa SLEE / ALARM */
 
-#define ROBOT_MM_PER_TICK           0.1682f
-#define ROBOT_BASELINE_MM           105.38f
-
-/* =========================================================================
-   CONSTANTES INTERNAS
-   ========================================================================= */
-
-#define PRINT_INTERVAL_CYCLES       10
-#define IR_SETTLE_CYCLES            5
-
-/* =========================================================================
-   BANDERAS VOLÁTILES  (seteadas en IRQ, leídas en loop)
-   ========================================================================= */
-
-/** Seteada por imu_alarm_callback — indica sample listo. */
-volatile bool flag_imu   = false;
-
-/** Seteada por pause_alarm_callback — indica fin de pausa SLEEP/ALARM. */
-volatile bool flag_pause = false;
-
-/* =========================================================================
-   ALARMA DE PAUSA  (APP_ALARM / APP_SLEEPING)
-   ========================================================================= */
 
 /**
  * @brief Callback de la alarma de pausa.
@@ -129,35 +103,30 @@ static int64_t pause_alarm_callback(alarm_id_t id, void *user_data)
     return 0;
 }
 
-/* =========================================================================
-   ESTADO COMPARTIDO DEL FSM
-   ========================================================================= */
+//-------------------- Estado compartido del FSM --------------------//
 
-/** Estructura con todo el contexto mutable del FSM. */
-typedef struct {
-    uint32_t  cycle;
-    uint32_t  last_distance;
-    uint32_t  detect_count;
-    uint32_t  wait_cycles;
-    uint32_t  ir_read_cycles;
-    uint32_t  scan_no_detect_cycles;
-    float     return_dist_mm;
-    /* APP_TURNING_BACK */
-    float     theta_back;
-    bool      theta_back_set;
+/**
+ * @brief Estructura con todo el contexto mutable del FSM.
+ * 
+ */
+typedef struct 
+{
+    uint32_t  cycle;                   /**< Ciclos de la IMU */
+    uint32_t  last_distance;           /**< Ultima distancia arrojada por el ultrasonido */
+    uint32_t  detect_count;            /**< Cuentas del ultrasonido consecutivas debajo del umbral */
+    uint32_t  wait_cycles;             /**< Ciclos que lleva esperando para avanzar al obstáculo */
+    uint32_t  ir_read_cycles;          /**< Ciclos consecutivos que lleva leyendo IR. */
+    uint32_t  scan_no_detect_cycles;   /**< Ciclos consecutivos que lleva sin detectar obstáculos */
+    float     return_dist_mm;          /**< Distancia calculada en dirección al origen (mm) */
+    float     theta_back;              /**< Ángulo objetivo (Theta actual + π) para el retorno */
+    bool      theta_back_set;          /**< Bandera que indica si theta_back ya fue calculado */
 } fsm_ctx_t;
 
-static fsm_ctx_t ctx;
+static fsm_ctx_t ctx; /**< Instancia del contexto de la FSM */
 
-/* =========================================================================
-   SONAR (global para acceso desde estados)
-   ========================================================================= */
+static hcsr04_t sonar; /**< Sensor HCSR-04 */
 
-static hcsr04_t sonar;
-
-/* =========================================================================
-   FORWARD DECLARATIONS DE ESTADOS
-   ========================================================================= */
+//-------------- Declaraciones adelantadas de los estados --------------//
 
 static void state_scanning(void);
 static void state_braking(void);
@@ -170,23 +139,30 @@ static void state_returning(void);
 static void state_alarm(void);
 static void state_sleeping(void);
 
-/* =========================================================================
-   PUNTERO AL ESTADO ACTIVO
-   ========================================================================= */
+//-------------- Apuntador a funcion para el estado actual --------------//
 
 typedef void (*state_fn_t)(void);
-static state_fn_t state_fn = state_scanning;
 
-/* =========================================================================
-   HELPERS
-   ========================================================================= */
+static state_fn_t state_fn = state_scanning; /**< Estado inicial */
 
+// Funciones privadas
+
+/**
+ * @brief Transforma radianes a grados
+ * 
+ * @param r Ángulo en radianes
+ * @return float Ángulo en grados
+ */
 static inline float rad_to_deg(float r)
 {
     return r * (180.0f / (float)M_PI);
 }
 
-static void apply_scan_turn(void)
+/**
+ * @brief Aplica el PWM a los motores para iniciar el giro de escaneo
+ * 
+ */
+static void apply_scan_turn()
 {
 #if SCAN_DIRECTION >= 0
     motors_set(-SCAN_TURN_PWM,  SCAN_TURN_PWM);
@@ -195,19 +171,26 @@ static void apply_scan_turn(void)
 #endif
 }
 
-static void apply_brake_pulse(void)
+/**
+ * @brief Aplicar freno a los motores
+ * 
+ */
+static void apply_brake_pulse()
 {
 #if SCAN_DIRECTION >= 0
     motors_set( BRAKE_PULSE_PWM, -BRAKE_PULSE_PWM);
 #else
     motors_set(-BRAKE_PULSE_PWM,  BRAKE_PULSE_PWM);
 #endif
-    sleep_ms(BRAKE_PULSE_MS);   /* Único sleep bloqueante permitido:
-                                   25 ms de pulso mecánico puro. */
+    sleep_ms(BRAKE_PULSE_MS);
     motors_set(0, 0);
 }
 
-/** Nombre del estado activo para telemetría. */
+/**
+ * @brief Retorna el nombre del estado activo para telemetría
+ * 
+ * @return const char* Estado activo
+ */
 static const char *state_name(void)
 {
     if (state_fn == state_scanning)    return "SCAN ";
@@ -240,12 +223,15 @@ static void gpio_irq_handler(uint gpio, uint32_t events)
     ultrasonic_eco_callback(gpio, events);
 }
 
-/* =========================================================================
-   IMPLEMENTACIÓN DE ESTADOS
-   ========================================================================= */
 
-/* ── APP_SCANNING ──────────────────────────────────────────────────────── */
-static void state_scanning(void)
+//----------- Implementación de los estados -------------//
+
+
+/**
+ * @brief APP_SCANNING: Escanea en busca de obstaculos
+ * 
+ */
+static void state_scanning()
 {
     apply_scan_turn();
 
@@ -290,8 +276,12 @@ static void state_scanning(void)
     }
 }
 
-/* ── APP_BRAKING ───────────────────────────────────────────────────────── */
-static void state_braking(void)
+/**
+ * @brief APP_BRAKING Espera de 2 segundos antes de aproximarse al obstáculo
+ * Evita acumulación de error.
+ * 
+ */
+static void state_braking()
 {
     apply_brake_pulse();
     ctx.wait_cycles = 0;
@@ -302,8 +292,11 @@ static void state_braking(void)
     state_fn = state_waiting;
 }
 
-/* ── APP_WAITING ───────────────────────────────────────────────────────── */
-static void state_waiting(void)
+/**
+ * @brief APP_WAITING: Esperar distancia del sonar
+ * 
+ */
+static void state_waiting()
 {
     ctx.wait_cycles++;
 
@@ -337,8 +330,11 @@ static void state_waiting(void)
     }
 }
 
-/* ── APP_APPROACHING ───────────────────────────────────────────────────── */
-static void state_approaching(void)
+/**
+ * @brief APP_APPROACHING: Se aproxima al obstaculo para su ID
+ * 
+ */
+static void state_approaching()
 {
     if (ctx.last_distance != NO_CAPTURE_READY &&
         ctx.last_distance <= (uint32_t)APPROACH_DISTANCE_CM)
@@ -359,7 +355,10 @@ static void state_approaching(void)
     }
 }
 
-/* ── APP_READING_IR ────────────────────────────────────────────────────── */
+/**
+ * @brief APP_READING_IR: Identifica el obsáculo por medio del IR
+ * 
+ */
 static void state_reading_ir(void)
 {
     ctx.ir_read_cycles++;
@@ -410,7 +409,10 @@ static void state_reading_ir(void)
     }
 }
 
-/* ── APP_PUSHING ───────────────────────────────────────────────────────── */
+/**
+ * @brief APP_PUSHING: Empuja el obstaculo fuera del área de pruebas si es negro
+ * 
+ */
 static void state_pushing(void)
 {
     pose_t pose;
@@ -449,7 +451,10 @@ static void state_pushing(void)
     }
 }
 
-/* ── APP_TURNING_BACK ──────────────────────────────────────────────────── */
+/**
+ * @brief APP_TURNING_BACK: Gira en dirección al origen y establece la ruta para regresar
+ * 
+ */
 static void state_turning_back(void)
 {
     if (!ctx.theta_back_set)
@@ -479,15 +484,15 @@ static void state_turning_back(void)
     {
         motors_set(0, 0);
         ctx.theta_back_set = false;
-        sleep_ms(80);   /* Estabilización de pose: bloqueante corto. */
+        sleep_ms(80);
 
-        /* Actualizar pose tras estabilización. */
+        // Actualizar pose tras estabilización
         while (!imu_data_ready()) tight_loop_contents();
         imu_read();
         odometry_update();
         odometry_get_pose(&p);
 
-        /* Limpiar flag_imu que quedó pendiente durante sleep_ms(80). */
+        // Limpiar flag_imu que quedó pendiente durante sleep_ms(80)
         flag_imu = false;
 
         float goal_x = ctx.return_dist_mm * cosf(p.theta);
@@ -515,7 +520,10 @@ static void state_turning_back(void)
     }
 }
 
-/* ── APP_RETURNING ─────────────────────────────────────────────────────── */
+/**
+ * @brief APP_RETURNING: Regresa al origen
+ * 
+ */
 static void state_returning(void)
 {
     nav_update();
@@ -540,7 +548,8 @@ static void state_returning(void)
     }
 }
 
-/* ── APP_ALARM ─────────────────────────────────────────────────────────── */
+//----------- APP_ALARM ──────────────────//
+
 /**
  * @brief Estado de alarma — se ejecuta UNA vez al entrar.
  *
@@ -550,25 +559,26 @@ static void state_returning(void)
  */
 static void state_alarm(void)
 {
-    /* Pausar IMU para que el WFI solo despierte con flag_pause. */
+    // Pausar IMU para que el WFI solo despierte con flag_pause.
     imu_alarm_pause();
 
-    /* Armar alarma de pausa one-shot. */
+    // Armar alarma de pausa one-shot
     add_alarm_in_ms(ALARM_DURATION_MS, pause_alarm_callback, NULL, true);
 
     /* Transicionar a un estado "nulo" — el loop no llamará state_fn
      * mientras flag_imu esté inactiva. La salida real ocurre en
      * el bloque if (flag_pause) del main loop. */
-    state_fn = NULL;    /* Centinela: "esperando alarma de pausa". */
+    state_fn = NULL;    // Esperando alarma de pausa
 }
 
-/* ── APP_SLEEPING ──────────────────────────────────────────────────────── */
+//---------- APP_SLEEPING ────────────//
+
 /**
  * @brief Estado sleep — análogo a state_alarm.
  *
  * Resetea pose, pausa IMU, arma alarma de pausa.
  */
-static void state_sleeping(void)
+static void state_sleeping()
 {
     pose_t reset = { .x = 0.0f, .y = 0.0f, .theta = 0.0f };
     odometry_set_pose(&reset);
@@ -581,7 +591,7 @@ static void state_sleeping(void)
     imu_alarm_pause();
     add_alarm_in_ms(SLEEP_DURATION_MS, pause_alarm_callback, NULL, true);
 
-    state_fn = NULL;    /* Centinela: esperando alarma de pausa. */
+    state_fn = NULL;    // Esperando alarma de pausa
 }
 
 /* =========================================================================
@@ -620,9 +630,7 @@ static void print_telemetry(void)
     fflush(stdout);
 }
 
-/* =========================================================================
-   MAIN
-   ========================================================================= */
+// Main principal
 
 int main(void)
 {
@@ -737,25 +745,20 @@ int main(void)
     printf("──────  ────────────  ────────  ────────  ──────  ──────  ──────────\n");
     fflush(stdout);
 
-    /* ── Contexto inicial ── */
+    // Contexto inicial
     ctx = (fsm_ctx_t){ .last_distance = NO_CAPTURE_READY };
 
     ultrasonic_start(&sonar);
     apply_scan_turn();
     state_fn = state_scanning;
     imu_alarm_resume();
-    /* ══════════════════════════════════════════════════════════════════
-       BUCLE PRINCIPAL
-       ──────────────────────────────────────────────────────────────────
-       WFI como estado base: el core duerme hasta que cualquier IRQ
-       lo despierta. El trabajo se hace SIEMPRE dentro de bloques
-       if (flag_*), nunca en el handler.
-       ══════════════════════════════════════════════════════════════════ */
+
+
     while (true)
     {
-        __wfi();    /* Dormir hasta la próxima IRQ. */
+        __wfi(); // Dormir hasta la próxima IRQ
 
-        /* ── Bloque IMU: todo el procesamiento normal ── */
+        // Bloque IMU: todo el procesamiento normal
         if (flag_imu)
         {
             flag_imu = false;
@@ -763,15 +766,13 @@ int main(void)
             imu_read();
             odometry_update();
 
-            /* Speed control solo en estados que lo requieren. */
-            if (state_fn == state_approaching ||
-                state_fn == state_pushing      ||
-                state_fn == state_returning)
+            // Speed control solo en estados que lo requieren
+            if (state_fn == state_approaching || state_fn == state_pushing || state_fn == state_returning)
             {
                 speed_control_update();
             }
 
-            /* Sonar: bombear máquina de estados y recolectar medida. */
+            // Sonar: bombear máquina de estados y recolectar medida
             ultrasonic_process(&sonar);
             if (ultrasonic_ready(&sonar))
             {
@@ -779,28 +780,26 @@ int main(void)
                 ultrasonic_start(&sonar);
             }
 
-            /* Ejecutar estado activo (NULL = esperando alarma de pausa). */
+            // Ejecutar estado activo (NULL = esperando alarma de pausa)
             if (state_fn != NULL)
                 state_fn();
 
-            /* Telemetría periódica. */
+            // Telemetría periódica
             print_telemetry();
             ctx.cycle++;
         }
 
-        /* ── Bloque PAUSA: fin de ALARM o SLEEPING ── */
+        // Bloque PAUSA: fin de ALARM o SLEEPING
         if (flag_pause)
         {
             flag_pause = false;
 
-            /* Reiniciar contexto para nuevo ciclo de barrido. */
+            // Reiniciar contexto para nuevo ciclo de barrido
             ctx.detect_count          = 0;
             ctx.scan_no_detect_cycles = 0;
             ctx.return_dist_mm        = 0.0f;
             ctx.theta_back_set        = false;
 
-            /* Alarma solo necesita reset si venimos de APP_ALARM
-             * (en APP_SLEEPING la pose ya se reseteó al entrar). */
             if (state_fn == NULL)
             {
                 pose_t reset = { .x = 0.0f, .y = 0.0f, .theta = 0.0f };
@@ -811,13 +810,11 @@ int main(void)
             printf("[WAKE] Reanudando barrido.\n\n");
             fflush(stdout);
 
-            /* Reanudar alarma de IMU y arrancar barrido. */
+            // Reanudar alarma de IMU y arrancar barrido
             imu_alarm_resume();
             apply_scan_turn();
             state_fn = state_scanning;
         }
-
-    } /* while (true) */
-
+    }
     return 0;
 }
